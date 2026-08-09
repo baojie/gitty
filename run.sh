@@ -77,8 +77,25 @@ if [ ! -f out/main/index.js ] || [ -n "$(find src electron.vite.config.ts -newer
   npm run build
 fi
 
-ELECTRON="$HERE/node_modules/electron/dist/electron"
-[ -x "$ELECTRON" ] || ELECTRON="$HERE/node_modules/.bin/electron"
+# Resolve Electron's real binary through the package itself. require('electron')
+# reads node_modules/electron/path.txt and returns the platform's actual path
+# (dist/electron on Linux, dist/Electron.app/Contents/MacOS/Electron on macOS),
+# or throws when the postinstall download never completed and path.txt is empty.
+# The old `[ -x dist/electron ]` heuristic missed that failure: on macOS the
+# Linux-layout path never exists, so it always fell through to .bin/electron —
+# a symlink to the package's cli.js that passes -x even with no binary — and a
+# broken install launched anyway, hanging forever on "Downloading Electron
+# binary...". Catch it here and say how to fix it instead.
+ELECTRON="$(node -p "require('electron')" 2>/dev/null)" || ELECTRON=""
+if [ -z "$ELECTRON" ] || [ ! -x "$ELECTRON" ]; then
+  echo "gitty: Electron's binary is missing — its download never completed." >&2
+  echo "gitty: reinstall it with:" >&2
+  echo "         node \"$HERE/node_modules/electron/install.js\"" >&2
+  echo "gitty: on a mirror-only network, point it at a mirror first, e.g.:" >&2
+  echo "         ELECTRON_MIRROR=https://registry.npmmirror.com/-/binary/electron/ \\" >&2
+  echo "           node \"$HERE/node_modules/electron/install.js\"" >&2
+  exit 1
+fi
 
 # Everything from here uses absolute paths: a --any launch with no repository
 # changes directory below so the app opens from outside any work tree and its
