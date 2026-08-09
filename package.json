@@ -1,6 +1,6 @@
 {
   "name": "gitty-desktop",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A four-pane git history browser",
   "main": "./out/main/index.js",
   "bin": {
@@ -10,7 +10,7 @@
     "out",
     "build",
     "cli.js",
-    "ref/gitty-0.1.3.png"
+    "ref/gitty-0.1.4.png"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
