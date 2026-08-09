@@ -77,16 +77,25 @@ if [ ! -f out/main/index.js ] || [ -n "$(find src electron.vite.config.ts -newer
   npm run build
 fi
 
-# Resolve Electron's real binary through the package itself. require('electron')
-# reads node_modules/electron/path.txt and returns the platform's actual path
-# (dist/electron on Linux, dist/Electron.app/Contents/MacOS/Electron on macOS),
-# or throws when the postinstall download never completed and path.txt is empty.
-# The old `[ -x dist/electron ]` heuristic missed that failure: on macOS the
-# Linux-layout path never exists, so it always fell through to .bin/electron —
-# a symlink to the package's cli.js that passes -x even with no binary — and a
-# broken install launched anyway, hanging forever on "Downloading Electron
-# binary...". Catch it here and say how to fix it instead.
-ELECTRON="$(node -p "require('electron')" 2>/dev/null)" || ELECTRON=""
+# Resolve Electron's real binary the way its own package does: path.txt holds
+# the executable's name relative to dist/, which differs per platform
+# (`electron` on Linux, `Electron.app/Contents/MacOS/Electron` on macOS). The
+# old `[ -x dist/electron ]` heuristic hardcoded the Linux layout, so on macOS
+# it always fell through to .bin/electron — a symlink to the package's cli.js
+# that passes -x even when no binary was ever downloaded — and a broken install
+# launched anyway, hanging on "Downloading Electron binary...".
+#
+# Read path.txt here rather than calling require('electron'): that entry point
+# re-runs install.js when the binary is missing, which is the very hang this
+# guard exists to prevent, and it announces the attempt on stdout — which would
+# land in $ELECTRON and fail the check even when the download then succeeded.
+ELECTRON="$(node -p "
+  const fs = require('fs'), path = require('path')
+  const dir = path.dirname(require.resolve('electron/package.json'))
+  const file = path.join(dir, 'path.txt')
+  const exe = fs.existsSync(file) ? fs.readFileSync(file, 'utf8').trim() : ''
+  exe ? path.join(dir, 'dist', exe) : ''
+" 2>/dev/null)" || ELECTRON=""
 if [ -z "$ELECTRON" ] || [ ! -x "$ELECTRON" ]; then
   echo "gitty: Electron's binary is missing — its download never completed." >&2
   echo "gitty: reinstall it with:" >&2
