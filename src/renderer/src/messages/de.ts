@@ -92,9 +92,9 @@ export const de: RendererMessages = {
     commitFile: (path: string, short: string) => `${path} @ ${short}`,
     snapshot: (short: string, subject: string) => `${short} — ${subject} (Momentaufnahme)`,
     snapshotFile: (path: string, short: string) => `${path} @ ${short} (Momentaufnahme)`,
-    range: (from: string, to: string) => `${from.slice(0, 8)}..${to.slice(0, 8)}`,
+    range: (from: string, to: string) => `${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     rangeFile: (path: string, from: string, to: string) =>
-      `${path} @ ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `${path} @ ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     blame: (label: string) => `blame: ${label}`,
     fileHistory: (label: string) => `Verlauf: ${label}`,
     lineHistory: (path: string, start: number, end: number) =>
@@ -119,7 +119,7 @@ export const de: RendererMessages = {
     snapshotTitle: (short: string, subject: string) =>
       `Snapshot ${short} — ${subject}`,
     rangeTitle: (from: string, to: string) =>
-      `Bereich ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `Bereich ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     backToWorkTree: 'Zurück zu den Änderungen',
     viewPickTitle: 'Umschalten, was dieser Bereich auflistet',
     changesHint: 'Was noch nicht committet ist',
@@ -389,7 +389,7 @@ export const de: RendererMessages = {
     pullSubmodule: 'Submodul pullen',
     pullingSubmodule: (path: string) => `${path} wird gepullt…`,
     diffAgainstSelected: 'Mit ausgewähltem Commit vergleichen',
-    diffAgainstAccel: 'Strg+Klick',
+    diffAgainstAccel: 'Strg/Cmd+Klick',
     blameFile: 'Blame',
     fileHistory: 'Dateiverlauf',
     lineHistory: 'Geschichte dieser Zeilen',
