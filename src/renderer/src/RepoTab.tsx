@@ -977,36 +977,31 @@ export const RepoTab = forwardRef<RepoTabHandle, RepoTabProps>(function RepoTab(
       const c = commits.find((x) => x.hash === hash)
       if (!c) return
 
-      if (!additive) {
+      const anchor = commits.find((x) => x.hash === selectedCommit)
+      if (!additive || !anchor) {
         showCommit(c)
         return
       }
-      // Second pick: diff the two commits, oldest first.
-      if (!selectedCommit || selectedCommit === hash) {
-        setCompareCommit(null)
+      // Unmark either endpoint and restore the remaining commit's own diff.
+      if (hash === selectedCommit || hash === compareCommit) {
+        const remaining = hash === selectedCommit
+          ? commits.find((x) => x.hash === compareCommit) ?? anchor
+          : anchor
+        showCommit(remaining)
         return
       }
+      // Keep the first pick when replacing the second. List order defines
+      // direction even across branches: lower row -> upper row.
       const iSel = commits.findIndex((x) => x.hash === selectedCommit)
       const iCmp = commits.findIndex((x) => x.hash === hash)
-      const [from, to] = iSel > iCmp ? [selectedCommit, hash] : [hash, selectedCommit]
+      const [from, to] = iSel > iCmp ? [anchor.hash, hash] : [hash, anchor.hash]
       setCompareCommit(hash)
       setSelectedFile(null)
       setDocs([])
       setActiveDoc(null)
       setView({ mode: 'range', from, to })
     },
-    [commits, selectedCommit, showCommit, backToWorkTree]
-  )
-
-  // Ctrl/Cmd+click on a commit row. Silent where the remote has no page to
-  // point at — the same repositories whose menu leaves the item out, and the
-  // same commits: one that has not been pushed has no page yet either.
-  const openRemoteCommit = useCallback(
-    (hash: string) => {
-      if (!remoteBases || unpushed.has(hash)) return
-      void window.gitty.file.openExternal(remoteBases.commit + hash)
-    },
-    [remoteBases, unpushed]
+    [commits, selectedCommit, compareCommit, showCommit, backToWorkTree]
   )
 
   // Only the active tab handles the shared Escape / refresh keys; the others
@@ -1703,7 +1698,6 @@ export const RepoTab = forwardRef<RepoTabHandle, RepoTabProps>(function RepoTab(
                   onFilterMode={setFilterMode}
                   searching={searching}
                   onSelect={onSelectCommit}
-                  onOpenRemote={openRemoteCommit}
                   onWorktreeMenu={worktreeMenu}
                   onEnter={(hash) => {
                     if (hash === WORKTREE_ROW) {
