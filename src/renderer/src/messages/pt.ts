@@ -92,9 +92,9 @@ export const pt: RendererMessages = {
     commitFile: (path: string, short: string) => `${path} @ ${short}`,
     snapshot: (short: string, subject: string) => `${short} — ${subject} (instantâneo)`,
     snapshotFile: (path: string, short: string) => `${path} @ ${short} (instantâneo)`,
-    range: (from: string, to: string) => `${from.slice(0, 8)}..${to.slice(0, 8)}`,
+    range: (from: string, to: string) => `${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     rangeFile: (path: string, from: string, to: string) =>
-      `${path} @ ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `${path} @ ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     blame: (label: string) => `blame: ${label}`,
     fileHistory: (label: string) => `histórico: ${label}`,
     lineHistory: (path: string, start: number, end: number) =>
@@ -118,7 +118,7 @@ export const pt: RendererMessages = {
     snapshotTitle: (short: string, subject: string) =>
       `Instantâneo ${short} — ${subject}`,
     rangeTitle: (from: string, to: string) =>
-      `Intervalo ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `Intervalo ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     backToWorkTree: 'Voltar às alterações',
     viewPickTitle: 'Alternar o que este painel lista',
     changesHint: 'O que não está confirmado',
@@ -390,7 +390,7 @@ export const pt: RendererMessages = {
     pullSubmodule: 'Fazer pull do submódulo',
     pullingSubmodule: (path: string) => `Fazendo pull de ${path}…`,
     diffAgainstSelected: 'Comparar com o commit selecionado',
-    diffAgainstAccel: 'Ctrl+clique',
+    diffAgainstAccel: 'Ctrl/Cmd+clique',
     blameFile: 'Blame',
     fileHistory: 'Histórico do arquivo',
     lineHistory: 'Histórico destas linhas',

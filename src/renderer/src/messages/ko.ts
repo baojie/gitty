@@ -91,9 +91,9 @@ export const ko: RendererMessages = {
     commitFile: (path: string, short: string) => `${path} @ ${short}`,
     snapshot: (short: string, subject: string) => `${short} — ${subject}(스냅숏)`,
     snapshotFile: (path: string, short: string) => `${path} @ ${short}(스냅숏)`,
-    range: (from: string, to: string) => `${from.slice(0, 8)}..${to.slice(0, 8)}`,
+    range: (from: string, to: string) => `${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     rangeFile: (path: string, from: string, to: string) =>
-      `${path} @ ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `${path} @ ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     blame: (label: string) => `blame: ${label}`,
     fileHistory: (label: string) => `기록: ${label}`,
     lineHistory: (path: string, start: number, end: number) =>
@@ -117,7 +117,7 @@ export const ko: RendererMessages = {
     snapshotTitle: (short: string, subject: string) =>
       `스냅숏 ${short} — ${subject}`,
     rangeTitle: (from: string, to: string) =>
-      `범위 ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `범위 ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     backToWorkTree: '변경 사항으로 돌아가기',
     viewPickTitle: '이 창이 나열하는 대상을 전환합니다',
     changesHint: '커밋되지 않은 변경 사항',
@@ -385,7 +385,7 @@ export const ko: RendererMessages = {
     pullSubmodule: '서브모듈 풀',
     pullingSubmodule: (path: string) => `${path} 풀 중…`,
     diffAgainstSelected: '선택한 커밋과 비교',
-    diffAgainstAccel: 'Ctrl+클릭',
+    diffAgainstAccel: 'Ctrl/Cmd+클릭',
     blameFile: 'Blame 파일',
     fileHistory: '파일 기록',
     lineHistory: '이 줄들의 이력',

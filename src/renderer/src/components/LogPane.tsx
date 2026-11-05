@@ -91,7 +91,6 @@ export function LogPane({
   searching,
   onSelect,
   onEnter,
-  onOpenRemote,
   onMenu,
   onWorktreeMenu,
   onScrollEnd
@@ -117,8 +116,6 @@ export function LogPane({
   searching: boolean
   onSelect: (hash: string, additive: boolean) => void
   onEnter: (hash: string) => void
-  /** Ctrl/Cmd+click: the commit's page on the site that hosts the remote. */
-  onOpenRemote: (hash: string) => void
   onMenu: (commit: Commit, state: MenuState) => void
   onWorktreeMenu: (state: MenuState) => void
   onScrollEnd: () => void
@@ -285,26 +282,19 @@ export function LogPane({
       {commits.map((c, i) => {
         const cls =
           c.hash === selected ? ' selected' : c.hash === compare ? ' compare' : ''
-        const kinCls = !kin
+        const kinCls = !kin || c.hash === selected || c.hash === compare
           ? ''
           : kin.ancestors.has(c.hash)
             ? ' kin-ancestor'
             : kin.descendants.has(c.hash)
               ? ' kin-descendant'
-              : c.hash === selected
-                ? ''
-                : ' kin-unrelated'
+              : ' kin-unrelated'
         return (
           <div
             key={c.hash}
             className={`commit-row${cls}${kinCls}`}
             onClick={(e) => {
-              // Ctrl/Cmd+click is the browser's own "open this link" and does
-              // that here too; Shift+click and Space are what mark a second
-              // commit. Where no hosting page can be worked out the click
-              // leaves the row alone rather than falling back to selecting.
-              if (e.ctrlKey || e.metaKey) onOpenRemote(c.hash)
-              else onSelect(c.hash, e.shiftKey)
+              onSelect(c.hash, e.ctrlKey || e.metaKey || e.shiftKey)
             }}
             onDoubleClick={() => onEnter(c.hash)}
             onContextMenu={(e) => {

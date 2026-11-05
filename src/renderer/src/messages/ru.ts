@@ -107,9 +107,9 @@ export const ru: RendererMessages = {
     commitFile: (path: string, short: string) => `${path} @ ${short}`,
     snapshot: (short: string, subject: string) => `${short} — ${subject} (снимок)`,
     snapshotFile: (path: string, short: string) => `${path} @ ${short} (снимок)`,
-    range: (from: string, to: string) => `${from.slice(0, 8)}..${to.slice(0, 8)}`,
+    range: (from: string, to: string) => `${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     rangeFile: (path: string, from: string, to: string) =>
-      `${path} @ ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `${path} @ ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     blame: (label: string) => `blame: ${label}`,
     fileHistory: (label: string) => `история: ${label}`,
     lineHistory: (path: string, start: number, end: number) =>
@@ -134,7 +134,7 @@ export const ru: RendererMessages = {
     snapshotTitle: (short: string, subject: string) =>
       `Снимок ${short} — ${subject}`,
     rangeTitle: (from: string, to: string) =>
-      `Диапазон ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `Диапазон ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     backToWorkTree: 'Назад к изменениям',
     viewPickTitle: 'Переключить, что показывает эта панель',
     changesHint: 'Незакоммиченные изменения',
@@ -407,7 +407,7 @@ export const ru: RendererMessages = {
     pullSubmodule: 'Получить изменения подмодуля',
     pullingSubmodule: (path: string) => `Получение ${path}…`,
     diffAgainstSelected: 'Сравнить с выбранным коммитом',
-    diffAgainstAccel: 'Ctrl+щелчок',
+    diffAgainstAccel: 'Ctrl/Cmd+щелчок',
     blameFile: 'Blame',
     fileHistory: 'История файла',
     lineHistory: 'История этих строк',

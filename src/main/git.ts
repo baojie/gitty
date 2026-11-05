@@ -808,7 +808,7 @@ export async function diff(
 
   const args = ['diff', ...common, `${req.from}..${req.to}`, ...pathArgs(req)]
   const patch = await git(root, args)
-  const label = `${req.from.slice(0, 8)}..${req.to.slice(0, 8)}`
+  const label = `${req.from.slice(0, 8)} → ${req.to.slice(0, 8)}`
   return clip(patch, req.path ? `${req.path} @ ${label}` : label)
 }
 

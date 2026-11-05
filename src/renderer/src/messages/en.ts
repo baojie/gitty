@@ -92,9 +92,9 @@ export const en: RendererMessages = {
     commitFile: (path: string, short: string) => `${path} @ ${short}`,
     snapshot: (short: string, subject: string) => `${short} — ${subject} (snapshot)`,
     snapshotFile: (path: string, short: string) => `${path} @ ${short} (snapshot)`,
-    range: (from: string, to: string) => `${from.slice(0, 8)}..${to.slice(0, 8)}`,
+    range: (from: string, to: string) => `${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     rangeFile: (path: string, from: string, to: string) =>
-      `${path} @ ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `${path} @ ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     blame: (label: string) => `blame: ${label}`,
     fileHistory: (label: string) => `history: ${label}`,
     lineHistory: (path: string, start: number, end: number) =>
@@ -119,7 +119,7 @@ export const en: RendererMessages = {
     snapshotTitle: (short: string, subject: string) =>
       `Snapshot ${short} — ${subject}`,
     rangeTitle: (from: string, to: string) =>
-      `Range ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `Range ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     backToWorkTree: 'Back to Changes',
     viewPickTitle: 'Switch what this pane lists',
     changesHint: 'What is uncommitted',
@@ -387,7 +387,7 @@ export const en: RendererMessages = {
     pullSubmodule: 'Pull Submodule',
     pullingSubmodule: (path: string) => `Pulling ${path}…`,
     diffAgainstSelected: 'Diff Against Selected',
-    diffAgainstAccel: 'Ctrl+Click',
+    diffAgainstAccel: 'Ctrl/Cmd+Click',
     blameFile: 'Blame File',
     fileHistory: 'File History',
     lineHistory: 'History of These Lines',

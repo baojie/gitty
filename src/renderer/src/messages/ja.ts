@@ -91,9 +91,9 @@ export const ja: RendererMessages = {
     commitFile: (path: string, short: string) => `${path} @ ${short}`,
     snapshot: (short: string, subject: string) => `${short} — ${subject}（スナップショット）`,
     snapshotFile: (path: string, short: string) => `${path} @ ${short}（スナップショット）`,
-    range: (from: string, to: string) => `${from.slice(0, 8)}..${to.slice(0, 8)}`,
+    range: (from: string, to: string) => `${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     rangeFile: (path: string, from: string, to: string) =>
-      `${path} @ ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `${path} @ ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     blame: (label: string) => `blame: ${label}`,
     fileHistory: (label: string) => `履歴: ${label}`,
     lineHistory: (path: string, start: number, end: number) =>
@@ -118,7 +118,7 @@ export const ja: RendererMessages = {
     snapshotTitle: (short: string, subject: string) =>
       `スナップショット ${short} — ${subject}`,
     rangeTitle: (from: string, to: string) =>
-      `範囲 ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `範囲 ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     backToWorkTree: '変更に戻る',
     viewPickTitle: 'このペインが一覧する対象を切り替える',
     changesHint: 'コミットされていない変更',
@@ -386,7 +386,7 @@ export const ja: RendererMessages = {
     pullSubmodule: 'サブモジュールをプル',
     pullingSubmodule: (path: string) => `${path} をプルしています…`,
     diffAgainstSelected: '選択したコミットと比較',
-    diffAgainstAccel: 'Ctrl+クリック',
+    diffAgainstAccel: 'Ctrl/Cmd+クリック',
     blameFile: 'Blame ファイル',
     fileHistory: 'ファイル履歴',
     lineHistory: 'これらの行の履歴',

@@ -91,9 +91,9 @@ export const zh: RendererMessages = {
     commitFile: (path: string, short: string) => `${path} @ ${short}`,
     snapshot: (short: string, subject: string) => `${short} — ${subject}（快照）`,
     snapshotFile: (path: string, short: string) => `${path} @ ${short}（快照）`,
-    range: (from: string, to: string) => `${from.slice(0, 8)}..${to.slice(0, 8)}`,
+    range: (from: string, to: string) => `${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     rangeFile: (path: string, from: string, to: string) =>
-      `${path} @ ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `${path} @ ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     blame: (label: string) => `blame：${label}`,
     fileHistory: (label: string) => `历史：${label}`,
     lineHistory: (path: string, start: number, end: number) =>
@@ -116,7 +116,7 @@ export const zh: RendererMessages = {
     snapshotTitle: (short: string, subject: string) =>
       `快照 ${short} — ${subject}`,
     rangeTitle: (from: string, to: string) =>
-      `范围 ${from.slice(0, 8)}..${to.slice(0, 8)}`,
+      `范围 ${from.slice(0, 8)} → ${to.slice(0, 8)}`,
     backToWorkTree: '返回变更',
     viewPickTitle: '切换此面板列出的内容',
     changesHint: '尚未提交的改动',
@@ -383,7 +383,7 @@ export const zh: RendererMessages = {
     pullSubmodule: '拉取子模块',
     pullingSubmodule: (path: string) => `正在拉取 ${path}…`,
     diffAgainstSelected: '与选中提交对比',
-    diffAgainstAccel: 'Ctrl+单击',
+    diffAgainstAccel: 'Ctrl/Cmd+单击',
     blameFile: '追溯文件',
     fileHistory: '文件历史',
     lineHistory: '这几行的历史',

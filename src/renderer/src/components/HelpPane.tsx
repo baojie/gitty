@@ -38,8 +38,7 @@ function sections(msg: RendererMessages): Section[] {
       rows: [
         { keys: '↑ / ↓ / PgUp / PgDn / Home / End', action: h.moveSelection },
         { keys: 'Enter', action: h.showCommit },
-        { keys: 'Space / Shift+Click', action: h.markSecond },
-        { keys: 'Ctrl+Click', action: h.openCommitPage },
+        { keys: 'Ctrl/Cmd+Click / Shift+Click / Space', action: h.markSecond },
         { keys: 'Ctrl+Click', action: h.openFileTab },
         { keys: 'Ctrl+F', action: h.find },
         { keys: 'Ctrl+C / Ctrl+Shift+C', action: h.copy },
