@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Closing the window or quitting with two or more repositories open asks first.
+- The recent-repository menu remembers the last 100 repositories, shows the
+  twelve most recent with **More…** for the rest, and has a search box that
+  filters all of them.
 
 ### Fixed
 

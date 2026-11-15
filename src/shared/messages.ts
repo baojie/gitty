@@ -220,6 +220,12 @@ export interface RendererMessages {
     /** The × at the right of one, which takes it out of the list. */
     readonly forget: string
     readonly accelOpen: string
+    /** The filter box at the top of the menu, which searches the whole list. */
+    readonly searchPlaceholder: string
+    /** The last row while only the most recent few are shown. */
+    readonly more: (n: number) => string
+    readonly moreTitle: string
+    readonly noMatch: string
   }
   /** The back / forward buttons and the browsing-history menu. */
   readonly nav: {

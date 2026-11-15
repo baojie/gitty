@@ -114,9 +114,15 @@ before — basename plus its parent directory — most recent first.
 - **×** at the right of an entry — take it out of the list; right-clicking the
   entry does the same. The menu stays open, so several can go in a row.
 
+The menu shows the twelve most recent; **More…** at the bottom lists the rest.
+The search box at the top filters the whole list as you type — every word has
+to appear in the repository's name or its directory, and name matches come
+first. <kbd>↑</kbd>/<kbd>↓</kbd> move, <kbd>Enter</kbd> opens in a new tab,
+<kbd>Ctrl+Enter</kbd> in the current one, <kbd>Esc</kbd> closes.
+
 **Open Repository…** and **Clear Recent** sit below. The list lives in
-`~/.config/Gitty/recent-repos.json`, holds twelve entries, and skips any that
-have since been moved or deleted.
+`~/.config/Gitty/recent-repos.json`, holds the last hundred repositories, and
+skips any that have since been moved or deleted.
 
 ### Full screen and hiding
 

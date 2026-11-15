@@ -396,6 +396,11 @@ scatter state into `~/.config/Electron`. Reads filter out paths that no longer
 exist, so a deleted repository disappears from the menu on its own. Remembering
 is best-effort and never blocks opening a repository.
 
+It keeps a hundred entries. The renderer shows only the first twelve until
+**More** or a search (`RepoMenu`, filtered by the pure `recentFilter.ts`), so
+the length of the list is a matter of how far back a search can reach, not of
+how tall the menu is.
+
 ## Asking before closing several repositories
 
 The renderer reports its open tabs over `repo:open-set` whenever they change,

@@ -77,7 +77,11 @@ export const zh: RendererMessages = {
     tooltip:
       '\n\n单击在新标签页中打开\nCtrl+单击在当前标签页打开\n× 把它从列表中移除',
     forget: '从列表中移除这个仓库',
-    accelOpen: 'Ctrl+O'
+    accelOpen: 'Ctrl+O',
+    searchPlaceholder: '搜索仓库…',
+    more: (n: number) => `更多…（${n}）`,
+    moreTitle: '显示记住的全部仓库',
+    noMatch: '没有匹配的仓库'
   },
   nav: {
     backTitle: '返回上一个查看过的位置（Alt+←）',

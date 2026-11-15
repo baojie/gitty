@@ -78,7 +78,11 @@ export const en: RendererMessages = {
     tooltip:
       '\n\nClick to open in a new tab\nCtrl+click to open in this tab\n× takes it out of the list',
     forget: 'Forget this repository',
-    accelOpen: 'Ctrl+O'
+    accelOpen: 'Ctrl+O',
+    searchPlaceholder: 'Search repositories…',
+    more: (n: number) => `More… (${n})`,
+    moreTitle: 'Show every remembered repository',
+    noMatch: 'No repository matches'
   },
   nav: {
     backTitle: 'Back to the place viewed before this one (Alt+←)',

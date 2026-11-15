@@ -78,7 +78,11 @@ export const de: RendererMessages = {
     tooltip:
       '\n\nKlick öffnet in einem neuen Tab\nStrg+Klick öffnet in diesem Tab\n× nimmt es aus der Liste',
     forget: 'Dieses Repository vergessen',
-    accelOpen: 'Strg+O'
+    accelOpen: 'Strg+O',
+    searchPlaceholder: 'Repositorys durchsuchen…',
+    more: (n: number) => `Mehr… (${n})`,
+    moreTitle: 'Alle gemerkten Repositorys anzeigen',
+    noMatch: 'Kein Repository passt'
   },
   nav: {
     backTitle: 'Zurück zur zuvor angesehenen Stelle (Alt+←)',

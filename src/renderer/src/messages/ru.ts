@@ -93,7 +93,11 @@ export const ru: RendererMessages = {
     tooltip:
       '\n\nЩелчок — открыть в новой вкладке\nCtrl+щелчок — открыть в этой вкладке\n× убирает его из списка',
     forget: 'Забыть этот репозиторий',
-    accelOpen: 'Ctrl+O'
+    accelOpen: 'Ctrl+O',
+    searchPlaceholder: 'Поиск репозиториев…',
+    more: (n: number) => `Ещё… (${n})`,
+    moreTitle: 'Показать все запомненные репозитории',
+    noMatch: 'Нет подходящих репозиториев'
   },
   nav: {
     backTitle: 'Назад к предыдущему просмотренному месту (Alt+←)',

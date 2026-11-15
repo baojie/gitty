@@ -78,7 +78,11 @@ export const fr: RendererMessages = {
     tooltip:
       '\n\nClic pour ouvrir dans un nouvel onglet\nCtrl+clic pour ouvrir dans cet onglet\n× le retire de la liste',
     forget: 'Oublier ce dépôt',
-    accelOpen: 'Ctrl+O'
+    accelOpen: 'Ctrl+O',
+    searchPlaceholder: 'Rechercher un dépôt…',
+    more: (n: number) => `Plus… (${n})`,
+    moreTitle: 'Afficher tous les dépôts mémorisés',
+    noMatch: 'Aucun dépôt ne correspond'
   },
   nav: {
     backTitle: 'Revenir à l’endroit consulté juste avant (Alt+←)',

@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, type JSX } from 'react'
 import { ContextMenu, type MenuItem, type MenuState } from './components/ContextMenu'
+import { RepoMenu } from './components/RepoMenu'
 import { PromptDialog } from './components/PromptDialog'
 import { AboutPane } from './components/AboutPane'
 import { HelpPane } from './components/HelpPane'
@@ -503,54 +504,15 @@ export default function App(): JSX.Element {
 
   /* ---------- repository menu (recent + open) ---------- */
 
-  // Rebuilt rather than captured, so removing an entry updates the open menu.
-  function forgetRecent(path: string): void {
-    void window.gitty.repo.forget(path).then((next) => {
-      setRecent(next)
-      setMenu((m) => (m ? { ...m, items: recentItems(next) } : m))
-    })
-  }
-
-  function recentItems(list: string[]): MenuItem[] {
-    const others = list.filter((p) => p !== active)
-    const items: MenuItem[] = others.map((p) => ({
-      // A tab's custom name follows the repository into this list, so the one
-      // name names it everywhere; the path is still on the row as its accel.
-      label: tabLabel(tabNames, p),
-      accel: shortenPath(p),
-      title: `${p}${msg.recent.tooltip}`,
-      action: (mods) => void (mods?.ctrl ? openInActiveTab(p) : openTab(p)),
-      auxAction: () => void openInActiveTab(p),
-      // Right-click and the × do the same thing; the × is the one that can be
-      // seen. The menu is rebuilt rather than closed, so several entries can
-      // go in a row.
-      altAction: () => forgetRecent(p),
-      remove: { title: msg.recent.forget, action: () => forgetRecent(p) }
-    }))
-    if (items.length === 0) {
-      items.push({ label: msg.recent.noOtherRepos, action: () => {} })
-    }
-    items.push({
-      label: msg.recent.openRepoEllipsis,
-      accel: msg.recent.accelOpen,
-      separatorBefore: true,
-      action: () => pickAndOpen()
-    })
-    if (others.length > 0) {
-      items.push({
-        label: msg.recent.clearRecent,
-        action: () => {
-          void window.gitty.repo.forgetAll()
-          setRecent(active ? [active] : [])
-        }
-      })
-    }
-    return items
-  }
-
-  const openRecentMenu = (x: number, y: number): void => {
-    setMenu({ x, y, items: recentItems(recent) })
-  }
+  // The menu is its own component (it holds a search box); it reads `recent`
+  // live, so forgetting an entry updates it in place and several can go in a row.
+  const [repoMenuAt, setRepoMenuAt] = useState<{ x: number; y: number } | null>(null)
+  const openRecentMenu = (x: number, y: number): void => setRepoMenuAt({ x, y })
+  const closeRepoMenu = useCallback(() => setRepoMenuAt(null), [])
+  const recentLabel = useCallback((p: string) => tabLabel(tabNames, p), [tabNames])
+  const forgetRecent = useCallback((p: string): void => {
+    void window.gitty.repo.forget(p).then(setRecent)
+  }, [])
 
   /* ---------- branch menu ---------- */
 
@@ -882,6 +844,23 @@ export default function App(): JSX.Element {
       </div>
 
       <ContextMenu state={menu} onClose={() => setMenu(null)} />
+      {repoMenuAt && (
+        <RepoMenu
+          x={repoMenuAt.x}
+          y={repoMenuAt.y}
+          list={recent.filter((p) => p !== active)}
+          labelOf={recentLabel}
+          shortPath={shortenPath}
+          onOpen={(p, inActiveTab) => void (inActiveTab ? openInActiveTab(p) : openTab(p))}
+          onForget={forgetRecent}
+          onPick={pickAndOpen}
+          onClear={() => {
+            void window.gitty.repo.forgetAll()
+            setRecent(active ? [active] : [])
+          }}
+          onClose={closeRepoMenu}
+        />
+      )}
       <PromptDialog
         open={renameFor !== null}
         title={msg.tab.renameTitle}

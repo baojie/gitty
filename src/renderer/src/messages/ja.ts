@@ -77,7 +77,11 @@ export const ja: RendererMessages = {
     tooltip:
       '\n\nクリックで新しいタブに開く\nCtrl+クリックでこのタブに開く\n× で一覧から外す',
     forget: 'このリポジトリを一覧から外す',
-    accelOpen: 'Ctrl+O'
+    accelOpen: 'Ctrl+O',
+    searchPlaceholder: 'リポジトリを検索…',
+    more: (n: number) => `さらに表示…（${n}）`,
+    moreTitle: '記憶しているリポジトリをすべて表示',
+    noMatch: '一致するリポジトリはありません'
   },
   nav: {
     backTitle: '直前に見ていた場所に戻る（Alt+←）',

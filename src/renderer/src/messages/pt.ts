@@ -78,7 +78,11 @@ export const pt: RendererMessages = {
     tooltip:
       '\n\nClique para abrir num separador novo\nCtrl+clique para abrir neste separador\n× tira-o da lista',
     forget: 'Esquecer este repositório',
-    accelOpen: 'Ctrl+O'
+    accelOpen: 'Ctrl+O',
+    searchPlaceholder: 'Pesquisar repositórios…',
+    more: (n: number) => `Mais… (${n})`,
+    moreTitle: 'Mostrar todos os repositórios lembrados',
+    noMatch: 'Nenhum repositório corresponde'
   },
   nav: {
     backTitle: 'Voltar ao local visto antes deste (Alt+←)',

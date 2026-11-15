@@ -1215,6 +1215,59 @@ button:disabled:hover {
   background: var(--border);
 }
 
+/* ---------- the repository menu ---------- */
+
+/* The list scrolls rather than the menu, so the search box above it and Open /
+   Clear below stay in reach however long the list has grown. */
+.repo-menu {
+  display: flex;
+  flex-direction: column;
+  min-width: 340px;
+  max-width: min(640px, 90vw);
+  overflow: hidden;
+}
+
+.repo-menu-search {
+  width: auto;
+  max-width: none;
+  margin: 2px 8px 6px;
+  padding: 4px 8px;
+}
+
+.repo-menu-list {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* The accelerator column holds a path here; it gives way before the name. */
+.repo-menu-list .ctx-item .accel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.repo-menu-list .ctx-item > span:first-child {
+  white-space: nowrap;
+}
+
+/* Hover and the keyboard cursor are one highlight, as in quick open. */
+.repo-menu-list .ctx-item:hover {
+  background: none;
+}
+
+.repo-menu-list .ctx-item.selected {
+  background: var(--bg-select);
+}
+
+.ctx-item.ctx-note {
+  color: var(--fg-faint);
+  cursor: default;
+}
+
+.ctx-item.ctx-more {
+  color: var(--fg-dim);
+}
+
 /* ---------- terminal ---------- */
 
 .term-body {

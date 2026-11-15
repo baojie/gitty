@@ -24,6 +24,7 @@
     "src/renderer/src/symbols.ts",
     "src/renderer/src/icons.ts",
     "src/renderer/src/tabs.ts",
+    "src/renderer/src/recentFilter.ts",
     "src/renderer/src/diffLines.ts",
     "src/renderer/src/quickopen.ts",
     "src/renderer/src/json.ts",

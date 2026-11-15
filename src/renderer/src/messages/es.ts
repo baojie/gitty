@@ -78,7 +78,11 @@ export const es: RendererMessages = {
     tooltip:
       '\n\nClic para abrir en una pestaña nueva\nCtrl+clic para abrir en esta pestaña\n× lo quita de la lista',
     forget: 'Olvidar este repositorio',
-    accelOpen: 'Ctrl+O'
+    accelOpen: 'Ctrl+O',
+    searchPlaceholder: 'Buscar repositorios…',
+    more: (n: number) => `Más… (${n})`,
+    moreTitle: 'Mostrar todos los repositorios recordados',
+    noMatch: 'Ningún repositorio coincide'
   },
   nav: {
     backTitle: 'Volver al lugar visto justo antes (Alt+←)',

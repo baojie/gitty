@@ -2,8 +2,9 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { app } from 'electron'
 
-/** How many repositories to remember. */
-const LIMIT = 12
+/** How many repositories to remember. The menu shows the first few; More and
+ *  the search box reach the rest. */
+const LIMIT = 100
 
 function storePath(): string {
   return path.join(app.getPath('userData'), 'recent-repos.json')
