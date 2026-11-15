@@ -94,6 +94,10 @@ real path still in the tooltip — and **Close repository**. Closing the last ta
 leaves an empty window with a button to open the next repository. (Open tabs are
 not remembered across restarts.)
 
+Closing the window or quitting with more than one repository open asks first,
+so a stray <kbd>Ctrl+Q</kbd> does not take the whole set with it. One open
+repository closes without a question.
+
 ### Recent repositories
 
 The repository path in the title bar is a menu of the repositories opened

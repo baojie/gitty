@@ -396,6 +396,16 @@ scatter state into `~/.config/Electron`. Reads filter out paths that no longer
 exist, so a deleted repository disappears from the menu on its own. Remembering
 is best-effort and never blocks opening a repository.
 
+## Asking before closing several repositories
+
+The renderer reports its open tabs over `repo:open-set` whenever they change,
+because by the time the window's `close` event fires there is no asking it. With
+two or more open, `close` is cancelled, the native dialog is shown, and on
+**Quit** the close is repeated with `closeConfirmed` set. `before-quit` marks a
+close that Quit started, so the confirmed close is repeated as `app.quit()` —
+on macOS closing the window alone would leave the app running. A cancelled
+Quit clears that mark, or a later plain close would quit the app.
+
 ## One instance, or several
 
 The window holds every repository as a tab, so the useful default is one

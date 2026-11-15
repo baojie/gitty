@@ -88,6 +88,12 @@ export interface MainMessages {
     readonly rebaseConfirm: string
     readonly rebaseDetail: string
     readonly rebaseButton: string
+    /** Closing the window with more than one repository open: asked so a
+     *  stray Ctrl+Q does not take the whole set of tabs with it. */
+    readonly quitTitle: string
+    readonly quitConfirm: (n: number) => string
+    readonly quitDetail: string
+    readonly quitButton: string
   }
   readonly window: {
     readonly title: string

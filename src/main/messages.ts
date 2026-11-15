@@ -70,7 +70,11 @@ const en: MainMessages = {
     rebaseConfirm: 'The branches have diverged. Pull with rebase instead?',
     rebaseDetail:
       'A fast-forward is not possible. Rebasing replays your local commits on top of what the remote has; the work tree must be clean, and a conflict stops the rebase for you to resolve.',
-    rebaseButton: 'Rebase'
+    rebaseButton: 'Rebase',
+    quitTitle: 'Quit Gitty',
+    quitConfirm: (n: number) => `${n} repositories are open. Quit anyway?`,
+    quitDetail: 'They reopen at the next start when Reopen last session is on in Settings.',
+    quitButton: 'Quit'
   },
   window: {
     title: 'Gitty'
@@ -163,7 +167,11 @@ const zh: MainMessages = {
     rebaseConfirm: '分支已经分叉，改用变基方式拉取吗？',
     rebaseDetail:
       '无法快进。变基会把你的本地提交重放到远端已有的提交之上；工作区必须干净，遇到冲突变基会停下，交由你解决。',
-    rebaseButton: '变基'
+    rebaseButton: '变基',
+    quitTitle: '退出 Gitty',
+    quitConfirm: (n: number) => `已打开 ${n} 个仓库，仍要退出吗？`,
+    quitDetail: '开启“恢复上次会话”时，下次启动会重新打开它们。',
+    quitButton: '退出'
   },
   window: {
     title: 'Gitty'
@@ -259,7 +267,11 @@ const ja: MainMessages = {
     rebaseConfirm: 'ブランチが分岐しています。リベースして取得しますか？',
     rebaseDetail:
       '早送りできません。リベースはローカルのコミットをリモートの内容の上に適用し直します。作業ツリーはクリーンである必要があり、衝突が起きるとリベースは停止して解決を待ちます。',
-    rebaseButton: 'リベース'
+    rebaseButton: 'リベース',
+    quitTitle: 'Gitty を終了',
+    quitConfirm: (n: number) => `${n} 個のリポジトリが開いています。それでも終了しますか？`,
+    quitDetail: '「前回のセッションを復元」がオンなら、次回起動時に再び開きます。',
+    quitButton: '終了'
   },
   window: {
     title: 'Gitty'
@@ -354,7 +366,11 @@ const ko: MainMessages = {
     rebaseConfirm: '브랜치가 갈라졌습니다. 리베이스로 가져올까요?',
     rebaseDetail:
       '빨리 감기가 불가능합니다. 리베이스는 로컬 커밋을 원격의 내용 위에 다시 적용합니다. 작업 트리가 깨끗해야 하며, 충돌이 나면 리베이스가 멈추고 해결을 기다립니다.',
-    rebaseButton: '리베이스'
+    rebaseButton: '리베이스',
+    quitTitle: 'Gitty 종료',
+    quitConfirm: (n: number) => `저장소 ${n}개가 열려 있습니다. 그래도 종료할까요?`,
+    quitDetail: '「지난 세션 복원」가 켜져 있으면 다음 실행 때 다시 열립니다.',
+    quitButton: '종료'
   },
   window: {
     title: 'Gitty'
@@ -450,7 +466,11 @@ const fr: MainMessages = {
     rebaseConfirm: 'Les branches ont divergé. Tirer avec un rebase ?',
     rebaseDetail:
       'L\'avance rapide est impossible. Le rebase rejoue vos commits locaux au-dessus de ce que le dépôt distant contient ; l\'arbre de travail doit être propre, et un conflit interrompt le rebase pour que vous le résolviez.',
-    rebaseButton: 'Rebaser'
+    rebaseButton: 'Rebaser',
+    quitTitle: 'Quitter Gitty',
+    quitConfirm: (n: number) => `${n} dépôts sont ouverts. Quitter quand même ?`,
+    quitDetail: 'Ils se rouvrent au prochain démarrage si « Rouvrir la session précédente » est activé.',
+    quitButton: 'Quitter'
   },
   window: {
     title: 'Gitty'
@@ -547,7 +567,11 @@ const de: MainMessages = {
     rebaseConfirm: 'Die Branches sind auseinandergelaufen. Stattdessen mit Rebase holen?',
     rebaseDetail:
       'Ein Fast-Forward ist nicht möglich. Beim Rebase werden deine lokalen Commits auf den Stand des Remotes neu aufgesetzt; der Arbeitsbaum muss sauber sein, und ein Konflikt hält den Rebase an, damit du ihn auflöst.',
-    rebaseButton: 'Rebase'
+    rebaseButton: 'Rebase',
+    quitTitle: 'Gitty beenden',
+    quitConfirm: (n: number) => `${n} Repositorys sind geöffnet. Trotzdem beenden?`,
+    quitDetail: 'Ist „Letzte Sitzung wiederherstellen“ an, öffnen sie sich beim nächsten Start wieder.',
+    quitButton: 'Beenden'
   },
   window: {
     title: 'Gitty'
@@ -644,7 +668,11 @@ const es: MainMessages = {
     rebaseConfirm: 'Las ramas han divergido. ¿Traer con rebase?',
     rebaseDetail:
       'No es posible un avance rápido. El rebase vuelve a aplicar tus commits locales sobre lo que tiene el remoto; el árbol de trabajo debe estar limpio y un conflicto detiene el rebase para que lo resuelvas.',
-    rebaseButton: 'Rebase'
+    rebaseButton: 'Rebase',
+    quitTitle: 'Salir de Gitty',
+    quitConfirm: (n: number) => `Hay ${n} repositorios abiertos. ¿Salir de todos modos?`,
+    quitDetail: 'Se vuelven a abrir en el próximo inicio si «Reabrir la sesión anterior» está activado.',
+    quitButton: 'Salir'
   },
   window: {
     title: 'Gitty'
@@ -741,7 +769,11 @@ const ru: MainMessages = {
     rebaseConfirm: 'Ветки разошлись. Получить с ребейзом?',
     rebaseDetail:
       'Перемотка невозможна. Ребейз заново применяет ваши локальные коммиты поверх того, что есть на удалённом репозитории; рабочее дерево должно быть чистым, а конфликт останавливает ребейз, чтобы вы его разрешили.',
-    rebaseButton: 'Ребейз'
+    rebaseButton: 'Ребейз',
+    quitTitle: 'Выйти из Gitty',
+    quitConfirm: (n: number) => `Открыто репозиториев: ${n}. Всё равно выйти?`,
+    quitDetail: 'Если включено «Восстановить прошлый сеанс», при следующем запуске они откроются снова.',
+    quitButton: 'Выйти'
   },
   window: {
     title: 'Gitty'
@@ -837,7 +869,11 @@ const pt: MainMessages = {
     rebaseConfirm: 'Os ramos divergiram. Obter com rebase?',
     rebaseDetail:
       'Não é possível avançar rapidamente. O rebase reaplica os teus commits locais sobre o que o remoto tem; a árvore de trabalho tem de estar limpa e um conflito interrompe o rebase para o resolveres.',
-    rebaseButton: 'Rebase'
+    rebaseButton: 'Rebase',
+    quitTitle: 'Sair do Gitty',
+    quitConfirm: (n: number) => `Há ${n} repositórios abertos. Sair mesmo assim?`,
+    quitDetail: 'Eles reabrem no próximo início se «Reabrir a sessão anterior» estiver ativado.',
+    quitButton: 'Sair'
   },
   window: {
     title: 'Gitty'

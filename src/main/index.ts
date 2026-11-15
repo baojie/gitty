@@ -85,6 +85,13 @@ function relaunchWithoutFractionalScale(): boolean {
 
 let win: BrowserWindow | null = null
 
+/** How many repository tabs the renderer has open, as it last reported. */
+let openRepoCount = 0
+/** Set once the user has agreed to close with several repositories open. */
+let closeConfirmed = false
+/** The close under way came from Quit rather than from closing the window. */
+let quitRequested = false
+
 /** The project's home page — the About dialog and the Help menu both point here. */
 const GITTY_REPO_URL = 'https://github.com/baojie/gitty'
 
@@ -267,6 +274,9 @@ function installMenu(): void {
 }
 
 function createWindow(): void {
+  // A window reopened on macOS starts its own session: nothing open, nothing agreed.
+  openRepoCount = 0
+  closeConfirmed = false
   // BrowserWindow's icon shows on Linux and Windows; the macOS dock has its
   // own. Guard it in case the file is absent when running unpackaged.
   const icon = path.join(app.getAppPath(), 'build', 'icon.png')
@@ -306,6 +316,33 @@ function createWindow(): void {
   // A reload throws away the renderer's terminal ids, so its shells would
   // otherwise linger with nothing able to reach them.
   win.webContents.on('did-start-loading', disposeAllTerminals)
+
+  // Several tabs are a session worth asking about; one is not. The dialog is
+  // async, so the close is cancelled first and repeated once it is answered —
+  // as a quit when Quit started it, since on macOS closing the window alone
+  // would leave the app running.
+  win.on('close', (e) => {
+    if (closeConfirmed || openRepoCount < 2 || !win) return
+    e.preventDefault()
+    const wasQuit = quitRequested
+    quitRequested = false
+    void dialog
+      .showMessageBox(win, {
+        type: 'question',
+        title: msg.dialog.quitTitle,
+        message: msg.dialog.quitConfirm(openRepoCount),
+        detail: msg.dialog.quitDetail,
+        buttons: [msg.dialog.cancelButton, msg.dialog.quitButton],
+        defaultId: 1,
+        cancelId: 0
+      })
+      .then(({ response }) => {
+        if (response !== 1) return
+        closeConfirmed = true
+        if (wasQuit) app.quit()
+        else win?.close()
+      })
+  })
 
   win.on('closed', () => {
     disposeAllTerminals()
@@ -453,6 +490,10 @@ function registerIpc(): void {
       dialog.showErrorBox(msg.dialog.notARepo, msg.dialog.notInsideWorkTree(res.filePaths[0]))
       return null
     }
+  })
+
+  ipcMain.on('repo:open-set', (_e, roots: string[]) => {
+    openRepoCount = Array.isArray(roots) ? roots.length : 0
   })
 
   ipcMain.on('settings:setLocale', (_e, locale: string) => {
@@ -847,6 +888,10 @@ app.whenReady().then(async () => {
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+})
+
+app.on('before-quit', () => {
+  quitRequested = true
 })
 
 app.on('window-all-closed', () => {

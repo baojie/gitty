@@ -317,6 +317,8 @@ export default function App(): JSX.Element {
   // Closing the last tab is a deliberate act and writes the empty list itself.
   useEffect(() => {
     if (roots.length > 0) localStorage.setItem('gitty.roots', JSON.stringify(roots))
+    // The main process asks before closing over several of them.
+    window.gitty.repo.reportOpen(roots)
   }, [roots])
 
   // Ctrl+Shift+C copies as well, so the key does not change meaning when the

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Closing the window or quitting with two or more repositories open asks first.
+
 ## [0.2.1] - 2026-09-14
 
 ### Added
