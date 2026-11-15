@@ -321,6 +321,21 @@ export default function App(): JSX.Element {
     window.gitty.repo.reportOpen(roots)
   }, [roots])
 
+  // And once more as the window goes, so with several windows (Multiple
+  // instances) the session kept is the one closed last, not the one whose
+  // tabs happened to change last.
+  const rootsRef = useRef(roots)
+  rootsRef.current = roots
+  useEffect(() => {
+    const save = (): void => {
+      if (rootsRef.current.length > 0) {
+        localStorage.setItem('gitty.roots', JSON.stringify(rootsRef.current))
+      }
+    }
+    window.addEventListener('pagehide', save)
+    return () => window.removeEventListener('pagehide', save)
+  }, [])
+
   // Ctrl+Shift+C copies as well, so the key does not change meaning when the
   // focus moves into a terminal — where Ctrl+C is the interrupt. App-wide
   // rather than per tab: the panes it covers belong to several of them.

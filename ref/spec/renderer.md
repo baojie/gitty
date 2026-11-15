@@ -94,7 +94,9 @@ reads it back over IPC — the single asymmetric entry in an otherwise uniform
 set. The open-repository list
 (`gitty.roots`, for **Reopen last session**) is the one with a lifecycle of its
 own: the app holds `[]` until the restore pass has opened anything, so it is
-written only when non-empty and cleared only by closing the last tab.
+written only when non-empty and cleared only by closing the last tab. It is
+written on every change and once more on `pagehide`, so with several windows the
+one closed last is the session kept.
 
 Preferences that git needs (`DiffOptions`) or the pty needs (`TerminalOptions`)
 travel *with each call* rather than being pushed into the main process: it

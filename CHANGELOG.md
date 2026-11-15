@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Closing the window or quitting with two or more repositories open asks first.
 
+### Fixed
+
+- The session reopened at the next start is the set of tabs open when the
+  window closed, so with several windows the one closed last wins. The manual
+  no longer says open tabs are forgotten.
+
 ## [0.2.1] - 2026-09-14
 
 ### Added

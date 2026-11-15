@@ -91,8 +91,13 @@ when you switch away and back. Drag a tab to a new place in the bar to reorder
 the repositories. Right-clicking a tab offers **Rename tab…** — the name is
 remembered for that repository, shown in the tab bar and the title bar, with the
 real path still in the tooltip — and **Close repository**. Closing the last tab
-leaves an empty window with a button to open the next repository. (Open tabs are
-not remembered across restarts.)
+leaves an empty window with a button to open the next repository.
+
+The tabs open when Gitty exits are reopened at the next start — the
+repository it was started with still ends up the active tab, and one that has
+since been deleted is quietly dropped. **Reopen last session** in the settings
+turns this off. With several windows (**Instances: Multiple**) the window
+closed last is the session kept.
 
 Closing the window or quitting with more than one repository open asks first,
 so a stray <kbd>Ctrl+Q</kbd> does not take the whole set with it. One open
