@@ -855,8 +855,9 @@ export default function App(): JSX.Element {
           onForget={forgetRecent}
           onPick={pickAndOpen}
           onClear={() => {
-            void window.gitty.repo.forgetAll()
-            setRecent(active ? [active] : [])
+            void window.gitty.repo.forgetAll().then((cleared) => {
+              if (cleared) setRecent(active ? [active] : [])
+            })
           }}
           onClose={closeRepoMenu}
         />

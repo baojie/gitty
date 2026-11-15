@@ -504,7 +504,23 @@ function registerIpc(): void {
   ipcMain.handle('recent:list', () => listRecent())
   ipcMain.handle('recent:add', (_e, root: string) => addRecent(root))
   ipcMain.handle('recent:remove', (_e, root: string) => removeRecent(root))
-  ipcMain.handle('recent:clear', () => clearRecent())
+  // Asked natively, as forgetting a command is: the whole list goes at once and
+  // there is no undo. Resolves whether it was cleared.
+  ipcMain.handle('recent:clear', async () => {
+    const n = listRecent().length
+    const answer = await dialog.showMessageBox(win!, {
+      type: 'question',
+      title: msg.dialog.clearRecentTitle,
+      message: msg.dialog.clearRecentConfirm(n),
+      detail: msg.dialog.clearRecentDetail,
+      buttons: [msg.dialog.cancelButton, msg.dialog.clearRecentButton],
+      defaultId: 0,
+      cancelId: 0
+    })
+    if (answer.response !== 1) return false
+    clearRecent()
+    return true
+  })
 
   ipcMain.handle('repo:watch', (_e, root: string) => {
     // Re-watching the same root replaces its watcher; others stay untouched.

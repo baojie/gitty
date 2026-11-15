@@ -74,7 +74,11 @@ const en: MainMessages = {
     quitTitle: 'Quit Gitty',
     quitConfirm: (n: number) => `${n} repositories are open. Quit anyway?`,
     quitDetail: 'They reopen at the next start when Reopen last session is on in Settings.',
-    quitButton: 'Quit'
+    quitButton: 'Quit',
+    clearRecentTitle: 'Clear Recent',
+    clearRecentConfirm: (n: number) => n === 1 ? 'Forget the one remembered repository?' : `Forget all ${n} remembered repositories?`,
+    clearRecentDetail: 'The list empties; the repositories themselves are not touched. Open tabs stay open.',
+    clearRecentButton: 'Clear'
   },
   window: {
     title: 'Gitty'
@@ -171,7 +175,11 @@ const zh: MainMessages = {
     quitTitle: '退出 Gitty',
     quitConfirm: (n: number) => `已打开 ${n} 个仓库，仍要退出吗？`,
     quitDetail: '开启“恢复上次会话”时，下次启动会重新打开它们。',
-    quitButton: '退出'
+    quitButton: '退出',
+    clearRecentTitle: '清除记录',
+    clearRecentConfirm: (n: number) => `忘记全部 ${n} 个记住的仓库？`,
+    clearRecentDetail: '只清空列表，不会动仓库本身；已打开的标签保持打开。',
+    clearRecentButton: '清除'
   },
   window: {
     title: 'Gitty'
@@ -271,7 +279,11 @@ const ja: MainMessages = {
     quitTitle: 'Gitty を終了',
     quitConfirm: (n: number) => `${n} 個のリポジトリが開いています。それでも終了しますか？`,
     quitDetail: '「前回のセッションを復元」がオンなら、次回起動時に再び開きます。',
-    quitButton: '終了'
+    quitButton: '終了',
+    clearRecentTitle: '履歴を消去',
+    clearRecentConfirm: (n: number) => `記憶している ${n} 個のリポジトリをすべて消去しますか？`,
+    clearRecentDetail: '一覧が空になるだけで、リポジトリ自体には触れません。開いているタブはそのままです。',
+    clearRecentButton: 'クリア'
   },
   window: {
     title: 'Gitty'
@@ -370,7 +382,11 @@ const ko: MainMessages = {
     quitTitle: 'Gitty 종료',
     quitConfirm: (n: number) => `저장소 ${n}개가 열려 있습니다. 그래도 종료할까요?`,
     quitDetail: '「지난 세션 복원」가 켜져 있으면 다음 실행 때 다시 열립니다.',
-    quitButton: '종료'
+    quitButton: '종료',
+    clearRecentTitle: '기록 지우기',
+    clearRecentConfirm: (n: number) => `기억된 저장소 ${n}개를 모두 지울까요?`,
+    clearRecentDetail: '목록만 비워지며 저장소 자체는 그대로입니다. 열린 탭도 그대로 유지됩니다.',
+    clearRecentButton: '지우기'
   },
   window: {
     title: 'Gitty'
@@ -470,7 +486,11 @@ const fr: MainMessages = {
     quitTitle: 'Quitter Gitty',
     quitConfirm: (n: number) => `${n} dépôts sont ouverts. Quitter quand même ?`,
     quitDetail: 'Ils se rouvrent au prochain démarrage si « Rouvrir la session précédente » est activé.',
-    quitButton: 'Quitter'
+    quitButton: 'Quitter',
+    clearRecentTitle: 'Effacer la liste',
+    clearRecentConfirm: (n: number) => n === 1 ? 'Oublier le dépôt mémorisé ?' : `Oublier les ${n} dépôts mémorisés ?`,
+    clearRecentDetail: 'Seule la liste est vidée ; les dépôts eux-mêmes ne sont pas touchés. Les onglets ouverts restent ouverts.',
+    clearRecentButton: 'Effacer'
   },
   window: {
     title: 'Gitty'
@@ -571,7 +591,11 @@ const de: MainMessages = {
     quitTitle: 'Gitty beenden',
     quitConfirm: (n: number) => `${n} Repositorys sind geöffnet. Trotzdem beenden?`,
     quitDetail: 'Ist „Letzte Sitzung wiederherstellen“ an, öffnen sie sich beim nächsten Start wieder.',
-    quitButton: 'Beenden'
+    quitButton: 'Beenden',
+    clearRecentTitle: 'Liste leeren',
+    clearRecentConfirm: (n: number) => n === 1 ? 'Das gemerkte Repository vergessen?' : `Alle ${n} gemerkten Repositorys vergessen?`,
+    clearRecentDetail: 'Nur die Liste wird geleert; die Repositorys selbst bleiben unberührt. Offene Tabs bleiben offen.',
+    clearRecentButton: 'Leeren'
   },
   window: {
     title: 'Gitty'
@@ -672,7 +696,11 @@ const es: MainMessages = {
     quitTitle: 'Salir de Gitty',
     quitConfirm: (n: number) => `Hay ${n} repositorios abiertos. ¿Salir de todos modos?`,
     quitDetail: 'Se vuelven a abrir en el próximo inicio si «Reabrir la sesión anterior» está activado.',
-    quitButton: 'Salir'
+    quitButton: 'Salir',
+    clearRecentTitle: 'Borrar recientes',
+    clearRecentConfirm: (n: number) => n === 1 ? '¿Olvidar el repositorio recordado?' : `¿Olvidar los ${n} repositorios recordados?`,
+    clearRecentDetail: 'Solo se vacía la lista; los repositorios no se tocan. Las pestañas abiertas siguen abiertas.',
+    clearRecentButton: 'Borrar'
   },
   window: {
     title: 'Gitty'
@@ -773,7 +801,11 @@ const ru: MainMessages = {
     quitTitle: 'Выйти из Gitty',
     quitConfirm: (n: number) => `Открыто репозиториев: ${n}. Всё равно выйти?`,
     quitDetail: 'Если включено «Восстановить прошлый сеанс», при следующем запуске они откроются снова.',
-    quitButton: 'Выйти'
+    quitButton: 'Выйти',
+    clearRecentTitle: 'Очистить список',
+    clearRecentConfirm: (n: number) => `Забыть все запомненные репозитории (${n})?`,
+    clearRecentDetail: 'Очищается только список, сами репозитории не затрагиваются. Открытые вкладки остаются открытыми.',
+    clearRecentButton: 'Очистить'
   },
   window: {
     title: 'Gitty'
@@ -873,7 +905,11 @@ const pt: MainMessages = {
     quitTitle: 'Sair do Gitty',
     quitConfirm: (n: number) => `Há ${n} repositórios abertos. Sair mesmo assim?`,
     quitDetail: 'Eles reabrem no próximo início se «Reabrir a sessão anterior» estiver ativado.',
-    quitButton: 'Sair'
+    quitButton: 'Sair',
+    clearRecentTitle: 'Limpar recentes',
+    clearRecentConfirm: (n: number) => n === 1 ? 'Esquecer o repositório lembrado?' : `Esquecer os ${n} repositórios lembrados?`,
+    clearRecentDetail: 'Só a lista é esvaziada; os repositórios não são tocados. As abas abertas continuam abertas.',
+    clearRecentButton: 'Limpar'
   },
   window: {
     title: 'Gitty'

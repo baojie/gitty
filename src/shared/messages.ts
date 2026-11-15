@@ -94,6 +94,12 @@ export interface MainMessages {
     readonly quitConfirm: (n: number) => string
     readonly quitDetail: string
     readonly quitButton: string
+    /** Clear Recent in the repository menu: a hundred entries go at once, and
+     *  nothing brings them back. */
+    readonly clearRecentTitle: string
+    readonly clearRecentConfirm: (n: number) => string
+    readonly clearRecentDetail: string
+    readonly clearRecentButton: string
   }
   readonly window: {
     readonly title: string

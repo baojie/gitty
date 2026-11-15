@@ -120,7 +120,8 @@ to appear in the repository's name or its directory, and name matches come
 first. <kbd>↑</kbd>/<kbd>↓</kbd> move, <kbd>Enter</kbd> opens in a new tab,
 <kbd>Ctrl+Enter</kbd> in the current one, <kbd>Esc</kbd> closes.
 
-**Open Repository…** and **Clear Recent** sit below. The list lives in
+**Open Repository…** and **Clear Recent** sit below; Clear Recent asks before
+emptying the list, which has no undo. The list lives in
 `~/.config/Gitty/recent-repos.json`, holds the last hundred repositories, and
 skips any that have since been moved or deleted.
 
