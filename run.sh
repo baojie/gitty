@@ -54,6 +54,14 @@ fi
 
 cd "$HERE"
 
+# Checked up front because every later failure would blame something else —
+# the Electron lookup below runs through node and would report a missing binary.
+# On Windows the usual cause is a terminal opened before Node was installed.
+if ! command -v node >/dev/null 2>&1; then
+  echo "gitty: node is not on PATH; install Node.js (or open a new terminal)" >&2
+  exit 1
+fi
+
 if [ ! -d node_modules ]; then
   echo "gitty: installing dependencies..."
   npm install

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import path from 'node:path'
 import { lfsObjectPath, parseLfsPointer } from '../src/main/lfs'
 
 const OID = 'a26e0004e9ce82b10b92ab8b52c900a7de6ceba844ca897ced9b1e020506700e'
@@ -51,6 +52,6 @@ describe('parseLfsPointer', () => {
 
 describe('lfsObjectPath', () => {
   it('fans out by the first four hex digits', () => {
-    expect(lfsObjectPath('/repo/.git', OID)).toBe(`/repo/.git/lfs/objects/a2/6e/${OID}`)
+    expect(lfsObjectPath('/repo/.git', OID)).toBe(path.join('/repo/.git', 'lfs', 'objects', 'a2', '6e', OID))
   })
 })

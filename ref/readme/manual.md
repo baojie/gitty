@@ -1001,3 +1001,58 @@ no Homebrew on it, and `run.sh` needs `node` and `npm` to rebuild when the
 bundle is stale. `setup.sh` resolves them at install time and prepends them —
 a prefix, so a terminal launch is unaffected. Switching Node versions later
 leaves that path stale; re-run `setup.sh` to repoint it.
+
+### Windows
+
+Windows runs from a checkout, through the same `run.sh` and `setup.sh` as the
+other platforms, executed by Git Bash, which comes with
+[Git for Windows](https://gitforwindows.org/). The README lists the
+[steps](../../README.md#on-windows). Nothing is packaged:
+`electron-builder.yml` configures Linux targets only.
+
+**What `setup.sh` installs.** A symlink is no use here, because Git Bash's
+`ln -s` quietly makes a copy, and a copy of `run.sh` looks for the checkout
+beside itself. So `%USERPROFILE%\.local\bin` gets two small wrappers instead:
+`gitty`, a bash script for Git Bash, and `gitty.cmd` for cmd and PowerShell,
+which hands its arguments to Git's `bash.exe -l`. The `-l` puts Git's own tools
+on `PATH`; `CHERE_INVOKING=1` keeps the login profile from changing to your home
+directory, so `gitty` still means the current one. Git Bash builds its `PATH`
+from Windows', so a single entry for that directory serves every shell, and
+`setup.sh` prints the PowerShell line that adds it when it is missing.
+
+The Start Menu and desktop get a `Gitty.lnk` that runs `run.sh --any` in a
+minimised Git Bash window. That window closes as soon as Electron has been
+started. Its icon is `build/icon.png` wrapped in an `.ico` under
+`%LOCALAPPDATA%\Gitty`. The log is `%USERPROFILE%\.local\state\gitty\gitty.log`,
+the same path as elsewhere.
+
+**No Visual Studio.** The terminal pane's `node-pty` ships prebuilt N-API
+binaries for Windows that load under any Electron, so the `postinstall` step
+skips the `electron-rebuild` it runs on Linux and macOS. That rebuild would
+need Visual Studio's C++ tools, and fail without them.
+
+**_not a valid Win32 application_ during `npm install`.** This means the 64-bit
+Visual C++ runtime is missing, not that a download is broken. Without it,
+Windows looks for `vcruntime140.dll` along `PATH`, and a 32-bit copy left there
+by some other program (a 32-bit Python is the usual one) cannot load into
+64-bit Node. Install the runtime with
+`winget install Microsoft.VCRedist.2015+.x64` and run `npm install` again.
+
+**_dubious ownership_.** On a drive that does not record file owners, such as
+FAT/exFAT or some network shares, git refuses a repository it cannot prove you
+own, and Gitty shows nothing for it. Trust the repository, or every repository
+on that drive, in git's own configuration:
+
+```bash
+git config --global --add safe.directory D:/path/to/repo
+git config --global --add safe.directory '*'   # every repository
+```
+
+**The terminal** starts `COMSPEC`, which is `cmd.exe`, unless **Settings →
+Shell** picks PowerShell or another shell. **Login shell** does nothing here.
+
+**Line endings.** Git for Windows checks text out with CRLF by default, and
+bash reads a trailing CR as part of the command. `.gitattributes` keeps `*.sh`
+at LF on every checkout. A checkout made before that file existed picks it up
+once the two scripts are checked out again, with
+`rm run.sh setup.sh && git checkout -- run.sh setup.sh`.

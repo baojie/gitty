@@ -5,6 +5,10 @@
 #   ./setup.sh               install to ~/.local/bin (no sudo needed)
 #   ./setup.sh --system      install to /usr/local/bin (requires sudo)
 #
+# On Windows, run it from Git Bash: it writes `gitty` for Git Bash and
+# `gitty.cmd` for cmd and PowerShell into ~/.local/bin, plus a Start Menu and
+# desktop shortcut.
+#
 # After installing, run `gitty .` (or just `gitty`) from any repository.
 #
 set -euo pipefail
@@ -172,7 +176,88 @@ EOF
   echo "  drag it to the Dock to pin it"
 }
 
+# Git Bash (MSYS2) reports MINGW64_NT-…; Cygwin and a bare MSYS shell are the
+# same environment for everything below.
+is_windows() {
+  case "$(uname -s)" in MINGW*|MSYS*|CYGWIN*) return 0 ;; *) return 1 ;; esac
+}
+
+# The `gitty` command on Windows is a pair of wrappers, not a symlink: Git
+# Bash's `ln -s` silently makes a copy unless Developer Mode and
+# MSYS=winsymlinks are both on, and a copy of run.sh would look for the
+# checkout beside itself. One wrapper serves Git Bash; the .cmd serves cmd and
+# PowerShell by handing the arguments to Git's bash.
+install_windows_commands() {
+  local bash_w launcher_m
+  bash_w="$(cygpath -w "$(command -v bash)")"
+  launcher_m="$(cygpath -m "$LAUNCHER")"
+
+  cat > "$TARGET_DIR/gitty" <<EOF
+#!/usr/bin/env bash
+exec "$LAUNCHER" "\$@"
+EOF
+  chmod +x "$TARGET_DIR/gitty"
+
+  # -l puts Git's /usr/bin (readlink, find, nohup) on PATH, which bash started
+  # from cmd would otherwise lack; CHERE_INVOKING stops the login profile from
+  # changing to $HOME, so `gitty` still means the current directory.
+  printf '@echo off\r\nsetlocal\r\nset CHERE_INVOKING=1\r\n"%s" -l "%s" %%*\r\n' \
+    "$bash_w" "$launcher_m" > "$TARGET_DIR/gitty.cmd"
+}
+
+# The Windows counterpart of the desktop entry: a shortcut in the Start Menu
+# and on the desktop that runs `run.sh --any` through Git's bash in a minimised
+# window. run.sh detaches Electron and exits, so that window lasts a moment.
+# A .lnk takes its icon from an .ico, so the PNG is wrapped in one — a single
+# 256px PNG entry, which every Windows since Vista reads.
+install_windows_shortcuts() {
+  local data="${LOCALAPPDATA:-$HOME/AppData/Local}/Gitty"
+  mkdir -p "$data"
+
+  GITTY_BASH="$(cygpath -w "$(command -v bash)")" \
+  GITTY_ARGS="-l \"$(cygpath -m "$LAUNCHER")\" --any" \
+  GITTY_PNG="$(cygpath -w "$HERE/build/icon.png")" \
+  GITTY_ICO="$(cygpath -w "$data/gitty.ico")" \
+  powershell.exe -NoProfile -NonInteractive -Command '
+    $ErrorActionPreference = "Stop"
+    Add-Type -AssemblyName System.Drawing
+    $icon = $null
+    if (Test-Path $env:GITTY_PNG) {
+      $src = [Drawing.Image]::FromFile($env:GITTY_PNG)
+      $bmp = New-Object Drawing.Bitmap $src, 256, 256
+      $png = New-Object IO.MemoryStream
+      $bmp.Save($png, [Drawing.Imaging.ImageFormat]::Png)
+      $bytes = $png.ToArray()
+      $out = New-Object IO.BinaryWriter ([IO.File]::Create($env:GITTY_ICO))
+      # ICONDIR, then one ICONDIRENTRY: 0 x 0 means 256 x 256.
+      $out.Write([UInt16]0); $out.Write([UInt16]1); $out.Write([UInt16]1)
+      $out.Write([Byte]0); $out.Write([Byte]0); $out.Write([Byte]0); $out.Write([Byte]0)
+      $out.Write([UInt16]1); $out.Write([UInt16]32)
+      $out.Write([UInt32]$bytes.Length); $out.Write([UInt32]22)
+      $out.Write($bytes); $out.Close(); $src.Dispose(); $bmp.Dispose()
+      $icon = $env:GITTY_ICO
+    }
+    $shell = New-Object -ComObject WScript.Shell
+    foreach ($dir in [Environment]::GetFolderPath("Programs"), [Environment]::GetFolderPath("Desktop")) {
+      if (-not $dir -or -not (Test-Path $dir)) { continue }
+      $lnk = $shell.CreateShortcut((Join-Path $dir "Gitty.lnk"))
+      $lnk.TargetPath = $env:GITTY_BASH
+      $lnk.Arguments = $env:GITTY_ARGS
+      $lnk.WorkingDirectory = $env:USERPROFILE
+      $lnk.WindowStyle = 7
+      $lnk.Description = "Git history browser"
+      if ($icon) { $lnk.IconLocation = "$icon,0" }
+      $lnk.Save()
+      Write-Output "shortcut -> $(Join-Path $dir "Gitty.lnk")"
+    }
+  ' || echo "setup: could not create the Windows shortcuts" >&2
+}
+
 if [ "${1:-}" = "--system" ]; then
+  if is_windows; then
+    echo "setup: --system is not supported on Windows; run ./setup.sh" >&2
+    exit 1
+  fi
   TARGET_DIR="/usr/local/bin"
 else
   TARGET_DIR="${XDG_BIN_HOME:-$HOME/.local/bin}"
@@ -184,7 +269,11 @@ if [ ! -f "$LAUNCHER" ]; then
 fi
 
 mkdir -p "$TARGET_DIR"
-ln -sfn "$LAUNCHER" "$TARGET_DIR/gitty"
+if is_windows; then
+  install_windows_commands
+else
+  ln -sfn "$LAUNCHER" "$TARGET_DIR/gitty"
+fi
 
 echo "gitty installed → $TARGET_DIR/gitty"
 echo "  run:  gitty .          # open the current repository"
@@ -195,6 +284,7 @@ echo "  run:  gitty --dev .    # dev mode with hot reload"
 # a Linux session.
 case "$(uname -s)" in
   Darwin) install_macos_app ;;
+  MINGW*|MSYS*|CYGWIN*) install_windows_shortcuts ;;
   *) install_desktop_entry ;;
 esac
 
@@ -203,5 +293,11 @@ case ":$PATH:" in
   *":$TARGET_DIR:"*) : ;;
   *) echo
      echo "warning: $TARGET_DIR is not on your PATH."
-     echo "add it with:  export PATH=\"$TARGET_DIR:\$PATH\"" ;;
+     if is_windows; then
+       # Git Bash builds its PATH from Windows', so one entry serves every shell.
+       echo "add it (then open a new terminal) with, in PowerShell:"
+       echo "  [Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';$(cygpath -w "$TARGET_DIR")', 'User')"
+     else
+       echo "add it with:  export PATH=\"$TARGET_DIR:\$PATH\""
+     fi ;;
 esac

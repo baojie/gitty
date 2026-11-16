@@ -85,10 +85,12 @@ the `electron` window class, and the `.deb`'s postinst sets `chrome-sandbox` up.
 `electron` in `optionalDependencies` — electron-builder refuses to package a
 project that lists it as a dependency, and npm installs optional ones anyway.
 
-`npm install` runs `install-electron && electron-rebuild -f -w node-pty` via
-`postinstall`; both halves are needed. If the terminal pane fails to start after
-an Electron version change, re-run that rebuild — node-pty must match Electron's
-ABI, not Node's.
+`npm install` runs `install-electron && node scripts/postinstall.js` via
+`postinstall`; both halves are needed. The script runs `electron-rebuild -f -w
+node-pty` everywhere except Windows, where node-pty's N-API prebuilds load as
+they are and a rebuild would demand Visual Studio. If the terminal pane fails to
+start after an Electron version change, re-run that rebuild — node-pty must
+match Electron's ABI, not Node's.
 
 ## Verifying changes visually
 

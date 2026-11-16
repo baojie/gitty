@@ -11,6 +11,7 @@
     "out",
     "build",
     "cli.js",
+    "scripts/postinstall.js",
     "ref/gitty-0.1.6.png"
   ],
   "publishConfig": {
@@ -27,7 +28,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
     "test": "vitest run",
     "prepack": "npm run build",
-    "postinstall": "install-electron && electron-rebuild -f -w node-pty"
+    "postinstall": "install-electron && node scripts/postinstall.js"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",

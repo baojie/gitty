@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `setup.sh` works on Windows from Git Bash: it installs `gitty` for Git Bash
+  and `gitty.cmd` for cmd and PowerShell, plus Start Menu and desktop
+  shortcuts. The README has the steps, the manual the details.
+
+### Fixed
+
+- `npm install` on Windows no longer needs Visual Studio. node-pty's prebuilt
+  Windows binaries are used as they are, instead of being rebuilt.
+- `.gitattributes` keeps `*.sh` at LF, so a Windows checkout with
+  `core.autocrlf` does not break `run.sh` and `setup.sh`.
+- `run.sh` says so when `node` is not on `PATH`, instead of reporting a missing
+  Electron binary.
+- The LFS path test no longer assumes `/` as the path separator.
+
 ## [0.2.2] - 2026-11-16
 
 ### Added

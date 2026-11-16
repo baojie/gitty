@@ -137,8 +137,9 @@ Link it into your PATH with:
 ```
 
 `setup.sh` also installs a clickable launcher — a desktop entry on Linux, a
-minimal `Gitty.app` on macOS. Both wrap the same `run.sh`, and both carry the
-workarounds an unpackaged Electron needs; see
+minimal `Gitty.app` on macOS, Start Menu and desktop shortcuts on Windows. All
+wrap the same `run.sh`, and all carry the workarounds an unpackaged Electron
+needs; see
 [Platform notes](ref/readme/manual.md#platform-notes).
 
 Then open a repository from anywhere:
@@ -164,6 +165,33 @@ are available directly as well.
 
 Starting Gitty from a directory that is not inside a work tree falls back to the
 last repository opened, instead of just complaining.
+
+### On Windows
+
+There is no installer for Windows; run Gitty from a checkout. It needs
+[Git for Windows](https://gitforwindows.org/), whose Git Bash runs the scripts,
+plus Node.js and the 64-bit Visual C++ runtime. In PowerShell:
+
+```powershell
+winget install Git.Git
+winget install OpenJS.NodeJS.LTS
+winget install Microsoft.VCRedist.2015+.x64
+```
+
+Then, in a **new** Git Bash window, so it sees Node:
+
+```bash
+git clone https://github.com/baojie/gitty.git && cd gitty
+npm install
+./setup.sh
+```
+
+`setup.sh` installs `gitty` for Git Bash and `gitty.cmd` for cmd and
+PowerShell into `%USERPROFILE%\.local\bin`, plus the shortcuts. After that,
+`gitty` in any repository opens it, from whichever shell. Visual Studio is not
+needed. If `npm install` fails with *not a valid Win32 application*, or git
+calls a repository *dubious ownership*, see
+[Windows](ref/readme/manual.md#windows).
 
 ## What Gitty does not do
 
@@ -193,8 +221,8 @@ The rest — every pane, every setting, every shortcut — is in
 - [Finding text](ref/readme/manual.md#finding-text), the
   [settings table](ref/readme/manual.md#settings) and the
   [keyboard shortcuts](ref/readme/manual.md#keyboard-shortcuts).
-- [Platform notes](ref/readme/manual.md#platform-notes): Linux desktop integration
-  and the macOS app bundle.
+- [Platform notes](ref/readme/manual.md#platform-notes): Linux desktop integration,
+  the macOS app bundle and Windows.
 
 ## Architecture
 
