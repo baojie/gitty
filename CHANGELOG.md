@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `setup.sh` works on Windows from Git Bash: it installs `gitty` for Git Bash
   and `gitty.cmd` for cmd and PowerShell, plus Start Menu and desktop
   shortcuts. The README has the steps, the manual the details.
+- **Open in File Manager** on a repository tab's right-click menu and on the
+  file tree's empty space opens the repository's root directory.
 
 ### Fixed
 

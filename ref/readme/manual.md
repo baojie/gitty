@@ -90,7 +90,8 @@ commit you are reading and a shell you left running stay exactly where they were
 when you switch away and back. Drag a tab to a new place in the bar to reorder
 the repositories. Right-clicking a tab offers **Rename tab…** — the name is
 remembered for that repository, shown in the tab bar and the title bar, with the
-real path still in the tooltip — and **Close repository**. Closing the last tab
+real path still in the tooltip — **Open in File Manager**, which opens the
+repository's root directory, and **Close repository**. Closing the last tab
 leaves an empty window with a button to open the next repository.
 
 The tabs open when Gitty exits are reopened at the next start — the
@@ -242,6 +243,9 @@ Both keys are listed in the pane title's tooltip.
   is the browser's own listing of the directory, and **Open in File Manager**.
   A revision's snapshot lists a tree that is not on disk, so it offers the paths
   alone.
+- **Right-click the empty space below the rows** — **Open in File Manager** on
+  the repository's root directory (not in a revision's snapshot), and **Paste**
+  when there are files to paste.
 
 Files copied in a file manager can be **pasted into the tree**: right-click the
 empty space below the rows for **Paste**, which writes into the repository

@@ -486,12 +486,23 @@ export function createContextMenus(deps: ContextMenuDeps): {
   }
 
   /** Right-click on the tree itself rather than on a row: the repository root
-   *  is what a paste with no row under it means. */
+   *  is what the menu acts on — the folder to open, and where a paste with no
+   *  row under it lands. */
   const treeMenu = async (at: MenuState): Promise<void> => {
-    const items = pasteItem('', await canPaste())
+    const items: MenuItem[] = []
+    // A revision's snapshot is a tree in git, not the directory on disk, for
+    // the same reason dirMenu leaves its folders unopenable.
+    if (!(view.mode === 'snapshot' && view.hash !== null)) {
+      items.push({
+        label: msg.contextMenu.openFolderInFileManager,
+        action: () => void window.gitty.file.open(root)
+      })
+    }
+    items.push(...pasteItem('', await canPaste()))
     if (items.length === 0) return
-    // The one item stands alone here, so it needs no separator above it.
-    setMenu({ ...at, items: [{ ...items[0], separatorBefore: false }] })
+    // The first item heads the menu, so it needs no separator above it.
+    items[0] = { ...items[0], separatorBefore: false }
+    setMenu({ ...at, items })
   }
 
   const commitMenu = (c: Commit, at: MenuState): void => {

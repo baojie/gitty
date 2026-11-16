@@ -271,6 +271,10 @@ export default function App(): JSX.Element {
             }
           },
           {
+            label: msg.contextMenu.openFolderInFileManager,
+            action: () => void window.gitty.file.open(r)
+          },
+          {
             label: msg.tab.closeRepository,
             separatorBefore: true,
             action: () => closeTab(r)
