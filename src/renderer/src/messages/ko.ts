@@ -190,6 +190,8 @@ export const ko: RendererMessages = {
     formatJson: '정렬',
     formatJsonTitle: '이 JSON을 들여쓰기해 보기',
     jsonSourceTitle: '파일에 저장된 그대로의 JSON 보기',
+    foldNode: '이 부분 접기',
+    unfoldNode: '이 부분 다시 펼치기',
     expandAll: '모두 펼치기',
     collapseAll: '모두 접기',
     expandAllTitle: '모든 파일 펼치기',

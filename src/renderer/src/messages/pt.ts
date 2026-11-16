@@ -191,6 +191,8 @@ export const pt: RendererMessages = {
     formatJson: 'Formatar',
     formatJsonTitle: 'Mostrar este JSON com indentação',
     jsonSourceTitle: 'Mostrar o JSON tal como o ficheiro o guarda',
+    foldNode: 'Recolher isto',
+    unfoldNode: 'Voltar a expandir isto',
     expandAll: 'Expandir tudo',
     collapseAll: 'Recolher tudo',
     expandAllTitle: 'Expandir todos os ficheiros',

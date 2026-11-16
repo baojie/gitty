@@ -514,6 +514,15 @@ stores it and gets a **Format** button beside **Wrap**: pressed, the document is
 re-indented two spaces to a level, so a minified file that arrives as one
 endless line reads as a tree. Press it again for the file as it is stored.
 
+While the document is formatted, every object and array that holds something
+carries a **▼** beside its line number: click it to fold that node away, and the
+line it opened on keeps a **…** to say what is missing. Click the **▶** it
+becomes to open it again. Folds nest, so a node folded inside another is still
+folded when its parent is opened, and <kbd>Ctrl+F</kbd> searches what is on
+screen — a folded node's lines are not rendered at all. Nothing stays folded
+when another document is opened, or when a work-tree file is re-read after the
+repository changes: the lines a fold named may not be those lines any more.
+
 Only the whitespace between tokens changes. Numbers keep the digits the file
 spells — a value too long for a double, an exponent too large — keys keep the
 order they are in, and a duplicate key stays. The button appears only where the

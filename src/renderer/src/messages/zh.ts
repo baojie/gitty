@@ -188,6 +188,8 @@ export const zh: RendererMessages = {
     formatJson: '格式化',
     formatJsonTitle: '以缩进后的形式显示此 JSON',
     jsonSourceTitle: '改为显示文件中原本的 JSON',
+    foldNode: '折叠此处',
+    unfoldNode: '重新展开此处',
     expandAll: '全部展开',
     collapseAll: '全部折叠',
     expandAllTitle: '展开所有文件',

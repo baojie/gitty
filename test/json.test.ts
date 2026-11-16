@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 // A renderer module, but a DOM-free one — hence the entry for it in
 // tsconfig.node.json, which is the project the tests belong to.
-import { formatJson } from '../src/renderer/src/json'
+import { formatJson, formatJsonDoc } from '../src/renderer/src/json'
 
 describe('formatJson', () => {
   it('opens a minified document out into a tree', () => {
@@ -87,5 +87,51 @@ describe('formatJson', () => {
     for (const [what, text] of Object.entries(bad)) {
       it(`refuses ${what}`, () => expect(formatJson(text)).toBeNull())
     }
+  })
+})
+
+describe('formatJsonDoc', () => {
+  /** The folds as pairs, which reads better in an expectation than a Map. */
+  const folds = (text: string): [number, number][] => [
+    ...(formatJsonDoc(text)?.folds ?? new Map<number, number>())
+  ]
+
+  it('names the line each container opens and closes on', () => {
+    // {           1
+    //   "a": [    2
+    //     1       3
+    //   ],        4
+    //   "b": 2    5
+    // }           6
+    expect(folds('{"a":[1],"b":2}')).toEqual([
+      [2, 4],
+      [1, 6]
+    ])
+  })
+
+  it('has no fold for an empty container, which hides nothing', () => {
+    expect(folds('{"a":{},"b":[]}')).toEqual([[1, 4]])
+  })
+
+  it('has none at all for a document that is a bare scalar', () => {
+    expect(folds('42')).toEqual([])
+  })
+
+  it('counts the lines of a container nested in a container', () => {
+    expect(folds('[[[1]]]')).toEqual([
+      [3, 5],
+      [2, 6],
+      [1, 7]
+    ])
+  })
+
+  // The reason the folds are recorded while emitting rather than found by
+  // reading the result back: a brace in a string is not a brace.
+  it('is not fooled by a bracket inside a string', () => {
+    expect(folds('{"a":"{[","b":1}')).toEqual([[1, 4]])
+  })
+
+  it('answers null where the text is not one document, as the text does', () => {
+    expect(formatJsonDoc('{"a":1}}')).toBeNull()
   })
 })

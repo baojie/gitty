@@ -191,6 +191,8 @@ export const ja: RendererMessages = {
     formatJson: '整形',
     formatJsonTitle: 'この JSON をインデントして表示する',
     jsonSourceTitle: 'ファイルに書かれたままの JSON を表示する',
+    foldNode: 'ここを折りたたむ',
+    unfoldNode: 'ここを開き直す',
     expandAll: 'すべて展開',
     collapseAll: 'すべて折りたたむ',
     expandAllTitle: 'すべてのファイルを展開',

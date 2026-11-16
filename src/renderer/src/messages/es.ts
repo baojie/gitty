@@ -191,6 +191,8 @@ export const es: RendererMessages = {
     formatJson: 'Formatear',
     formatJsonTitle: 'Mostrar este JSON con sangría',
     jsonSourceTitle: 'Mostrar el JSON tal como lo guarda el archivo',
+    foldNode: 'Plegar esto',
+    unfoldNode: 'Volver a desplegar esto',
     expandAll: 'Expandir todo',
     collapseAll: 'Contraer todo',
     expandAllTitle: 'Expandir todos los archivos',

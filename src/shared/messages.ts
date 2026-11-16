@@ -377,6 +377,10 @@ export interface RendererMessages {
     readonly formatJson: string
     readonly formatJsonTitle: string
     readonly jsonSourceTitle: string
+    /** The arrow beside a line that opens an object or an array, in a document
+     *  whose shape is known — the formatted JSON. */
+    readonly foldNode: string
+    readonly unfoldNode: string
     readonly expandAll: string
     readonly collapseAll: string
     readonly expandAllTitle: string

@@ -207,6 +207,8 @@ export const ru: RendererMessages = {
     formatJson: 'Формат',
     formatJsonTitle: 'Показать этот JSON с отступами',
     jsonSourceTitle: 'Показать JSON так, как он записан в файле',
+    foldNode: 'Свернуть это',
+    unfoldNode: 'Развернуть обратно',
     expandAll: 'Развернуть все',
     collapseAll: 'Свернуть все',
     expandAllTitle: 'Развернуть все файлы',

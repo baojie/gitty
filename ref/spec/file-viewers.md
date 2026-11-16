@@ -41,6 +41,23 @@ one complete document is the same answer as *there is nothing to offer here*:
 falls back to the stored text if it ever disagrees. Pure string work with a
 silent failure mode, so it is tested in `test/json.test.ts`.
 
+`formatJsonDoc` is the same work with the fold ranges beside the text —
+`formatJson` is the wrapper that drops them — and `CodePane` draws an arrow for
+each. They are recorded **while emitting**, as the line the `{` or `[` was
+written on paired with the line its closing bracket lands on, because the
+scanner already knows a brace inside a string is not a brace; reading them back
+off the formatted text would need that knowledge a second time. An empty
+container is written `{}` on one line and records nothing, so every fold has
+something to hide.
+
+Folding is `CodePane`'s only optional behaviour and stays keyed to the `folds`
+prop: a document that arrives without one — every source file, whose nesting
+would be a guess — renders exactly as it did, arrows and all absent. Collapsed
+lines are not rendered rather than hidden in CSS, which is what keeps Ctrl+F
+honest (`useFind` searches the DOM, so its `contentKey` carries the folds as
+well as the chunk count). Nothing stays folded across a new `folds` map: a
+re-read work-tree file may have moved the line a fold named.
+
 ## The code outline
 
 `src/renderer/src/symbols.ts` is the other outline — the declarations in a

@@ -192,6 +192,8 @@ export const de: RendererMessages = {
     formatJson: 'Formatieren',
     formatJsonTitle: 'Dieses JSON eingerückt anzeigen',
     jsonSourceTitle: 'Das JSON so anzeigen, wie die Datei es speichert',
+    foldNode: 'Dies zuklappen',
+    unfoldNode: 'Dies wieder aufklappen',
     expandAll: 'Alle ausklappen',
     collapseAll: 'Alle einklappen',
     expandAllTitle: 'Alle Dateien ausklappen',

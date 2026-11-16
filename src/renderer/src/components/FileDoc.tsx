@@ -9,7 +9,7 @@ import { HtmlPane } from './HtmlPane'
 import { ImagePane } from './ImagePane'
 import { PdfPane } from './PdfPane'
 import { MarkdownPane } from './MarkdownPane'
-import { formatJson } from '../json'
+import { formatJsonDoc } from '../json'
 import { isHtmlPath, isImagePath, isJsonPath, isMarkdownPath, isPdfPath } from '../paths'
 import type { MenuState } from './ContextMenu'
 import type { Commit } from '../../../shared/types'
@@ -142,7 +142,7 @@ export function FileDoc({
   // shown as it is stored rather than the pane emptying. A hook, so it sits
   // above the early returns below with every other one.
   const formatted = useMemo(
-    () => (source !== null && preview && isJsonPath(path) ? formatJson(source) : null),
+    () => (source !== null && preview && isJsonPath(path) ? formatJsonDoc(source) : null),
     [preview, path, source]
   )
 
@@ -241,7 +241,8 @@ export function FileDoc({
     <HtmlPane source={source} docKey={docKey} wrap={wrap} active={active} onMenu={onMenu} />
   ) : (
     <CodePane
-      source={formatted ?? source}
+      source={formatted?.text ?? source}
+      folds={formatted?.folds}
       docKey={docKey}
       root={root}
       path={path}

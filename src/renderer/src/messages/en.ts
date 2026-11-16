@@ -193,6 +193,8 @@ export const en: RendererMessages = {
     formatJson: 'Format',
     formatJsonTitle: 'Show this JSON re-indented',
     jsonSourceTitle: 'Show the JSON as the file stores it',
+    foldNode: 'Fold this away',
+    unfoldNode: 'Open this back up',
     expandAll: 'Expand All',
     collapseAll: 'Collapse All',
     expandAllTitle: 'Expand every file',

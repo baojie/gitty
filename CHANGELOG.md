@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   twelve most recent with **More…** for the rest, and has a search box that
   filters all of them.
 - **Clear Recent** asks before emptying the recent-repository list.
+- Any object or array in a formatted JSON document folds away: an arrow beside
+  the line that opens it, a **…** on that line while it is shut. The ranges come
+  from the formatter itself, so a bracket inside a string cannot move one.
 
 ### Fixed
 

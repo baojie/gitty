@@ -26,23 +26,51 @@ const ESCAPES = '"\\/bfnrt'
 const HEX4 = /^[0-9a-fA-F]{4}$/
 
 /**
+ * A formatted document: the text, and where every container it opened begins
+ * and ends. The lines are 1-based, and the pair is the line the `{` or `[` sits
+ * at and the line its `}` or `]` sits at — which is what a viewer needs to fold
+ * one away. Recorded while emitting rather than found by re-reading the result:
+ * the scanner already knows a brace inside a string is not a brace.
+ */
+export interface JsonDoc {
+  text: string
+  /** Opening line → closing line, for every container with something in it. */
+  folds: ReadonlyMap<number, number>
+}
+
+/**
  * `text` re-indented, or `null` when it is not one complete JSON document —
  * which is the same answer as "there is nothing to offer here", so callers use
  * it to decide whether the button exists.
  */
 export function formatJson(text: string, indent = 2): string | null {
+  return formatJsonDoc(text, indent)?.text ?? null
+}
+
+/** The same work, with the fold ranges the viewer needs beside the text. */
+export function formatJsonDoc(text: string, indent = 2): JsonDoc | null {
   // A file written by an editor that marks its encoding starts with a BOM; it
   // is not part of the document, and the viewer has already read the text as
   // characters, so it goes.
   const s = text.charCodeAt(0) === 0xfeff ? text.slice(1) : text
   let i = 0
   const out: string[] = []
+  // The line the next token will be written on, and what the folds are keyed
+  // by. Only `nl` moves it, so the count cannot drift from the text.
+  let line = 1
+  const folds = new Map<number, number>()
 
   const skipSpace = (): void => {
     while (i < s.length && isSpace(s[i])) i++
   }
 
   const pad = (depth: number): string => ' '.repeat(indent * depth)
+
+  /** Break, and indent to `depth`. The one place a line is ever started. */
+  const nl = (depth: number): void => {
+    out.push('\n', pad(depth))
+    line++
+  }
 
   /** A string token, emitted exactly as written; `false` if it is malformed. */
   const string = (): boolean => {
@@ -92,6 +120,9 @@ export function formatJson(text: string, indent = 2): string | null {
 
   const container = (depth: number, open: '{' | '['): boolean => {
     const close = open === '{' ? '}' : ']'
+    // Read before anything is emitted: nested containers move the counter on,
+    // so the opening line has to be remembered rather than worked out after.
+    const openLine = line
     i++
     skipSpace()
     // An empty container stays on its line: `{}` opened over three lines is
@@ -103,7 +134,7 @@ export function formatJson(text: string, indent = 2): string | null {
     }
     out.push(open)
     for (;;) {
-      out.push('\n', pad(depth + 1))
+      nl(depth + 1)
       if (open === '{') {
         if (!string()) return false
         skipSpace()
@@ -122,7 +153,11 @@ export function formatJson(text: string, indent = 2): string | null {
       }
       if (s[i] !== close) return false
       i++
-      out.push('\n', pad(depth), close)
+      nl(depth)
+      out.push(close)
+      // An empty container never reaches here, so every recorded fold has at
+      // least one line to hide.
+      folds.set(openLine, line)
       return true
     }
   }
@@ -134,5 +169,5 @@ export function formatJson(text: string, indent = 2): string | null {
   // is not the JSON file it looked like, and formatting the part that parsed
   // would show the reader a silently truncated file.
   if (i !== s.length) return null
-  return out.join('')
+  return { text: out.join(''), folds }
 }

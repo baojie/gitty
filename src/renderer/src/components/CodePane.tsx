@@ -22,6 +22,7 @@ export function CodePane({
   path,
   wrap,
   outline,
+  folds,
   active,
   gotoLine,
   onMenu
@@ -36,6 +37,14 @@ export function CodePane({
   wrap: boolean
   /** Show the symbol outline beside the file. */
   outline: boolean
+  /**
+   * Where the document's containers open and close, as opening line → closing
+   * line. Only a document whose shape was worked out while it was written has
+   * any — the formatted JSON — and only then are the fold arrows drawn. Text
+   * whose nesting is a guess gets none: a fold that hides the wrong lines is
+   * worse than no fold.
+   */
+  folds?: ReadonlyMap<number, number>
   /** On screen in the active tab, so Ctrl+F belongs to this view. */
   active: boolean
   /** 1-based line to open at, when the file was opened from a search hit. */
@@ -58,6 +67,37 @@ export function CodePane({
   const bodies = useMemo(() => lines.map((h) => ({ __html: h || ' ' })), [lines])
   const hostRef = useRef<HTMLDivElement>(null)
   const [shown, setShown] = useState(CHUNK)
+
+  // Which containers the reader has folded away, by the line their opening
+  // bracket sits on.
+  const [collapsed, setCollapsed] = useState<ReadonlySet<number>>(() => new Set())
+
+  const toggle = useCallback((line: number) => {
+    setCollapsed((prev) => {
+      const next = new Set(prev)
+      if (!next.delete(line)) next.add(line)
+      return next
+    })
+  }, [])
+
+  // The lines a fold takes off the screen: everything after the line that
+  // opens the container, its closing bracket included. What is left is the
+  // opening line with a … after it, which is the row the arrow reopens.
+  const hidden = useMemo(() => {
+    if (!folds || collapsed.size === 0) return null
+    const h = new Set<number>()
+    for (const open of collapsed) {
+      const close = folds.get(open)
+      if (close === undefined) continue
+      for (let n = open + 1; n <= close; n++) h.add(n)
+    }
+    return h
+  }, [folds, collapsed])
+
+  // Another document, or the same one read again after the repository changed:
+  // the line a fold named is not necessarily the line it names now, so nothing
+  // stays folded across a new set of ranges.
+  useEffect(() => setCollapsed(new Set()), [folds])
 
   const scrollTop = useRef(0)
 
@@ -151,7 +191,9 @@ export function CodePane({
   const find = useFind({
     hostRef,
     active,
-    contentKey: shown,
+    // Folding changes which lines are in the document, not just how many have
+    // been rendered, and a Range into a line that is gone points at nothing.
+    contentKey: `${shown}:${[...collapsed].join(',')}`,
     resetKey: docKey,
     onOpen: revealAll
   })
@@ -183,12 +225,37 @@ export function CodePane({
         onMenu({ x: e.clientX, y: e.clientY, items: [] })
       }}
     >
-      {lines.slice(0, shown).map((_, i) => (
-        <div key={i} className={`code-line${gotoLine === i + 1 ? ' hit' : ''}`} data-line={i + 1}>
-          <span className="code-gutter">{i + 1}</span>
-          <span className="code-text" dangerouslySetInnerHTML={bodies[i]} />
-        </div>
-      ))}
+      {lines.slice(0, shown).map((_, i) => {
+        const n = i + 1
+        if (hidden?.has(n)) return null
+        // Undefined for a line that opens nothing, which is most of them; the
+        // arrow's column is still drawn, or the text would step sideways from
+        // one line to the next.
+        const close = folds?.get(n)
+        const shut = collapsed.has(n)
+        return (
+          <div
+            key={i}
+            className={`code-line${gotoLine === n ? ' hit' : ''}${shut ? ' folded' : ''}`}
+            data-line={n}
+          >
+            {folds && (
+              <span
+                className={`code-fold${close === undefined ? '' : ' foldable'}`}
+                title={
+                  close === undefined ? undefined : shut ? msg.diff.unfoldNode : msg.diff.foldNode
+                }
+                onClick={close === undefined ? undefined : () => toggle(n)}
+              >
+                {close === undefined ? '' : shut ? '▶' : '▼'}
+              </span>
+            )}
+            <span className="code-gutter">{n}</span>
+            <span className="code-text" dangerouslySetInnerHTML={bodies[i]} />
+            {shut && <span className="code-fold-mark">…</span>}
+          </div>
+        )
+      })}
       {shown < lines.length && (
         <div className="diff-more" onClick={() => setShown((n) => n + CHUNK)}>
           {msg.diff.loadMoreLines(lines.length - shown)}

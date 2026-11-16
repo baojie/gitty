@@ -1975,10 +1975,44 @@ body.col-resizing {
   user-select: none;
 }
 
+/* The fold arrow, in its own column before the line number — where the file
+   tree's twisty is, rather than inside the gutter, which would unalign the
+   numbers. Present on every line of a foldable document, empty where nothing
+   opens, so the text does not shift left and right down the page. */
+.code-fold {
+  flex: none;
+  width: 12px;
+  text-align: center;
+  color: var(--fg-faint);
+  user-select: none;
+}
+
+.code-fold.foldable {
+  cursor: pointer;
+}
+
+.code-fold.foldable:hover {
+  color: var(--fg);
+}
+
 .code-text {
   flex: 1;
   min-width: 0;
   padding: 0 8px;
+}
+
+/* What a folded container leaves behind, on the line that opened it. The text
+   of a folded line stops growing so the mark sits against the bracket it
+   stands for, rather than being pushed to the far edge of the pane. */
+.code-line.folded .code-text {
+  flex: 0 1 auto;
+  padding-right: 0;
+}
+
+.code-fold-mark {
+  flex: none;
+  padding-right: 8px;
+  color: var(--fg-dim);
 }
 
 .code.wrap .code-line {

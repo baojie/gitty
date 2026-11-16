@@ -192,6 +192,8 @@ export const fr: RendererMessages = {
     formatJson: 'Formater',
     formatJsonTitle: 'Afficher ce JSON réindenté',
     jsonSourceTitle: 'Afficher le JSON tel que le fichier le stocke',
+    foldNode: 'Replier ceci',
+    unfoldNode: 'Déplier ceci',
     expandAll: 'Tout déplier',
     collapseAll: 'Tout replier',
     expandAllTitle: 'Déplier tous les fichiers',
