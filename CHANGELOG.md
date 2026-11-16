@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-11-16
+
 ### Added
 
 - Closing the window or quitting with two or more repositories open asks first.
@@ -955,7 +957,8 @@ Initial release.
   `chrome-sandbox` cannot keep its root-owned setuid bit inside `node_modules`.
 - README shows a screenshot of the interface (`ref/gitty-0.1.0.png`).
 
-[Unreleased]: https://github.com/baojie/gitty/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/baojie/gitty/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/baojie/gitty/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/baojie/gitty/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/baojie/gitty/compare/v0.1.9...v0.2.0
 [0.1.9]: https://github.com/baojie/gitty/compare/v0.1.8...v0.1.9
