@@ -174,6 +174,16 @@ paging: it appends, and a rebase rewrites hashes, so every replayed commit looks
 new and would land below the stale rows it had just replaced — the newest
 commits gone from the top of a log that had been scrolled.
 
+**A hidden tab does not refresh.** A refresh is never only status and log:
+the new status reloads the whole uncommitted diff, the file list's line counts
+and churn, the unpushed set and any open document. With every tab mounted,
+five open repositories did all of that on every change to any of them, and a
+hidden tab whose repository another process kept writing — a 1.6 MB diff —
+stalled the window for seconds (found from the stall log). So a hidden
+`RepoTab` marks itself stale on a watcher event and re-reads only its status,
+at most every two seconds, for the tab bar's marker; the full refresh runs
+when it becomes active. Its first load waits the same way.
+
 The rewritten commits leave something behind, too. `git show` still answers for
 a commit that has left the branch, so a selection naming one does not fail: the
 log highlights nothing while the diff pane goes on showing it. When the rows

@@ -121,6 +121,9 @@ export interface RepoTabHandle {
   forward(): void
 }
 
+/** How often a hidden tab re-reads its status while its repository churns. */
+const HIDDEN_STATUS_MS = 2000
+
 export interface RepoTabProps {
   root: string
   /** Whether this is the tab the user is looking at. Inactive tabs stay
@@ -465,17 +468,54 @@ export const RepoTab = forwardRef<RepoTabHandle, RepoTabProps>(function RepoTab(
   // re-parented when it comes back. They end with the repository tab itself.
   useEffect(() => () => destroyTerminals(root), [root])
 
+  // A tab out of sight does not refresh. A refresh is never just status and
+  // log: the new status reloads the whole uncommitted diff, the file list's
+  // line counts and churn, the unpushed set and any open document — and the
+  // stall log caught five tabs doing all of that at once on every change to
+  // any of them, a hidden tab with a 1.6 MB diff stalling the window for
+  // seconds. A hidden tab only keeps its status current, for the tab bar's
+  // marker, throttled; the full refresh waits until it is shown.
+  const activeRef = useRef(active)
+  activeRef.current = active
+  const stale = useRef(false)
+  const statusTimer = useRef<number | null>(null)
+  const refreshHidden = useCallback(() => {
+    stale.current = true
+    if (statusTimer.current !== null) return
+    statusTimer.current = window.setTimeout(() => {
+      statusTimer.current = null
+      void window.gitty.git.status(root).then((st) => {
+        if (!activeRef.current) onStatus(st)
+      })
+    }, HIDDEN_STATUS_MS)
+  }, [root, onStatus])
+  useEffect(
+    () => () => {
+      if (statusTimer.current !== null) window.clearTimeout(statusTimer.current)
+    },
+    []
+  )
+
   useEffect(() => {
+    if (activeRef.current) void refresh()
+    else refreshHidden()
+  }, [refresh, refreshHidden])
+
+  useEffect(() => {
+    if (!active || !stale.current) return
+    stale.current = false
     void refresh()
-  }, [refresh])
+  }, [active, refresh])
 
   // The watcher fires for every open repository; only react to our own.
   useEffect(
     () =>
       window.gitty.repo.onChanged(({ root: r }) => {
-        if (r === root) void refresh()
+        if (r !== root) return
+        if (activeRef.current) void refresh()
+        else refreshHidden()
       }),
-    [refresh, root]
+    [refresh, refreshHidden, root]
   )
 
   /* ---------- file list per view ---------- */

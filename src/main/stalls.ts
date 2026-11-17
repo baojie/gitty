@@ -49,7 +49,23 @@ let finished: Call[] = []
 export function stallDir(): string {
   return app.isPackaged
     ? path.join(app.getPath('logs'), 'stalls')
-    : path.join(app.getAppPath(), 'logs', 'stalls')
+    : path.join(checkoutRoot(), 'logs', 'stalls')
+}
+
+/**
+ * The checkout an unpackaged run comes from. Not `app.getAppPath()` itself:
+ * run.sh starts `electron out/main/index.js`, which makes the app path
+ * `out/main` — a directory every build wipes, so the log would vanish with it.
+ * The nearest directory up from there holding a package.json is the checkout.
+ */
+function checkoutRoot(): string {
+  let dir = app.getAppPath()
+  while (!fs.existsSync(path.join(dir, 'package.json'))) {
+    const up = path.dirname(dir)
+    if (up === dir) return app.getAppPath()
+    dir = up
+  }
+  return dir
 }
 
 function localDate(t: number): string {

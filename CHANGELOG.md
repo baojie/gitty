@@ -32,6 +32,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   git processes instead of one per file, and on Linux the work tree is
   watched per directory, walked asynchronously, skipping `.git/objects`,
   ignored and build-output directories.
+- With several repositories open, a tab out of sight no longer reloads its
+  diff, log and file list on every change to its repository; it keeps only its
+  status current, and catches up when shown.
+- The stall log is written to the checkout's `logs/stalls/`, not into `out/`,
+  which every build wipes.
 - `npm install` on Windows no longer needs Visual Studio. node-pty's prebuilt
   Windows binaries are used as they are, instead of being rebuilt.
 - `.gitattributes` keeps `*.sh` at LF, so a Windows checkout with
