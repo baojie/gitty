@@ -231,7 +231,13 @@ export interface RendererMessages {
     /** The last row while only the most recent few are shown. */
     readonly more: (n: number) => string
     readonly moreTitle: string
+    /** Nothing in the list, nor on disk once a search has fallen back to it. */
     readonly noMatch: string
+    /** Notes above the guesses when the search falls back to the disk. */
+    readonly guessSearching: string
+    readonly guessQuestion: string
+    /** Hover tip for a guessed entry, after its full path. */
+    readonly guessTooltip: string
   }
   /** The back / forward buttons and the browsing-history menu. */
   readonly nav: {

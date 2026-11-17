@@ -82,7 +82,11 @@ export const fr: RendererMessages = {
     searchPlaceholder: 'Rechercher un dépôt…',
     more: (n: number) => `Plus… (${n})`,
     moreTitle: 'Afficher tous les dépôts mémorisés',
-    noMatch: 'Aucun dépôt ne correspond'
+    noMatch: 'Aucun dépôt ne correspond',
+    guessSearching: 'Absent de la liste — recherche sur le disque…',
+    guessQuestion: 'Absent de la liste. Est-ce l’un de ceux-ci ?',
+    guessTooltip:
+      '\n\nTrouvé sur le disque, jamais ouvert\nClic pour l’ouvrir dans un nouvel onglet\nCtrl+clic pour l’ouvrir dans cet onglet'
   },
   nav: {
     backTitle: 'Revenir à l’endroit consulté juste avant (Alt+←)',

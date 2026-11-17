@@ -82,7 +82,11 @@ export const en: RendererMessages = {
     searchPlaceholder: 'Search repositories…',
     more: (n: number) => `More… (${n})`,
     moreTitle: 'Show every remembered repository',
-    noMatch: 'No repository matches'
+    noMatch: 'No repository matches',
+    guessSearching: 'Not in the list — looking on disk…',
+    guessQuestion: 'Not in the list. Is it one of these?',
+    guessTooltip:
+      '\n\nFound on disk, not opened before\nClick to open in a new tab\nCtrl+click to open in this tab'
   },
   nav: {
     backTitle: 'Back to the place viewed before this one (Alt+←)',

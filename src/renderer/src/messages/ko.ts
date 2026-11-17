@@ -81,7 +81,11 @@ export const ko: RendererMessages = {
     searchPlaceholder: '저장소 검색…',
     more: (n: number) => `더 보기… (${n})`,
     moreTitle: '기억된 저장소를 모두 표시',
-    noMatch: '일치하는 저장소가 없습니다'
+    noMatch: '일치하는 저장소가 없습니다',
+    guessSearching: '목록에 없습니다 — 디스크에서 찾는 중…',
+    guessQuestion: '목록에 없습니다. 이 중 하나인가요?',
+    guessTooltip:
+      '\n\n디스크에서 찾음, 아직 연 적 없음\n클릭하면 새 탭에서 열기\nCtrl+클릭하면 이 탭에서 열기'
   },
   nav: {
     backTitle: '바로 전에 보던 곳으로 돌아가기(Alt+←)',

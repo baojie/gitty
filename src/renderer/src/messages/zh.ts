@@ -81,7 +81,11 @@ export const zh: RendererMessages = {
     searchPlaceholder: '搜索仓库…',
     more: (n: number) => `更多…（${n}）`,
     moreTitle: '显示记住的全部仓库',
-    noMatch: '没有匹配的仓库'
+    noMatch: '没有匹配的仓库',
+    guessSearching: '列表里没有——正在磁盘上找…',
+    guessQuestion: '列表里没有。是下面这个吗？',
+    guessTooltip:
+      '\n\n在磁盘上找到，之前没打开过\n单击在新标签页打开\nCtrl+单击在当前标签页打开'
   },
   nav: {
     backTitle: '返回上一个查看过的位置（Alt+←）',

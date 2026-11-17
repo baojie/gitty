@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- The repository menu's search falls back to the disk when nothing remembered
+  matches: it looks for a repository of that name where the remembered ones
+  live and in the usual places under home, and asks *Is it one of these?*
+  before opening anything.
+
 - `setup.sh` works on Windows from Git Bash: it installs `gitty` for Git Bash
   and `gitty.cmd` for cmd and PowerShell, plus Start Menu and desktop
   shortcuts. The README has the steps, the manual the details.

@@ -401,6 +401,19 @@ It keeps a hundred entries. The renderer shows only the first twelve until
 the length of the list is a matter of how far back a search can reach, not of
 how tall the menu is.
 
+A search that matches none of them falls back to the disk (`recent:guess`,
+`guessRepos`). Where to look is decided by the pure `guess.ts` from the list's
+own layout: each remembered repository's parent is searched one level down,
+its grandparent two levels down — never home's parent or the filesystem root,
+which hold users rather than projects — then a fixed set of usual places under
+home. A directory reached several ways keeps its deepest search and the summed
+weight. A name matches when every word is in it, ignoring case and `-_.`;
+whole-name beats prefix beats substring, and a heavier base breaks ties. The
+scan skips dot-directories and `node_modules`, does not descend into a
+repository, and stops after four hundred directory reads. The menu offers the
+results under a question and opens nothing on its own: picking one *is* the
+confirmation, and opening it records it like any other.
+
 ## Asking before closing several repositories
 
 The renderer reports its open tabs over `repo:open-set` whenever they change,

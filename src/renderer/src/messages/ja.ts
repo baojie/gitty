@@ -81,7 +81,11 @@ export const ja: RendererMessages = {
     searchPlaceholder: 'リポジトリを検索…',
     more: (n: number) => `さらに表示…（${n}）`,
     moreTitle: '記憶しているリポジトリをすべて表示',
-    noMatch: '一致するリポジトリはありません'
+    noMatch: '一致するリポジトリはありません',
+    guessSearching: '一覧にありません — ディスクを探しています…',
+    guessQuestion: '一覧にありません。このどれかですか？',
+    guessTooltip:
+      '\n\nディスク上で見つかりました（未オープン）\nクリックで新しいタブに開く\nCtrl+クリックでこのタブに開く'
   },
   nav: {
     backTitle: '直前に見ていた場所に戻る（Alt+←）',

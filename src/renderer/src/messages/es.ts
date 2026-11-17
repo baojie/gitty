@@ -82,7 +82,11 @@ export const es: RendererMessages = {
     searchPlaceholder: 'Buscar repositorios…',
     more: (n: number) => `Más… (${n})`,
     moreTitle: 'Mostrar todos los repositorios recordados',
-    noMatch: 'Ningún repositorio coincide'
+    noMatch: 'Ningún repositorio coincide',
+    guessSearching: 'No está en la lista — buscando en el disco…',
+    guessQuestion: 'No está en la lista. ¿Es alguno de estos?',
+    guessTooltip:
+      '\n\nEncontrado en el disco, nunca abierto\nClic para abrirlo en una pestaña nueva\nCtrl+clic para abrirlo en esta pestaña'
   },
   nav: {
     backTitle: 'Volver al lugar visto justo antes (Alt+←)',

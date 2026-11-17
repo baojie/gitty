@@ -14,7 +14,7 @@ import {
 import * as git from './git'
 import * as gource from './gource'
 import { availableShells, createTerminal, type TerminalSession } from './pty'
-import { addRecent, clearRecent, listRecent, removeRecent } from './recent'
+import { addRecent, clearRecent, guessRepos, listRecent, removeRecent } from './recent'
 import { readPrefs, writePrefs } from './prefs'
 import { registerPlugins } from './plugins'
 import { watchRepo, type RepoWatcher } from './watcher'
@@ -504,6 +504,7 @@ function registerIpc(): void {
   ipcMain.handle('recent:list', () => listRecent())
   ipcMain.handle('recent:add', (_e, root: string) => addRecent(root))
   ipcMain.handle('recent:remove', (_e, root: string) => removeRecent(root))
+  ipcMain.handle('recent:guess', (_e, query: string) => guessRepos(String(query)))
   // Asked natively, as forgetting a command is: the whole list goes at once and
   // there is no undo. Resolves whether it was cleared.
   ipcMain.handle('recent:clear', async () => {

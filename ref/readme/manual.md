@@ -121,6 +121,14 @@ to appear in the repository's name or its directory, and name matches come
 first. <kbd>↑</kbd>/<kbd>↓</kbd> move, <kbd>Enter</kbd> opens in a new tab,
 <kbd>Ctrl+Enter</kbd> in the current one, <kbd>Esc</kbd> closes.
 
+When nothing in the list matches, the search goes to disk: Gitty looks for a
+repository whose directory name matches, in the places your remembered
+repositories live — their parent directories, and the ones above those two
+levels down, so `~/work/<group>/<repo>` is covered without being configured —
+and in the usual places under home (`~/work`, `~/code`, `~/src`,
+`~/projects`, …). What it finds is listed under *Is it one of these?* with its
+full path, and opens only when you pick it; once opened it joins the list.
+
 **Open Repository…** and **Clear Recent** sit below; Clear Recent asks before
 emptying the list, which has no undo. The list lives in
 `~/.config/Gitty/recent-repos.json`, holds the last hundred repositories, and

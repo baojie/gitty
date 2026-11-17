@@ -82,7 +82,11 @@ export const de: RendererMessages = {
     searchPlaceholder: 'Repositorys durchsuchen…',
     more: (n: number) => `Mehr… (${n})`,
     moreTitle: 'Alle gemerkten Repositorys anzeigen',
-    noMatch: 'Kein Repository passt'
+    noMatch: 'Kein Repository passt',
+    guessSearching: 'Nicht in der Liste — suche auf der Festplatte…',
+    guessQuestion: 'Nicht in der Liste. Ist es eines davon?',
+    guessTooltip:
+      '\n\nAuf der Festplatte gefunden, noch nie geöffnet\nKlick öffnet in einem neuen Tab\nStrg+Klick öffnet in diesem Tab'
   },
   nav: {
     backTitle: 'Zurück zur zuvor angesehenen Stelle (Alt+←)',

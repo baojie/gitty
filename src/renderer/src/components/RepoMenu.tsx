@@ -15,6 +15,11 @@ import { filterRecent, RECENT_SHOWN } from '../recentFilter'
  *
  * The list holds up to a hundred entries; only the most recent few are shown
  * until More is clicked or something is typed, which searches all of them.
+ *
+ * A search the list cannot answer goes to disk: `onGuess` looks for a
+ * repository of that name where the remembered ones live, and the menu offers
+ * what it finds under a question rather than opening it — the pick is the
+ * confirmation.
  */
 export function RepoMenu({
   x,
@@ -26,6 +31,7 @@ export function RepoMenu({
   onForget,
   onPick,
   onClear,
+  onGuess,
   onClose
 }: {
   x: number
@@ -39,6 +45,8 @@ export function RepoMenu({
   onForget: (path: string) => void
   onPick: () => void
   onClear: () => void
+  /** Repositories on disk named like the query, outside the list. */
+  onGuess: (query: string) => Promise<string[]>
   onClose: () => void
 }): JSX.Element {
   const { msg } = useMsg()
@@ -55,9 +63,34 @@ export function RepoMenu({
   )
   // Searching reaches every entry; an empty box shows the head until More.
   const capped = !expanded && !query.trim() && matches.length > RECENT_SHOWN
-  const shown = capped ? matches.slice(0, RECENT_SHOWN) : matches
+  const shownRecent = capped ? matches.slice(0, RECENT_SHOWN) : matches
 
-  useEffect(() => setCursor(0), [query])
+  // The guesses for one query; `null` while the disk is still being searched.
+  const [guessed, setGuessed] = useState<{
+    query: string
+    found: string[] | null
+  } | null>(null)
+  const trimmed = query.trim()
+  const guessing = trimmed !== '' && matches.length === 0
+  useEffect(() => {
+    if (!guessing) return
+    let live = true
+    setGuessed({ query: trimmed, found: null })
+    // Typed out, not keystroke by keystroke: each search reads directories.
+    const timer = window.setTimeout(() => {
+      void onGuess(trimmed).then((found) => {
+        if (live) setGuessed({ query: trimmed, found })
+      })
+    }, 250)
+    return () => {
+      live = false
+      window.clearTimeout(timer)
+    }
+  }, [guessing, trimmed, onGuess])
+  const guesses = guessing && guessed?.query === trimmed ? guessed.found : null
+  const shown = guessing ? (guesses ?? []) : shownRecent
+
+  useEffect(() => setCursor(0), [query, guesses])
 
   // Clamped to the window once its size is known, and again when More grows it.
   useLayoutEffect(() => {
@@ -67,7 +100,7 @@ export function RepoMenu({
       x: Math.max(4, Math.min(x, window.innerWidth - width - 4)),
       y: Math.max(4, Math.min(y, window.innerHeight - height - 4))
     })
-  }, [x, y, expanded, shown.length])
+  }, [x, y, expanded, shown.length, guessing])
 
   useEffect(() => {
     const close = (): void => onClose()
@@ -118,15 +151,22 @@ export function RepoMenu({
       onContextMenu={(e) => e.preventDefault()}
       onKeyDown={onKey}
     >
-      {list.length > 0 && (
-        <input
-          className="repo-menu-search"
-          autoFocus
-          spellCheck={false}
-          placeholder={msg.recent.searchPlaceholder}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+      <input
+        className="repo-menu-search"
+        autoFocus
+        spellCheck={false}
+        placeholder={msg.recent.searchPlaceholder}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      {guessing && (
+        <div className="ctx-item ctx-note">
+          {guesses === null
+            ? msg.recent.guessSearching
+            : guesses.length === 0
+              ? msg.recent.noMatch
+              : msg.recent.guessQuestion}
+        </div>
       )}
       <div ref={listRef} className="repo-menu-list">
         {shown.map((p, i) => (
@@ -134,7 +174,7 @@ export function RepoMenu({
             key={p}
             data-index={i}
             className={`ctx-item${i === cursor ? ' selected' : ''}`}
-            title={`${p}${msg.recent.tooltip}`}
+            title={`${p}${guessing ? msg.recent.guessTooltip : msg.recent.tooltip}`}
             onMouseMove={() => setCursor(i)}
             onClick={(e) => open(p, e.ctrlKey || e.metaKey)}
             onAuxClick={(e) => {
@@ -144,28 +184,29 @@ export function RepoMenu({
             }}
             onContextMenu={(e) => {
               e.preventDefault()
-              onForget(p)
+              if (!guessing) onForget(p)
             }}
           >
             {/* A tab's custom name follows the repository here, so the one
                 name names it everywhere; the path is still beside it. */}
             <span>{labelOf(p)}</span>
             <span className="accel">{shortPath(p)}</span>
-            <button
-              className="ctx-remove"
-              title={msg.recent.forget}
-              onClick={(e) => {
-                e.stopPropagation()
-                onForget(p)
-              }}
-            >
-              ×
-            </button>
+            {!guessing && (
+              <button
+                className="ctx-remove"
+                title={msg.recent.forget}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onForget(p)
+                }}
+              >
+                ×
+              </button>
+            )}
           </div>
         ))}
-        {list.length === 0 && <div className="ctx-item ctx-note">{msg.recent.noOtherRepos}</div>}
-        {list.length > 0 && shown.length === 0 && (
-          <div className="ctx-item ctx-note">{msg.recent.noMatch}</div>
+        {list.length === 0 && !trimmed && (
+          <div className="ctx-item ctx-note">{msg.recent.noOtherRepos}</div>
         )}
         {capped && (
           <div

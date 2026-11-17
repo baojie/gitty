@@ -514,6 +514,7 @@ export default function App(): JSX.Element {
   const openRecentMenu = (x: number, y: number): void => setRepoMenuAt({ x, y })
   const closeRepoMenu = useCallback(() => setRepoMenuAt(null), [])
   const recentLabel = useCallback((p: string) => tabLabel(tabNames, p), [tabNames])
+  const guessRepos = useCallback((q: string) => window.gitty.repo.guess(q), [])
   const forgetRecent = useCallback((p: string): void => {
     void window.gitty.repo.forget(p).then(setRecent)
   }, [])
@@ -863,6 +864,7 @@ export default function App(): JSX.Element {
               if (cleared) setRecent(active ? [active] : [])
             })
           }}
+          onGuess={guessRepos}
           onClose={closeRepoMenu}
         />
       )}

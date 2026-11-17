@@ -63,6 +63,9 @@ const api = {
     recent: (): Promise<string[]> => ipcRenderer.invoke('recent:list'),
     remember: (root: string): Promise<string[]> => ipcRenderer.invoke('recent:add', root),
     forget: (root: string): Promise<string[]> => ipcRenderer.invoke('recent:remove', root),
+    /** Repositories on disk named like `query`, looked for where the remembered
+     *  ones live — for a search the recent list cannot answer. */
+    guess: (query: string): Promise<string[]> => ipcRenderer.invoke('recent:guess', query),
     /** Empty the list, after a native confirmation; resolves whether it was. */
     forgetAll: (): Promise<boolean> => ipcRenderer.invoke('recent:clear'),
     /** The tabs now open, so closing the window can ask before taking several
