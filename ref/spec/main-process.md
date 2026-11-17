@@ -479,6 +479,27 @@ stops that root's watcher. Each `RepoTab` reloads status and log only for its ow
 root. Watching is best-effort; the manual refresh path must keep working if it
 fails.
 
+On Linux it does **not** use `fs.watch(root, { recursive: true })`. Node
+implements that option there in JavaScript: a synchronous walk of the whole
+tree with `readdirSync` and `statSync`, and an inotify watch on every file —
+`.git/objects` and `node_modules` included, since filtering only happens to
+events. On the main process's thread that held a large work tree's window
+for seconds per watch, long enough for the desktop to offer to kill it.
+`watchDirs` instead puts one watch on each *directory* (inotify reports a
+directory's children), walks asynchronously one `readdir` at a time, and does
+not descend into what could never matter: `.git` beyond itself and `refs/`,
+the build-output names in `NOISE`, and whatever `git ls-files --ignored
+--directory` names. A directory created or moved in later is picked up from
+its parent's `rename` event. It stops at 8192 directories — inotify watches
+are a per-user kernel budget shared with every other program. macOS and
+Windows keep the recursive option, which their kernels implement for one
+handle.
+
+The same lesson applies to anything that runs once per file of a commit:
+never one process each. Spawning is synchronous on the main thread, so
+`countFileLines` reads a commit's files through one `cat-file --batch-check`
+(sizes) and one `cat-file --batch` (line counts), not a `git show` per file.
+
 The debounce narrows the burst but does not serialise anything: a refresh and
 the next event can both be waiting on `git`, and the replies come back in
 whatever order git finishes. Both `refresh` and `loadDiff` therefore stamp each

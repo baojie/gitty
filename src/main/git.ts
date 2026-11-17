@@ -72,6 +72,12 @@ const MAX_LINE_COUNT_BYTES = 8 * 1024 * 1024
 const MAX_HISTORY_COUNT_BYTES = 64 * 1024 * 1024
 
 /**
+ * How much of a commit's files to read when counting their lines in one batch.
+ * Past it the rows show sizes, which `--batch-check` gives for all of them.
+ */
+const MAX_BATCH_COUNT_BYTES = 256 * 1024 * 1024
+
+/**
  * How far back to walk when naming the last author of every file in a tree.
  * A repository older than this leaves the rows it did not reach blank rather
  * than reading a decade of history for a column beside a file name.
@@ -1562,37 +1568,49 @@ export async function countFileLines(
   pairs: Array<{ rev: string | null; filePath: string }>
 ): Promise<FileMeasure[]> {
   const unreadable: FileMeasure = { lines: null, bytes: null }
-  return Promise.all(
-    pairs.map(async ({ rev, filePath }) => {
+  const out: FileMeasure[] = pairs.map(() => unreadable)
+
+  // Committed files go to git in one batch. A `git show` each is what this
+  // replaces: a commit of thousands of files was thousands of processes, all
+  // spawned at once on the main process's thread — long enough for the
+  // desktop to offer to kill the window. A path holding a newline cannot be
+  // put to `cat-file` (it reads one request per line) and stays unreadable.
+  const committed: Array<{ i: number; rev: string; filePath: string }> = []
+  pairs.forEach(({ rev, filePath }, i) => {
+    if (rev !== null && !filePath.includes('\n')) committed.push({ i, rev, filePath })
+  })
+  const sizes = await sizeAtRevs(root, committed)
+  const countable = committed.filter(
+    (c, k) => sizes[k] != null && sizes[k]! <= MAX_LINE_COUNT_BYTES && !isPdf(c.filePath)
+  )
+  const counts = await countLinesAtRevs(root, countable, MAX_BATCH_COUNT_BYTES)
+  const lineOf = new Map(countable.map((c, k) => [c.i, counts[k] ?? null]))
+  committed.forEach((c, k) => {
+    const bytes = sizes[k] ?? null
+    if (bytes !== null) out[c.i] = { lines: lineOf.get(c.i) ?? null, bytes }
+  })
+
+  await Promise.all(
+    pairs.map(async ({ rev, filePath }, i) => {
+      if (rev !== null) return
       try {
-        if (rev === null) {
-          const abs = path.resolve(root, filePath)
-          if (abs !== root && !abs.startsWith(root + path.sep)) return unreadable
-          const stat = await fs.promises.stat(abs)
-          if (stat.size > MAX_LINE_COUNT_BYTES) return { lines: null, bytes: stat.size }
-          const buf = await fs.promises.readFile(abs)
-          const bytes = buf.length
-          if (buf.includes(0x00)) return { lines: null, bytes } // binary
-          if (isPdf(filePath)) return { lines: null, bytes }
-          return { lines: countNewlines(buf), bytes }
+        const abs = path.resolve(root, filePath)
+        if (abs !== root && !abs.startsWith(root + path.sep)) return
+        const stat = await fs.promises.stat(abs)
+        if (stat.size > MAX_LINE_COUNT_BYTES) {
+          out[i] = { lines: null, bytes: stat.size }
+          return
         }
-        // Committed file via git show, read as a buffer to stay binary-safe.
-        const { stdout } = await exec('git', ['show', `${rev}:${filePath}`], {
-          cwd: root,
-          maxBuffer: MAX_LINE_COUNT_BYTES + 1024 * 1024,
-          windowsHide: true,
-          encoding: 'buffer',
-          env: { ...process.env, GIT_OPTIONAL_LOCKS: '0', LC_ALL: 'C' }
-        })
-        const buf = stdout as unknown as Buffer
+        const buf = await fs.promises.readFile(abs)
         const bytes = buf.length
-        if (bytes > MAX_LINE_COUNT_BYTES) return { lines: null, bytes }
-        if (buf.includes(0x00)) return { lines: null, bytes } // binary
-        if (isPdf(filePath)) return { lines: null, bytes }
-        return { lines: countNewlines(buf), bytes }
+        out[i] =
+          buf.includes(0x00) || isPdf(filePath) // binary, or measured in pages
+            ? { lines: null, bytes }
+            : { lines: countNewlines(buf), bytes }
       } catch {
-        return unreadable
+        /* unreadable */
       }
     })
   )
+  return out
 }

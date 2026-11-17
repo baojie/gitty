@@ -16,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **+** and Ctrl+O open that menu rather than the folder dialog, so a
   repository is found by name; Ctrl+O again or **Open Repository…** reaches
   the dialog.
-
 - `setup.sh` works on Windows from Git Bash: it installs `gitty` for Git Bash
   and `gitty.cmd` for cmd and PowerShell, plus Start Menu and desktop
   shortcuts. The README has the steps, the manual the details.
@@ -25,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A large commit or work tree no longer freezes the window long enough for
+  the desktop to offer to kill it. Line counts for a commit's files use two
+  git processes instead of one per file, and on Linux the work tree is
+  watched per directory, walked asynchronously, skipping `.git/objects`,
+  ignored and build-output directories.
 - `npm install` on Windows no longer needs Visual Studio. node-pty's prebuilt
   Windows binaries are used as they are, instead of being rebuilt.
 - `.gitattributes` keeps `*.sh` at LF, so a Windows checkout with
