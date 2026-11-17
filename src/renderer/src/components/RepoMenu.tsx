@@ -11,7 +11,8 @@ import { filterRecent, RECENT_SHOWN } from '../recentFilter'
  * own. It keeps that menu's look (`.ctx`) and its mouse grammar: click opens in
  * a new tab, Ctrl+click or middle-click in the current one, × or right-click
  * forgets. The keyboard follows the quick-open box: arrows move, Enter opens,
- * Ctrl+Enter opens in the current tab, Escape closes.
+ * Ctrl+Enter opens in the current tab, Escape closes, and Ctrl+O — the chord
+ * that opened it — goes on to Open Repository….
  *
  * The list holds up to a hundred entries; only the most recent few are shown
  * until More is clicked or something is typed, which searches all of them.
@@ -24,6 +25,7 @@ import { filterRecent, RECENT_SHOWN } from '../recentFilter'
 export function RepoMenu({
   x,
   y,
+  up = false,
   list,
   labelOf,
   shortPath,
@@ -36,6 +38,8 @@ export function RepoMenu({
 }: {
   x: number
   y: number
+  /** `y` is where the menu's bottom goes rather than its top. */
+  up?: boolean
   /** Most recent first, without the repository the active tab shows. */
   list: string[]
   labelOf: (path: string) => string
@@ -98,9 +102,9 @@ export function RepoMenu({
     const { width, height } = ref.current.getBoundingClientRect()
     setPos({
       x: Math.max(4, Math.min(x, window.innerWidth - width - 4)),
-      y: Math.max(4, Math.min(y, window.innerHeight - height - 4))
+      y: Math.max(4, Math.min(up ? y - height : y, window.innerHeight - height - 4))
     })
-  }, [x, y, expanded, shown.length, guessing])
+  }, [x, y, up, expanded, shown.length, guessing])
 
   useEffect(() => {
     const close = (): void => onClose()
@@ -124,7 +128,12 @@ export function RepoMenu({
   }
 
   const onKey = (e: React.KeyboardEvent): void => {
-    if (e.key === 'Escape') {
+    if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.code === 'KeyO') {
+      // The chord that opened the menu, again: on to the native dialog.
+      e.preventDefault()
+      onPick()
+      onClose()
+    } else if (e.key === 'Escape') {
       e.preventDefault()
       onClose()
     } else if (e.key === 'ArrowDown') {

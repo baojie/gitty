@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   matches: it looks for a repository of that name where the remembered ones
   live and in the usual places under home, and asks *Is it one of these?*
   before opening anything.
+- **+** and Ctrl+O open that menu rather than the folder dialog, so a
+  repository is found by name; Ctrl+O again or **Open Repository…** reaches
+  the dialog.
 
 - `setup.sh` works on Windows from Git Bash: it installs `gitty` for Git Bash
   and `gitty.cmd` for cmd and PowerShell, plus Start Menu and desktop

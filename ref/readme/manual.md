@@ -28,8 +28,8 @@ Left to right, it describes the active repository and then acts on it:
   [Going back](#going-back).
 - **The repository path** is a button: it opens the
   [recent repositories](#recent-repositories) menu.
-  Opening another repository is **+** at the end of the [tab bar](#tabs), or
-  <kbd>Ctrl+O</kbd>.
+  **+** at the end of the [tab bar](#tabs) and <kbd>Ctrl+O</kbd> open the same
+  menu.
 - **⎇ branch** is a button too — the branch git has checked out, and a menu of
   every other branch to read. See
   [browsing another branch](#browsing-another-branch).
@@ -84,7 +84,8 @@ says `3 changed` in the title bar, while a background tab is hidden entirely, so
 the dot is the only sign that there is work left there. Hovering a tab names the
 repository and says so in words.
 
-**+** (and <kbd>Ctrl+O</kbd>) opens another repository into a new tab; the title
+**+** (and <kbd>Ctrl+O</kbd>) opens another repository into a new tab, by way of
+the [recent repositories](#recent-repositories) menu; the title
 bar always shows the active one. Each tab keeps its own panes and terminal, so a
 commit you are reading and a shell you left running stay exactly where they were
 when you switch away and back. Drag a tab to a new place in the bar to reorder
@@ -128,6 +129,10 @@ levels down, so `~/work/<group>/<repo>` is covered without being configured —
 and in the usual places under home (`~/work`, `~/code`, `~/src`,
 `~/projects`, …). What it finds is listed under *Is it one of these?* with its
 full path, and opens only when you pick it; once opened it joins the list.
+
+**+** and <kbd>Ctrl+O</kbd> open this same menu, so a repository is found by
+typing its name; <kbd>Ctrl+O</kbd> a second time, or **Open Repository…**, goes
+on to the folder dialog.
 
 **Open Repository…** and **Clear Recent** sit below; Clear Recent asks before
 emptying the list, which has no undo. The list lives in
@@ -925,7 +930,7 @@ opens the same sheet.
 | <kbd>Alt</kbd> | Show or hide the application menu bar (not on macOS, where it is always there) |
 | <kbd>F1</kbd> | The shortcuts, in a sheet over the window |
 | <kbd>F5</kbd> / <kbd>Ctrl+R</kbd> | Refresh status and log |
-| <kbd>Ctrl+O</kbd> | Open another repository in a new tab |
+| <kbd>Ctrl+O</kbd> | Open another repository in a new tab: the recent-repository menu; again for the folder dialog |
 | <kbd>Ctrl+E</kbd> | Open a file by name, from anywhere in the window — the terminal included |
 | <kbd>Ctrl+,</kbd> | Settings |
 | <kbd>Ctrl+1</kbd> … <kbd>Ctrl+4</kbd> | Hide or show Files, Diff, Commits, Terminal |

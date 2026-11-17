@@ -141,7 +141,16 @@ the shell — `isOpenRepoChord` in `panes.ts`, listed in `TerminalPane`'s
 `attachCustomKeyEventHandler` — because the terminal holds the focus in most
 windows and readline's Ctrl+O would otherwise eat the key. The menu item keeps
 its accelerator all the same: it is what writes the chord next to the item, and
-`menu:open-repo` goes to the same `pickAndOpen`.
+`menu:open-repo` goes to the same `openRepoMenu`.
+
+Ctrl+O and the tab bar's **+** open the recent-repository menu, not the folder
+dialog: typing a name there finds a repository whether it is remembered or only
+on disk (`recent:guess`), which is quicker than walking a dialog to it. The
+dialog is one step further — **Open Repository…** in the menu, or Ctrl+O again,
+which `RepoMenu` takes while its search box holds the focus. Ctrl+O hangs the
+menu from the title bar's repository button; **+** sits at the foot of the
+window, so its menu opens upward (`up`). The empty window's own **Open
+Repository** button still goes straight to the dialog.
 
 `App.tsx` is a thin tab manager: the list of open roots, which is active, the
 app-wide preferences (theme, font size, wrap, …), and the settings dialog. Each

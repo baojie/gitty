@@ -291,6 +291,25 @@ export default function App(): JSX.Element {
     })
   }, [openTab])
 
+  /* ---------- repository menu (recent + open) ---------- */
+
+  // The menu is its own component (it holds a search box); it reads `recent`
+  // live, so forgetting an entry updates it in place and several can go in a row.
+  // `up` hangs it above its anchor, for the + at the foot of the window.
+  const [repoMenuAt, setRepoMenuAt] = useState<{ x: number; y: number; up?: boolean } | null>(
+    null
+  )
+  const repoButtonRef = useRef<HTMLButtonElement>(null)
+  // Ctrl+O and + come here before the native dialog: a name typed into the
+  // menu finds a repository, remembered or on disk, and Open Repository… —
+  // or Ctrl+O again — is one step further. Ctrl+O drops it from the title
+  // bar's repository button, or near the top when full screen hides that.
+  const openRepoMenu = useCallback(() => {
+    const r = repoButtonRef.current?.getBoundingClientRect()
+    if (r && r.width > 0) setRepoMenuAt({ x: r.left, y: r.bottom + 2 })
+    else setRepoMenuAt({ x: Math.max(4, window.innerWidth / 2 - 170), y: 48 })
+  }, [])
+
   // Launch in the requested repository; if there is none — started from a
   // directory outside any work tree — fall back to the last one opened. Last
   // session's tabs are reopened first, so the requested repository is the one
@@ -402,9 +421,9 @@ export default function App(): JSX.Element {
   useEffect(
     () =>
       window.gitty.repo.onMenuOpen(() => {
-        void pickAndOpen()
+        openRepoMenu()
       }),
-    [pickAndOpen]
+    [openRepoMenu]
   )
 
   // A second `gitty <repo>` handed its directory to this instance instead of
@@ -456,7 +475,7 @@ export default function App(): JSX.Element {
         setHelpOpen((v) => !v)
       } else if (isOpenRepoChord(e)) {
         e.preventDefault()
-        void pickAndOpen()
+        openRepoMenu()
       } else if ((e.ctrlKey || e.metaKey) && e.key === ',') {
         e.preventDefault()
         setSettingsOpen(true)
@@ -480,7 +499,7 @@ export default function App(): JSX.Element {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [settingsOpen, aboutOpen, helpOpen, pickAndOpen, togglePane, goBack, goForward])
+  }, [settingsOpen, aboutOpen, helpOpen, openRepoMenu, togglePane, goBack, goForward])
 
   const openPanesMenu = (x: number, y: number): void => {
     const items: MenuItem[] = PANE_ORDER.map((id) => ({
@@ -506,12 +525,8 @@ export default function App(): JSX.Element {
     localStorage.setItem('gitty.tabNames', JSON.stringify(tabNames))
   }, [tabNames])
 
-  /* ---------- repository menu (recent + open) ---------- */
+  /* ---------- repository menu, continued ---------- */
 
-  // The menu is its own component (it holds a search box); it reads `recent`
-  // live, so forgetting an entry updates it in place and several can go in a row.
-  const [repoMenuAt, setRepoMenuAt] = useState<{ x: number; y: number } | null>(null)
-  const openRecentMenu = (x: number, y: number): void => setRepoMenuAt({ x, y })
   const closeRepoMenu = useCallback(() => setRepoMenuAt(null), [])
   const recentLabel = useCallback((p: string) => tabLabel(tabNames, p), [tabNames])
   const guessRepos = useCallback((q: string) => window.gitty.repo.guess(q), [])
@@ -626,6 +641,7 @@ export default function App(): JSX.Element {
           </div>
         )}
         <button
+          ref={repoButtonRef}
           className="repo-button"
           title={
             // A renamed tab hides its repository, so the tooltip names it.
@@ -635,7 +651,7 @@ export default function App(): JSX.Element {
           }
           onClick={(e) => {
             const r = (e.currentTarget as HTMLElement).getBoundingClientRect()
-            openRecentMenu(r.left, r.bottom + 2)
+            setRepoMenuAt({ x: r.left, y: r.bottom + 2 })
           }}
         >
           <span className="repo">{active ? tabLabel(tabNames, active) : msg.app.noRepo}</span>
@@ -843,7 +859,14 @@ export default function App(): JSX.Element {
             </button>
           </div>
         ))}
-        <button className="tab-add" title={msg.tab.openAnotherRepo} onClick={() => pickAndOpen()}>
+        <button
+          className="tab-add"
+          title={msg.tab.openAnotherRepo}
+          onClick={(e) => {
+            const r = (e.currentTarget as HTMLElement).getBoundingClientRect()
+            setRepoMenuAt({ x: r.left, y: r.top - 2, up: true })
+          }}
+        >
           +
         </button>
       </div>
@@ -853,6 +876,7 @@ export default function App(): JSX.Element {
         <RepoMenu
           x={repoMenuAt.x}
           y={repoMenuAt.y}
+          up={repoMenuAt.up}
           list={recent.filter((p) => p !== active)}
           labelOf={recentLabel}
           shortPath={shortenPath}
