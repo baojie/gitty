@@ -44,8 +44,10 @@ have translations in `ref/readme/` — `README.<lang>.md` and `manual.<lang>.md`
 in eight languages (zh-CN, ja, ko, fr, de, es, ru, pt).
 
 The translations are **snapshots, not a second source of truth**. Each carries
-its translation date and a line saying the English file is the official version
-and the only one kept current. Do not update a translation as part of changing
+its translation date, the release tag it matches (`Gitty vX.Y.Z`), and a line
+saying the English file is the official version and the only one kept current.
+Bring them up to date at a release, so there is a tag to name; their download
+links name that same version. Do not update a translation as part of changing
 behaviour; the English file is what has to stay right. Because translated
 headings would produce unpredictable anchors, each section carries an explicit
 `<a id="…">` with the English slug, so the cross-links match the English file's.

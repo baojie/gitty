@@ -6,7 +6,7 @@ Alles, was Gitty tut, Bereich für Bereich. Das [README](../../README.md) ist di
 Kurzfassung — was es ist, warum es existiert, wie man es installiert — und bleibt
 das; hier leben die Details.
 
-> **Übersetzt am 2026-08-22.**
+> **Übersetzt am 2026-11-18, entspricht Gitty v0.2.3.**
 > Das [englische Handbuch](manual.md) ist die offizielle Fassung und die einzige,
 > die weiter gepflegt wird. Dieses Dokument ist eine Momentaufnahme davon; wo
 > beide sich widersprechen, gilt das Englische. Die Oberfläche selbst ist
@@ -30,8 +30,8 @@ Von links nach rechts beschreibt sie das aktive Repository und handelt dann dara
   [Zurückgehen](#going-back).
 - **Der Repository-Pfad** ist eine Schaltfläche: sie öffnet das Menü der
   [zuletzt geöffneten Repositories](#recent-repositories).
-  Ein weiteres Repository öffnet das **+** am Ende der
-  [Tab-Leiste](#tabs), oder <kbd>Strg+O</kbd>.
+  **+** am Ende der [Tab-Leiste](#tabs) und <kbd>Strg+O</kbd> öffnen dasselbe
+  Menü.
 - **⎇ Branch** ist ebenfalls eine Schaltfläche — der Branch, den git ausgecheckt
   hat, und ein Menü aller anderen zum Lesen. Siehe
   [einen anderen Branch durchsehen](#browsing-another-branch).
@@ -45,7 +45,9 @@ Von links nach rechts beschreibt sie das aktive Repository und handelt dann dara
   <kbd>Strg+,</kbd>.
 - **Refresh** — Status und Log von Hand neu einlesen (<kbd>F5</kbd> /
   <kbd>Strg+R</kbd>). Gitty beobachtet das Repository und aktualisiert von selbst;
-  das hier ist für die Fälle, die das Beobachten nicht sieht.
+  das hier ist für die Fälle, die das Beobachten nicht sieht — unter Linux wird
+  ein Arbeitsverzeichnis mit mehr als etwa 8.000 Verzeichnissen nur teilweise
+  beobachtet.
 
 Während man einen anderen Branch liest, zeigt die Branch-Schaltfläche
 `⎇ main › other-branch`, und Fehler des letzten Git-Befehls erscheinen rot neben
@@ -90,16 +92,27 @@ Hintergrund vollständig verborgen ist — der Punkt ist also das einzige Zeiche
 dass dort noch Arbeit liegt. Fährt man über einen Tab, nennt er das Repository
 und sagt es in Worten.
 
-**+** (und <kbd>Strg+O</kbd>) öffnet ein weiteres Repository in einem neuen Tab;
-die Titelleiste zeigt stets das aktive. Jeder Tab behält seine eigenen Bereiche
+**+** (und <kbd>Strg+O</kbd>) öffnet ein weiteres Repository in einem neuen Tab,
+über das Menü der [zuletzt geöffneten Repositories](#recent-repositories); die Titelleiste zeigt stets das aktive. Jeder Tab behält seine eigenen Bereiche
 und sein Terminal, sodass ein Commit, den man gerade liest, und eine laufen
 gelassene Shell genau dort sind, wo sie waren, wenn man weg- und zurückwechselt.
 Einen Tab an eine neue Stelle in der Leiste zu ziehen ordnet die Repositories um.
 Ein Rechtsklick auf einen Tab bietet **Rename tab…** — der Name wird für dieses
 Repository gemerkt, in der Tab-Leiste und der Titelleiste gezeigt, der echte Pfad
-bleibt im Hover-Text — und **Close repository**. Den letzten Tab zu schließen
+bleibt im Hover-Text —, **Open in File Manager**, das das Wurzelverzeichnis des
+Repositories öffnet, und **Close repository**. Den letzten Tab zu schließen
 hinterlässt ein leeres Fenster mit einer Schaltfläche für das nächste Repository.
-(Offene Tabs werden über Neustarts hinweg nicht gemerkt.)
+
+Die Tabs, die beim Beenden von Gitty offen sind, werden beim nächsten Start
+wieder geöffnet — das Repository, mit dem es gestartet wurde, wird trotzdem der
+aktive Tab, und eines, das inzwischen gelöscht wurde, fällt stillschweigend weg.
+**Reopen last session** in den Einstellungen schaltet das ab. Bei mehreren
+Fenstern (**Instances: Multiple**) wird die Sitzung des zuletzt geschlossenen
+Fensters behalten.
+
+Das Fenster zu schließen oder Gitty zu beenden, während mehr als ein Repository
+offen ist, fragt vorher nach, damit ein verirrtes <kbd>Strg+Q</kbd> nicht die
+ganze Sammlung mitnimmt. Ein einzelnes offenes Repository schließt ohne Frage.
 
 ### Zuletzt geöffnete Repositories <a id="recent-repositories"></a>
 
@@ -112,9 +125,30 @@ Repositories — Basisname samt übergeordnetem Verzeichnis — das jüngste zue
 - Das **×** rechts an einem Eintrag — ihn aus der Liste nehmen; ein Rechtsklick auf den Eintrag tut dasselbe. Das Menü bleibt offen,
   sodass sich mehrere hintereinander löschen lassen.
 
-**Open Repository…** und **Clear Recent** stehen darunter. Die Liste liegt in
-`~/.config/Gitty/recent-repos.json`, fasst zwölf Einträge und überspringt alle,
-die inzwischen verschoben oder gelöscht wurden.
+Das Menü zeigt die zwölf jüngsten; **More…** am unteren Rand listet den Rest.
+Das Suchfeld oben filtert beim Tippen die ganze Liste — jedes Wort muss im Namen
+des Repositories oder in seinem Verzeichnis vorkommen, und Treffer im Namen kommen
+zuerst. <kbd>↑</kbd>/<kbd>↓</kbd> bewegen, <kbd>Enter</kbd> öffnet in einem neuen
+Tab, <kbd>Strg+Enter</kbd> im aktuellen, <kbd>Esc</kbd> schließt.
+
+Passt nichts in der Liste, sucht Gitty auf der Platte weiter: nach einem
+Repository, dessen Verzeichnisname passt, an den Orten, an denen deine gemerkten
+Repositories liegen — ihren übergeordneten Verzeichnissen und denen darüber, zwei
+Ebenen tief, sodass `~/work/<group>/<repo>` ohne Konfiguration abgedeckt ist —
+und an den üblichen Orten unter dem Home-Verzeichnis (`~/work`, `~/code`,
+`~/src`, `~/projects`, …). Was es findet, steht unter *Is it one of these?* mit
+vollem Pfad und öffnet sich erst, wenn du es auswählst; einmal geöffnet, kommt es
+in die Liste.
+
+**+** und <kbd>Strg+O</kbd> öffnen genau dieses Menü, sodass man ein Repository
+findet, indem man seinen Namen tippt; ein zweites <kbd>Strg+O</kbd> oder
+**Open Repository…** führt weiter zum Ordnerdialog.
+
+**Open Repository…** und **Clear Recent** stehen darunter; Clear Recent fragt
+nach, bevor es die Liste leert, denn das lässt sich nicht rückgängig machen. Die
+Liste liegt in `~/.config/Gitty/recent-repos.json`, fasst die letzten hundert
+Repositories und überspringt alle, die inzwischen verschoben oder gelöscht
+wurden.
 
 ### Vollbild und Ausblenden <a id="full-screen-and-hiding"></a>
 
@@ -186,13 +220,21 @@ nicht kennt, bekommt ein schlichtes Blatt statt einer Vermutung.
 Zwei Statusspalten werden gezeigt: der Zustand im
 Index (grün) und der im Arbeitsverzeichnis (gelb / rot); unversionierte Dateien
 sind `??`. Die Zahl wird im Arbeitsverzeichnis von der Platte und sonst aus der
-Revision gelesen; Binärdateien, gelöschte Dateien und alles über 8 MB zeigen
-schlicht keine. Danach folgt der Änderungsumfang — wie viele Zeilen diese
+Revision gelesen; wo es keine zu lesen gibt — bei einer Binärdatei oder allem
+über 8 MB —, sagt die Zeile stattdessen, wie groß die Datei ist, und eine
+gelöschte Datei sagt gar nichts. Danach folgt der Änderungsumfang — wie viele Zeilen diese
 Änderung in der Datei hinzugefügt und entfernt hat, `+12 −3`, gegen HEAD im
 Arbeitsverzeichnis und gegen den Vorgänger bei einem Commit oder einem Bereich.
 Eine Momentaufnahme ist ein Baum und keine Änderung, daher hat sie keinen
 Änderungsumfang; ebenso Binärdateien oder ein Merge-Commit, dessen kombiniertes
 Diff nichts zuschreibt.
+
+Wo der Änderungsumfang stünde, nennt ein Baum — die Auflistung des Working Tree
+und die Momentaufnahme eines Commits — stattdessen, **wer jede Datei zuletzt
+committet hat**: eine Änderung gehört bereits jemandem, bei einem Baum aber ist
+die Frage, wessen Datei das ist. Fährt man über den Namen, steht dort der ganze
+Satz. Eine Datei, die git nie gesehen hat, hat keinen, unversionierte und
+ignorierte Dateien zeigen also nichts.
 
 Der Titel des Bereichs sagt, was aufgelistet ist, und ein Klick darauf öffnet ein
 Menü der beiden ständigen Ansichten: **Changes**, die nicht committeten, und
@@ -222,11 +264,28 @@ Bereichstitels.
   das Bild selbst bei einem Bild).
 - **Klick auf eine Statusspalte** — die Datei stagen oder, falls bereits
   gestaged, wieder unstagen.
-- **Rechtsklick** — View File, Open in System App, Reveal in File Manager, Copy
-  Relative Path, Copy Absolute Path, Copy File Name, Blame File, File History,
-  Stage / Unstage File, Discard Changes, Delete File. Die Zeile eines Submoduls
-  bietet zusätzlich **Pull Submodule**.
+- **Rechtsklick** — View File, Open in System App, Reveal in File Manager, Open
+  Remote URL, Copy Relative Path, Copy Absolute Path, Copy File Name, Blame
+  File, File History, Stage / Unstage File, Discard Changes, Delete File. Die
+  Zeile eines Submoduls bietet zusätzlich **Pull Submodule**.
+- **Rechtsklick → Open Remote URL** — die Seite dieser Datei auf der Website, auf
+  der das Repository gehostet ist, im System-Browser geöffnet. Die Revision ist
+  die, die man gerade ansieht — ein Commit, eine Momentaufnahme — und in den
+  Ansichten Changes und Working Tree der ausgecheckte Branch. Die Adresse wird aus
+  dem Remote auf dieselbe Weise abgeleitet wie beim
+  [Eintrag im Commit-Menü](#commits-bottom-left), erscheint also nur dort, wo
+  diese Ableitung gelingt, und nie bei einer unversionierten Datei, einem
+  losgelösten HEAD oder einem Commit, der noch nicht gepusht wurde — die Website
+  hat für ihn noch keine Seite.
 - **Klick auf einen Ordner** — ein- oder ausklappen.
+- **Rechtsklick auf einen Ordner** — Copy Relative Path, Copy Absolute Path, Copy
+  Folder Name und die beiden Wege, ihn außerhalb von Gitty zu öffnen:
+  **Open in Browser**, die Verzeichnisauflistung des Browsers selbst, und
+  **Open in File Manager**. Die Momentaufnahme einer Revision listet einen Baum
+  auf, der nicht auf der Platte liegt, und bietet daher nur die Pfade.
+- **Rechtsklick auf die leere Fläche unter den Zeilen** — **Open in File Manager**
+  für das Wurzelverzeichnis des Repositories (nicht in der Momentaufnahme einer
+  Revision) und **Paste**, wenn es Dateien zum Einfügen gibt.
 
 In einem Dateimanager kopierte Dateien lassen sich **in den Baum einfügen**: ein
 Rechtsklick auf die leere Fläche unter den Zeilen gibt **Paste**, das in die
@@ -256,6 +315,25 @@ werden. Nichts bleibt zu, solange das Feld Text hat — ein Treffer fünf
 Verzeichnisse tiefer ist ja der Sinn des Tippens. <kbd>Esc</kbd> oder das **✕**
 löscht es und stellt den ganzen Baum wieder her, und ein Wechsel zu einem anderen
 Commit ebenso.
+
+<kbd>Strg+E</kbd> beantwortet die andere Frage — nicht „grenze ein, was hier
+aufgelistet ist", sondern „zeig mir diese Datei, wo auch immer sie liegt". Es
+öffnet von überall ein Feld über dem Fenster, ohne dass ein Bereich fokussiert
+sein muss, und listet das ganze Arbeitsverzeichnis statt des Baums auf dem
+Schirm: jede Datei, die `git` nennen würde, ohne die, die `.gitignore` abdeckt,
+damit `node_modules` die Antwort nicht verschüttet. Die Buchstaben werden **der
+Reihe nach, aber nicht zusammenhängend** geprüft — `dfpn` findet `DiffPane.tsx` —,
+und die Rangfolge bevorzugt Buchstaben, die ein Wort beginnen (ein
+Pfadsegment, oder nach `-`, `_`, `.` oder einem Wechsel von Klein- zu
+Großbuchstaben), Buchstaben im Dateinamen statt in den Verzeichnissen darüber
+und Folgen, die zusammenbleiben; bei Gleichstand gewinnt der kürzere Pfad.
+<kbd>↑</kbd> <kbd>↓</kbd> wählen, <kbd>Enter</kbd> öffnet die Datei als Dokument
+neben dem Diff, und <kbd>Esc</kbd> schließt das Feld. Die Datei öffnet sich so,
+wie sie auf der Platte liegt, auch wenn gerade ein Commit auf dem Schirm ist, denn
+das Arbeitsverzeichnis ist es, was das Feld aufgelistet hat. Die Taste wirkt auch
+in einem Terminal, wo die Shell sie nicht sieht — anders als <kbd>Strg+D</kbd>,
+das das Eingabeende bleibt, weil man so eine Shell verlässt; das Zeilenende von
+readline liegt auch auf <kbd>End</kbd>.
 
 **Pull Submodule** erscheint in der Zeile eines Pfads, den `.gitmodules` nennt, in
 den beiden Ansichten, die das Verzeichnis auf der Platte sind — **Changes** und
@@ -348,7 +426,11 @@ darüber, sodass man sie lesen kann, ohne das Diff zu verlieren, bei dem man war
 Der Tab **Diff** steht immer zuerst, und ein einfacher Klick im Baum blättert
 weiterhin an Ort und Stelle durch Diffs. Jedes Dokument merkt sich die Revision,
 in der es geöffnet wurde, schließt mit seinem eigenen **×** und liest eine Datei
-aus dem Arbeitsverzeichnis neu, wenn sich das Repository ändert. Quelldateien
+aus dem Arbeitsverzeichnis neu, wenn sich das Repository ändert.
+Ein **Rechtsklick** auf den Tab eines Dokuments gibt dasselbe Menü, das seine
+Zeile im Dateibaum hat; eine Datei, die die Liste nicht enthält — eine
+unveränderte, in der Ansicht Changes —, bekommt das der Working Tree, ohne
+Stagen, Verwerfen oder Löschen. Quelldateien
 bekommen Zeilennummern und Syntaxhervorhebung; Markdown öffnet
 [gerendert](#markdown-preview), mit einem Schalter zurück zur Quelle; HTML öffnet
 [ebenfalls gerendert](#html-preview); ein Bild öffnet als [das Bild](#images).
@@ -429,6 +511,12 @@ damit sich die Struktur auf einen Blick liest.
   immer um; in einer Vorschau entscheidet dieser Schalter, ob abgegrenzte
   Codeblöcke, breite Tabellen und lange Inline-Zeichenketten ebenfalls umbrechen,
   statt seitwärts zu scrollen.
+- **Tabellenspalten** — die Spalten einer Tabelle richten sich nach ihrem Inhalt,
+  und jede Grenze lässt sich ziehen: wer den rechten Rand einer Kopfzelle greift,
+  dem folgt die Spalte mit dem Zeiger, die übrigen behalten ihre Breite. Eine
+  Tabelle, die breiter als der Bereich ist, scrollt seitwärts. Ein Doppelklick auf
+  eine Grenze gibt die Tabelle dem Browser zurück, also wieder Breiten, die zum
+  Inhalt passen. Die Breiten halten, solange das Dokument offen ist.
 - **Outline** — die Überschriftenstruktur neben dem Dokument, nach Ebene
   eingerückt, der Überschrift folgend, zu der man gescrollt hat. Ein Klick auf
   einen Eintrag springt hin, und der Trenner zwischen ihm und dem Dokument lässt
@@ -441,7 +529,13 @@ damit sich die Struktur auf einen Blick liest.
   Tabelle, jeder Codeblock und jedes Bild bekommt im linken Rand die
   Zeilennummer, mit der es in der Quelle beginnt. Die Nummern werden gezeichnet
   statt eingefügt, also bleiben sie aus einer Auswahl heraus, die man kopiert,
-  und aus dem, was <kbd>Strg+F</kbd> durchsucht. Ein Bild, das innerhalb eines
+  und aus dem, was <kbd>Strg+F</kbd> durchsucht. Ist das Dokument eines, von dem
+  das Diff auf dem Schirm handelt, wird die Nummer eines Blocks, den dieses Diff
+  eingefügt oder geändert hat, grün auf grün gezeichnet — in den Farben, in denen
+  das Diff selbst eine `+`-Zeile malt —, sodass der Rand spiegelt, was das Diff
+  sagte. Ein Block gilt als geändert, wenn eine seiner Zeilen es ist, ein
+  bearbeiteter Codeblock ist also markiert, auch wenn seine erste Zeile unberührt
+  ist. Ein Bild, das innerhalb eines
   Satzes steht, übernimmt die Zeile seines Absatzes, da es keine eigene hat.
 - **<kbd>Strg+F</kbd>** — im Dokument suchen; siehe
   [Text suchen](#finding-text).
@@ -491,6 +585,35 @@ scrollt oder auf seinen Inhalt wächst, sodass die ganze Seite als eine scrollt.
 <kbd>Strg+F</kbd> und <kbd>Strg+Umschalt+C</kbd> funktionieren innerhalb des
 Rahmens, dessen Tasten den Rest des Fensters nie erreichen.
 
+#### JSON <a id="json"></a>
+
+Eine `.json`-, `.geojson`-, `.topojson`- oder `.webmanifest`-Datei öffnet so, wie
+die Datei sie speichert, und bekommt neben **Wrap** eine Schaltfläche **Format**:
+gedrückt wird das Dokument mit zwei Leerzeichen pro Ebene neu eingerückt, sodass
+eine minifizierte Datei, die als eine endlose Zeile ankommt, sich als Baum liest.
+Ein erneuter Druck zeigt die Datei wieder so, wie sie gespeichert ist.
+
+Solange das Dokument formatiert ist, trägt jedes Objekt und jedes Array, das etwas
+enthält, ein **▼** neben seiner Zeilennummer: ein Klick darauf klappt diesen
+Knoten weg, und die Zeile, auf der er begann, behält ein **…**, das sagt, dass
+etwas fehlt. Ein Klick auf das **▶**, zu dem es wird, öffnet ihn wieder.
+Faltungen verschachteln sich, ein Knoten, der in einem anderen gefaltet ist,
+bleibt also gefaltet, wenn sein Elternknoten geöffnet wird, und <kbd>Strg+F</kbd>
+durchsucht, was auf dem Schirm steht — die Zeilen eines gefalteten Knotens werden
+gar nicht gerendert. Nichts bleibt gefaltet, wenn ein anderes Dokument geöffnet
+wird oder eine Datei aus dem Arbeitsverzeichnis neu gelesen wird, nachdem sich das
+Repository geändert hat: die Zeilen, die eine Faltung meinte, sind vielleicht
+nicht mehr dieselben.
+
+Nur der Leerraum zwischen den Tokens ändert sich. Zahlen behalten die Ziffern, mit
+denen die Datei sie schreibt — ein Wert, zu lang für ein Double, ein zu großer
+Exponent —, Schlüssel behalten ihre Reihenfolge, und ein doppelter Schlüssel
+bleibt stehen. Die Schaltfläche erscheint nur, wo sich der Text als ein
+vollständiges JSON-Dokument parsen lässt, sodass eine Vorlage voller Platzhalter
+oder ein abgebrochener Download nichts anbietet statt einer Schaltfläche, die
+nichts tut. Formatieren ist eine Art, die Datei zu lesen; zurückgeschrieben wird
+nichts.
+
 #### Bilder <a id="images"></a>
 
 Eine `.png`, `.jpg`, `.gif`, `.webp`, `.bmp`, `.ico`, `.avif` oder `.svg` öffnet
@@ -503,6 +626,29 @@ nicht eingebettet.
 
 ![Image preview](../../ref/gitty-0.1.5-image.png)
 
+#### PDFs <a id="pdfs"></a>
+
+Eine `.pdf` öffnet als das Dokument, gelesen von dem Betrachter, den die
+Browser-Engine ohnehin mitbringt: Seiten an der Seite, Zoom, Drehen, eine eigene
+Suche und Schaltflächen zum Drucken oder Speichern einer Kopie. In einer Revision
+funktioniert es genauso — ein PDF in der Momentaufnahme eines Commits wird aus git
+gelesen, sodass sich eine alte Ausgabe eines Papers so liest, wie sie damals war,
+ohne etwas auszuchecken. Die Größe der Datei steht darunter. PDFs über 64 MB
+werden nicht geöffnet, und der Name in der eigenen Werkzeugleiste des Betrachters
+ist nicht der der Datei; das ist die Kopfzeile des Bereichs darüber.
+
+#### Mit Git LFS gespeicherte Dateien <a id="files-stored-with-git-lfs"></a>
+
+Eine Datei, die [Git LFS](https://git-lfs.com/) verfolgt, ist im Repository
+selbst ein dreizeiliger Zeiger, die echte Datei liegt in einem Speicher daneben.
+Gitty folgt dem Zeiger, sodass ein von LFS verfolgtes Bild oder PDF wie jedes
+andere in der Vorschau erscheint — in einer Revision ebenso wie im
+Arbeitsverzeichnis, und ob `git lfs` auf dem Rechner installiert ist oder nicht.
+Wurde das Objekt nicht geholt, sagt der Bereich das, statt ein kaputtes Bild oder
+einen Fehler des Betrachters zu zeigen. `git lfs pull` holt es, und danach
+funktioniert die Vorschau. Die Größe neben der Datei im Baum bleibt die des
+Zeigers, denn das ist es, was das Repository tatsächlich speichert.
+
 #### Blame und Datei-Historie <a id="blame-and-file-history"></a>
 
 Rechtsklick auf eine Datei im Baum und **Blame File** oder **File History**
@@ -510,10 +656,14 @@ wählen; beide öffnen als Dokumente neben dem Diff. Blame zeigt eine Zeile pro
 Quellzeile — den Commit, seinen Autor, sein Datum und die Zeile selbst,
 hervorgehoben wie im Code-Betrachter, mit einem Geviertstrich, wo eine Zeile
 noch nicht committet ist — in der Revision, die man gerade betrachtet. File
-History listet jeden Commit, der die Datei berührt hat, folgt Umbenennungen, und
-ein Klick auf einen Commit öffnet ihn; eine Spalte zwischen Datum und Autor sagt,
-wie lang die Datei bei jenem Commit war, und bleibt leer, wo sich die Zahl nicht
-ermitteln lässt — bei einer binären Revision und allem, was älter ist.
+History listet jeden Commit, der die Datei berührt hat, und folgt Umbenennungen;
+eine Spalte zwischen Datum und Autor sagt, wie lang die Datei bei jenem Commit
+war, und wie groß sie war, wo sich die Zahl nicht ermitteln lässt — bei einer
+binären Revision und allem, was älter ist. Ihre Zeilen verhalten sich wie die des
+Commit-Logs: ein Klick wählt eine, ein Doppelklick öffnet jenen Commit, und
+Umschalt+Klick auf eine zweite Zeile zeigt das Diff der Datei zwischen den beiden
+Revisionen — dieselbe Bereichsansicht, die die zweite Auswahl im Log öffnet, mit
+der Datei bereits ausgewählt.
 
 Ein Rechtsklick auf eine Blame-Zeile bietet **History of These Lines**: `git log
 -L` über die Zeilen, die die Auswahl abdeckt — oder die geklickte Zeile, ohne
@@ -644,7 +794,9 @@ ein regulärer Ausdruck erreicht git also als ein Argument.
   der Eintrag erscheint nur, wenn diese Ableitung gelingt: GitHub, GitLab,
   Bitbucket, Gitea, Forgejo, Codeberg und sourcehut sind bekannt, ebenso jeder
   selbst gehostete Server, der dem Schema `/commit/<hash>` folgt. Ein Repository
-  ohne Remote oder eines auf Azure DevOps bekommt den Eintrag nicht.
+  ohne Remote oder eines auf Azure DevOps bekommt den Eintrag nicht, ebenso wenig
+  ein Commit, der noch nicht gepusht wurde — und Strg+Klick öffnet einen solchen
+  auch nicht.
 
   Er lauscht auf `127.0.0.1`, und das allein wäre nicht viel: die Loopback-Adresse
   hält andere Rechner draußen, nicht andere Seiten im eigenen Browser, von denen
@@ -730,8 +882,6 @@ Terminal fokussiert es — das umrandete ist das, wo die nächste Teilung oder
 oder Spalte, statt zu verschachteln, sodass drei nebeneinanderliegende Terminals
 gegeneinander in der Größe verändert werden.
 
-**Close** beendet die fokussierte Shell; eine Shell mit `exit` zu verlassen
-schließt ihre Teilung von selbst. Das letzte Terminal bleibt immer: es zu
 **Close** beendet die fokussierte Shell; eine Shell mit `exit` zu verlassen
 schließt ihre Teilung von selbst. Das letzte Terminal bleibt immer: es zu
 verlassen hinterlässt den Hinweis auf dem Schirm statt eines leeren Bereichs.
@@ -841,7 +991,7 @@ direkt, für alle, denen das lieber ist. Beide Dateien liegen in Gittys eigenem
 Zustandsverzeichnis unter `plugins/semantic-reading/`, nie in einem Repository,
 und ihr Inhalt verlässt nie den Hauptprozess.
 
-
+**Shell** und **Login shell** werden gelesen, wenn ein Terminal entsteht; sie wirken
 also bei der nächsten Teilung oder dem nächsten Repository-Tab, nicht in den
 bereits laufenden Shells. **Word wrap**, **Diff layout** und **Outline**
 sind dieselben Schalter, die die Diff-Kopfzeile trägt: eine Änderung an einer
@@ -869,13 +1019,13 @@ Shortcuts** öffnet dasselbe Blatt.
 | <kbd>Alt</kbd> | Die Menüleiste der Anwendung ein- oder ausblenden (nicht unter macOS, wo sie immer da ist) |
 | <kbd>F1</kbd> | Die Tastenkürzel, als Blatt über dem Fenster |
 | <kbd>F5</kbd> / <kbd>Strg+R</kbd> | Status und Log aktualisieren |
-| <kbd>Strg+O</kbd> | Ein weiteres Repository in einem neuen Tab öffnen |
+| <kbd>Strg+O</kbd> | Ein weiteres Repository in einem neuen Tab öffnen: das Menü der zuletzt geöffneten Repositories; erneut für den Ordnerdialog |
+| <kbd>Strg+E</kbd> | Eine Datei nach Namen öffnen, von überall im Fenster — das Terminal eingeschlossen |
 | <kbd>Strg+,</kbd> | Einstellungen |
 | <kbd>Strg+1</kbd> … <kbd>Strg+4</kbd> | Files, Diff, Commits, Terminal aus- oder einblenden |
 | <kbd>Strg+Umschalt+0</kbd> | Alle vier Bereiche wieder anzeigen |
 | <kbd>Strg+Umschalt+1</kbd> … <kbd>Strg+Umschalt+4</kbd> | Das Fenster mit diesem Bereich füllen |
 | <kbd>Strg+Tab</kbd> / <kbd>Strg+Umschalt+Tab</kbd> | Das Vollbild geht zum nächsten Bereich, oder zum vorigen |
-
 
 ## Plattform-Hinweise <a id="platform-notes"></a>
 
@@ -966,3 +1116,72 @@ stellt sie voran — als Präfix, sodass ein Start aus dem Terminal unbeeinfluss
 bleibt. Ein späterer Wechsel der Node-Version lässt diesen Pfad veralten;
 `setup.sh` erneut auszuführen korrigiert ihn.
 
+### Windows <a id="windows"></a>
+
+Windows läuft aus einem Checkout, über dasselbe `run.sh` und `setup.sh` wie die
+anderen Plattformen, ausgeführt von Git Bash, das mit
+[Git for Windows](https://gitforwindows.org/) kommt. Das README listet die
+[Schritte](../../README.md#on-windows). Nichts wird paketiert:
+`electron-builder.yml` konfiguriert nur Linux-Ziele.
+
+**Was `setup.sh` installiert.** Ein Symlink nützt hier nichts, denn `ln -s` von
+Git Bash legt stillschweigend eine Kopie an, und eine Kopie von `run.sh` sucht den
+Checkout neben sich selbst. Also bekommt `%USERPROFILE%\.local\bin` stattdessen
+zwei kleine Wrapper: `gitty`, ein Bash-Skript für Git Bash, und `gitty.cmd` für
+cmd und PowerShell, das seine Argumente an Gits `bash.exe -l` weiterreicht. Das
+`-l` bringt Gits eigene Werkzeuge in den `PATH`; `CHERE_INVOKING=1` hält das
+Login-Profil davon ab, ins Home-Verzeichnis zu wechseln, sodass `gitty` weiterhin
+das aktuelle meint. Git Bash baut seinen `PATH` aus dem von Windows, ein einziger
+Eintrag für jenes Verzeichnis dient also jeder Shell, und `setup.sh` gibt die
+PowerShell-Zeile aus, die ihn hinzufügt, wenn er fehlt.
+
+Startmenü und Desktop bekommen eine `Gitty.lnk`, die `run.sh --any` in einem
+minimierten Git-Bash-Fenster ausführt. Dieses Fenster schließt sich, sobald
+Electron gestartet ist. Ihr Symbol ist `build/icon.png`, verpackt in eine `.ico`
+unter `%LOCALAPPDATA%\Gitty`. Das Log ist
+`%USERPROFILE%\.local\state\gitty\gitty.log`, derselbe Pfad wie anderswo.
+
+**Kein Visual Studio.** Das `node-pty` des Terminal-Bereichs liefert für Windows
+vorgebaute N-API-Binärdateien mit, die unter jedem Electron laden, deshalb
+überspringt der `postinstall`-Schritt das `electron-rebuild`, das er unter Linux
+und macOS ausführt. Dieser Neubau bräuchte die C++-Werkzeuge von Visual Studio und
+scheiterte ohne sie.
+
+**_not a valid Win32 application_ bei `npm install`.** Das heißt, dass die
+64-Bit-Visual-C++-Laufzeitumgebung fehlt, nicht dass ein Download kaputt ist. Ohne
+sie sucht Windows `vcruntime140.dll` entlang des `PATH`, und eine 32-Bit-Kopie,
+die irgendein anderes Programm dort hinterlassen hat (meist ein 32-Bit-Python),
+lässt sich nicht in ein 64-Bit-Node laden. Die Laufzeitumgebung mit
+`winget install Microsoft.VCRedist.2015+.x64` installieren und `npm install`
+erneut ausführen.
+
+**_dubious ownership_.** Auf einem Laufwerk, das keine Dateibesitzer aufzeichnet,
+etwa FAT/exFAT oder manche Netzwerkfreigaben, verweigert git ein Repository, von
+dem es nicht beweisen kann, dass es dir gehört, und Gitty zeigt dafür nichts an.
+Dem Repository, oder jedem Repository auf jenem Laufwerk, in gits eigener
+Konfiguration vertrauen:
+
+```bash
+git config --global --add safe.directory D:/path/to/repo
+git config --global --add safe.directory '*'   # every repository
+```
+
+**Das Terminal** startet `COMSPEC`, also `cmd.exe`, sofern nicht **Settings →
+Shell** PowerShell oder eine andere Shell wählt. **Login shell** bewirkt hier
+nichts.
+
+**Zeilenenden.** Git for Windows checkt Text standardmäßig mit CRLF aus, und bash
+liest ein abschließendes CR als Teil des Befehls. `.gitattributes` hält `*.sh` bei
+jedem Checkout auf LF. Ein Checkout, der entstand, bevor es diese Datei gab,
+übernimmt sie, sobald die beiden Skripte erneut ausgecheckt werden, mit
+`rm run.sh setup.sh && git checkout -- run.sh setup.sh`.
+
+### Wenn das Fenster einfriert <a id="when-the-window-freezes"></a>
+
+Gitty führt ein Protokoll seiner eigenen Hänger: Immer wenn der Hauptprozess oder
+das Fenster eine halbe Sekunde oder länger nicht reagiert, hält eine JSON-Zeile
+fest, wie lange, und welche Git-Aufrufe in dem Moment liefen. Aus einem Checkout
+gestartet, liegt das Protokoll unter `logs/stalls/<date>.jsonl` darin (von git
+ignoriert); paketiert unter `~/.config/Gitty/logs/stalls/`. Die Datei des
+betreffenden Tages an einen Fehlerbericht über ein Einfrieren anzuhängen sagt
+mehr, als eine Beschreibung es kann. `GITTY_STALL_MS=200` senkt die Schwelle.

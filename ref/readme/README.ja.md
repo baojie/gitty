@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · **日本語** · [한국어](README.ko.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Русский](README.ru.md) · [Português](README.pt.md)
 
-> **翻訳日: 2026-08-21。**
+> **翻訳日: 2026-11-18（Gitty v0.2.3 に対応）。**
 > 公式版は[英語版 README](../../README.md) であり、継続的に更新されるのはそちらだ
 > けです。この文書はその時点のスナップショットで、食い違いがある場合は英語版が正
 > です。この文書は本ファイルだけを対象としており、[マニュアル](manual.ja.md)には
@@ -101,18 +101,18 @@
 `.deb` が最短の入り口です。Node もビルドも不要です:
 
 ```bash
-wget https://github.com/baojie/gitty/releases/download/v0.2.0/gitty-desktop_0.2.0_amd64.deb
-sudo dpkg -i gitty-desktop_0.2.0_amd64.deb
+wget https://github.com/baojie/gitty/releases/download/v0.2.3/gitty-desktop_0.2.3_amd64.deb
+sudo dpkg -i gitty-desktop_0.2.3_amd64.deb
 ```
 
 これで `/usr/bin/gitty`、アイコン付きのアプリケーションメニューエントリがインストー
 ルされ、Chromium のサンドボックスを**有効にしたまま**動きます —
 [Linux デスクトップ統合](manual.ja.md#linux-desktop-integration)を参照。
 
-隣には [arm64 の `.deb`](https://github.com/baojie/gitty/releases/download/v0.2.0/gitty-desktop_0.2.0_arm64.deb)
+隣には [arm64 の `.deb`](https://github.com/baojie/gitty/releases/download/v0.2.3/gitty-desktop_0.2.3_arm64.deb)
 があり、dpkg の無いディストリビューション向けには AppImage
-（[x86_64](https://github.com/baojie/gitty/releases/download/v0.2.0/Gitty-0.2.0-x86_64.AppImage)、
-[arm64](https://github.com/baojie/gitty/releases/download/v0.2.0/Gitty-0.2.0-arm64.AppImage)）
+（[x86_64](https://github.com/baojie/gitty/releases/download/v0.2.3/Gitty-0.2.3-x86_64.AppImage)、
+[arm64](https://github.com/baojie/gitty/releases/download/v0.2.3/Gitty-0.2.3-arm64.AppImage)）
 があります。こちらは第二候補です。AppImage はサンドボックスのヘルパーをインストール
 できないからです。旧バージョンは[リリースページ](https://github.com/baojie/gitty/releases)
 にあります。
@@ -133,8 +133,9 @@ PATH へリンクします:
 ```
 
 `setup.sh` はクリック起動できるランチャーもインストールします — Linux ではデスクトッ
-プエントリ、macOS では最小限の `Gitty.app` です。どちらも同じ `run.sh` をラップし、
-どちらも未パッケージの Electron が必要とする回避策を抱えています。
+プエントリ、macOS では最小限の `Gitty.app`、Windows ではスタートメニューとデスクトップ
+のショートカットです。いずれも同じ `run.sh` をラップし、いずれも未パッケージの
+Electron が必要とする回避策を抱えています。
 [プラットフォームに関する注記](manual.ja.md#platform-notes)を参照。
 
 あとはどこからでもリポジトリを開けます:
@@ -161,6 +162,31 @@ Gitty はターミナルから切り離れて自分の pid を表示するので
 ワークツリー外のディレクトリから起動した場合、Gitty は文句を言うだけで終わらず、最後
 に開いたリポジトリにフォールバックします。
 
+### Windows の場合 <a id="on-windows"></a>
+
+Windows 向けのインストーラーはありません。チェックアウトから実行してください。
+[Git for Windows](https://gitforwindows.org/)（スクリプトはその Git Bash で動きます）
+に加えて、Node.js と 64 ビット版 Visual C++ ランタイムが必要です。PowerShell で:
+
+```powershell
+winget install Git.Git
+winget install OpenJS.NodeJS.LTS
+winget install Microsoft.VCRedist.2015+.x64
+```
+
+続いて、Node が見えるように**新しく開いた** Git Bash ウィンドウで:
+
+```bash
+git clone https://github.com/baojie/gitty.git && cd gitty
+npm install
+./setup.sh
+```
+
+`setup.sh` は Git Bash 用の `gitty` と、cmd・PowerShell 用の `gitty.cmd` を
+`%USERPROFILE%\.local\bin` にインストールし、ショートカットも作ります。以後はどのシェ
+ルからでも、リポジトリ内で `gitty` と打てばそれが開きます。Visual Studio は不要です。
+`npm install` が *not a valid Win32 application* で失敗したり、git がリポジトリを
+*dubious ownership* と言ったりする場合は、[Windows](manual.ja.md#windows) を参照。
 
 ## Gitty がやらないこと <a id="what-gitty-does-not-do"></a>
 
@@ -187,13 +213,14 @@ merge、cherry-pick、コンフリクト解決、ブランチの作成・削除�
   [設定表](manual.ja.md#settings)、
   [キーボードショートカット](manual.ja.md#keyboard-shortcuts)。
 - [プラットフォームに関する注記](manual.ja.md#platform-notes): Linux デスクトップ統
-  合と macOS アプリケーションバンドル。
+  合、macOS アプリケーションバンドル、Windows、そしてウィンドウが固まったときに Gitty
+  が残すログ。
 
 ## アーキテクチャ <a id="architecture"></a>
 
 ```
 src/main       Electron main process — git commands, ptys, fs watchers,
-               the recent-repository store, IPC
+               the recent-repository store, the stall log, IPC
 src/preload    contextBridge API exposed to the renderer as window.gitty
 src/renderer   React UI — App.tsx manages tabs, RepoTab.tsx owns one
                repository's four panes
@@ -211,8 +238,6 @@ markdown-it が解析される前にウィンドウが描画されます。こ�
 ライブラリを温かいチャンクから締め出す規則、新しいものを追加する手順 — は
 [ref/spec/lazy-loading.md](../../ref/spec/lazy-loading.md) に規定されています。
 
-
 ## ライセンス <a id="licence"></a>
 
 MIT
-

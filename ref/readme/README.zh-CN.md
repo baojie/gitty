@@ -2,7 +2,7 @@
 
 [English](../../README.md) · **简体中文** · [日本語](README.ja.md) · [한국어](README.ko.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Русский](README.ru.md) · [Português](README.pt.md)
 
-> **翻译于 2026-08-21。**
+> **翻译于 2026-11-18，对应 Gitty v0.2.3。**
 > [英文 README](../../README.md) 是官方版本，也是唯一持续更新的版本。本文是那一
 > 刻的快照，两者不一致时以英文版为准。本文只覆盖这份文件——[手册](manual.zh-CN.md)
 > 有自己的翻译，那里同样以英文为官方版本。界面本身全是英文，所以下文中的按钮名、
@@ -90,17 +90,17 @@
 `.deb` 是上手最快的路——不用装 Node，不用构建：
 
 ```bash
-wget https://github.com/baojie/gitty/releases/download/v0.2.0/gitty-desktop_0.2.0_amd64.deb
-sudo dpkg -i gitty-desktop_0.2.0_amd64.deb
+wget https://github.com/baojie/gitty/releases/download/v0.2.3/gitty-desktop_0.2.3_amd64.deb
+sudo dpkg -i gitty-desktop_0.2.3_amd64.deb
 ```
 
 它会装上 `/usr/bin/gitty`、一个带图标的应用程序菜单条目，并且带着 Chromium 沙箱
 **开启**运行——见[Linux 桌面集成](manual.zh-CN.md#linux-desktop-integration)。
 
-旁边还有 [arm64 的 `.deb`](https://github.com/baojie/gitty/releases/download/v0.2.0/gitty-desktop_0.2.0_arm64.deb)，
+旁边还有 [arm64 的 `.deb`](https://github.com/baojie/gitty/releases/download/v0.2.3/gitty-desktop_0.2.3_arm64.deb)，
 以及给没有 dpkg 的发行版用的 AppImage
-（[x86_64](https://github.com/baojie/gitty/releases/download/v0.2.0/Gitty-0.2.0-x86_64.AppImage)、
-[arm64](https://github.com/baojie/gitty/releases/download/v0.2.0/Gitty-0.2.0-arm64.AppImage)）——
+（[x86_64](https://github.com/baojie/gitty/releases/download/v0.2.3/Gitty-0.2.3-x86_64.AppImage)、
+[arm64](https://github.com/baojie/gitty/releases/download/v0.2.3/Gitty-0.2.3-arm64.AppImage)）——
 它是第二选择，因为 AppImage 装不了沙箱辅助程序。旧版本都在
 [releases 页](https://github.com/baojie/gitty/releases)。
 
@@ -120,7 +120,8 @@ npm install -g gitty-desktop      # installs the gitty command globally
 ```
 
 `setup.sh` 还会装一个可点击的启动器——Linux 上是一个桌面条目，macOS 上是一个极简的
-`Gitty.app`。两者都封装同一个 `run.sh`，也都带着未打包 Electron 所需的变通设置；见
+`Gitty.app`，Windows 上是开始菜单和桌面快捷方式。它们都封装同一个 `run.sh`，也都带
+着未打包 Electron 所需的变通设置；见
 [平台说明](manual.zh-CN.md#platform-notes)。
 
 然后在任何地方打开一个仓库：
@@ -144,6 +145,31 @@ Gitty 会从终端脱离并打印自己的 pid，所以 shell 依然可用，关
 
 从不在工作区里的目录启动 Gitty 时，它会回退到上次打开的仓库，而不是只抱怨一句。
 
+### 在 Windows 上 <a id="on-windows"></a>
+
+Windows 没有安装包；从源码检出运行 Gitty。它需要
+[Git for Windows](https://gitforwindows.org/)（脚本由它自带的 Git Bash 执行），
+以及 Node.js 和 64 位 Visual C++ 运行库。在 PowerShell 里：
+
+```powershell
+winget install Git.Git
+winget install OpenJS.NodeJS.LTS
+winget install Microsoft.VCRedist.2015+.x64
+```
+
+然后在一个**新开的** Git Bash 窗口里（这样它才能看到 Node）：
+
+```bash
+git clone https://github.com/baojie/gitty.git && cd gitty
+npm install
+./setup.sh
+```
+
+`setup.sh` 会往 `%USERPROFILE%\.local\bin` 里装上给 Git Bash 用的 `gitty` 和给 cmd、
+PowerShell 用的 `gitty.cmd`，外加快捷方式。之后在任何仓库里、用任何 shell 敲
+`gitty` 都能打开它。不需要 Visual Studio。如果 `npm install` 报
+*not a valid Win32 application*，或者 git 说仓库 *dubious ownership*，见
+[Windows](manual.zh-CN.md#windows)。
 
 ## Gitty 不做什么 <a id="what-gitty-does-not-do"></a>
 
@@ -166,13 +192,14 @@ Gitty 读历史，并暂存你决定归到一起的改动。它不 rebase、不 
 - [查找文本](manual.zh-CN.md#finding-text)、
   [设置表](manual.zh-CN.md#settings)和
   [键盘快捷键](manual.zh-CN.md#keyboard-shortcuts)。
-- [平台说明](manual.zh-CN.md#platform-notes)：Linux 桌面集成和 macOS 应用 bundle。
+- [平台说明](manual.zh-CN.md#platform-notes)：Linux 桌面集成、macOS 应用 bundle、
+  Windows，以及窗口卡住时 Gitty 记下的日志。
 
 ## 架构 <a id="architecture"></a>
 
 ```
 src/main       Electron main process — git commands, ptys, fs watchers,
-               the recent-repository store, IPC
+               the recent-repository store, the stall log, IPC
 src/preload    contextBridge API exposed to the renderer as window.gitty
 src/renderer   React UI — App.tsx manages tabs, RepoTab.tsx owns one
                repository's four panes
@@ -188,8 +215,6 @@ git 通过 `execFile('git', …)` 驱动，解析 `--porcelain=v2 -z` /`--name-s
 被解析之前就画出来。这套切分——四个 chunk、把重库挡在热 chunk 之外的规则，以及如何
 新增一个——规定在 [ref/spec/lazy-loading.md](../../ref/spec/lazy-loading.md)。
 
-
 ## 许可 <a id="licence"></a>
 
 MIT
-

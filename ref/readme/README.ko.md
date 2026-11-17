@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md) · **한국어** · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Русский](README.ru.md) · [Português](README.pt.md)
 
-> **번역일: 2026-08-21.**
+> **번역일: 2026-11-18 (Gitty v0.2.3 기준).**
 > [영어 README](../../README.md)가 공식 버전이며, 계속 갱신되는 유일한 문서입니다. 이
 > 문서는 그 시점의 스냅샷이고, 둘이 다르면 영어가 우선합니다. 이 문서는 이 파일만
 > 다루며, [매뉴얼](manual.ko.md)은 자체 번역이 있고 그쪽에서도 영어가 공식 버전입니다.
@@ -98,18 +98,18 @@
 `.deb`가 가장 빠른 길입니다 — Node도 빌드도 필요 없습니다:
 
 ```bash
-wget https://github.com/baojie/gitty/releases/download/v0.2.0/gitty-desktop_0.2.0_amd64.deb
-sudo dpkg -i gitty-desktop_0.2.0_amd64.deb
+wget https://github.com/baojie/gitty/releases/download/v0.2.3/gitty-desktop_0.2.3_amd64.deb
+sudo dpkg -i gitty-desktop_0.2.3_amd64.deb
 ```
 
 `/usr/bin/gitty`, 아이콘이 딸린 애플리케이션 메뉴 항목이 설치되고, Chromium 샌드박스가
 **켜진** 채로 실행됩니다 —
 [Linux 데스크톱 통합](manual.ko.md#linux-desktop-integration)을 보세요.
 
-옆에는 [arm64 `.deb`](https://github.com/baojie/gitty/releases/download/v0.2.0/gitty-desktop_0.2.0_arm64.deb)가
+옆에는 [arm64 `.deb`](https://github.com/baojie/gitty/releases/download/v0.2.3/gitty-desktop_0.2.3_arm64.deb)가
 있고, dpkg가 없는 배포판을 위한 AppImage
-([x86_64](https://github.com/baojie/gitty/releases/download/v0.2.0/Gitty-0.2.0-x86_64.AppImage),
-[arm64](https://github.com/baojie/gitty/releases/download/v0.2.0/Gitty-0.2.0-arm64.AppImage))도
+([x86_64](https://github.com/baojie/gitty/releases/download/v0.2.3/Gitty-0.2.3-x86_64.AppImage),
+[arm64](https://github.com/baojie/gitty/releases/download/v0.2.3/Gitty-0.2.3-arm64.AppImage))도
 있습니다. AppImage는 샌드박스 헬퍼를 설치할 수 없으므로 두 번째 선택입니다. 예전
 버전은 [릴리스 페이지](https://github.com/baojie/gitty/releases)에 있습니다.
 
@@ -129,8 +129,8 @@ PATH로 연결합니다:
 ```
 
 `setup.sh`는 클릭 가능한 런처도 설치합니다 — Linux에서는 데스크톱 항목, macOS에서는
-최소한의 `Gitty.app`입니다. 둘 다 같은 `run.sh`를 감싸고, 둘 다 미패키징 Electron이
-필요로 하는 우회를 갖습니다. [플랫폼 노트](manual.ko.md#platform-notes)를 보세요.
+최소한의 `Gitty.app`, Windows에서는 시작 메뉴와 바탕 화면 바로 가기입니다. 모두 같은
+`run.sh`를 감싸고, 모두 미패키징 Electron이 필요로 하는 우회를 갖습니다. [플랫폼 노트](manual.ko.md#platform-notes)를 보세요.
 
 그런 다음 어디서든 저장소를 엽니다:
 
@@ -155,6 +155,31 @@ Gitty는 터미널에서 분리되어 자신의 pid를 출력하므로, 셸은 �
 작업 트리 안이 아닌 디렉터리에서 Gitty를 시작하면, 그냥 불평만 하는 대신 마지막으로
 연 저장소로 되돌아갑니다.
 
+### Windows에서 <a id="on-windows"></a>
+
+Windows용 설치 프로그램은 없습니다. 체크아웃에서 Gitty를 실행합니다. 스크립트를
+실행할 Git Bash가 들어 있는 [Git for Windows](https://gitforwindows.org/)와, Node.js,
+64비트 Visual C++ 런타임이 필요합니다. PowerShell에서:
+
+```powershell
+winget install Git.Git
+winget install OpenJS.NodeJS.LTS
+winget install Microsoft.VCRedist.2015+.x64
+```
+
+그런 다음 Node를 인식하도록 **새** Git Bash 창에서:
+
+```bash
+git clone https://github.com/baojie/gitty.git && cd gitty
+npm install
+./setup.sh
+```
+
+`setup.sh`는 Git Bash용 `gitty`와 cmd·PowerShell용 `gitty.cmd`를
+`%USERPROFILE%\.local\bin`에 설치하고, 바로 가기도 만듭니다. 그 뒤로는 어느 셸에서든
+저장소 안에서 `gitty`를 치면 그 저장소가 열립니다. Visual Studio는 필요 없습니다.
+`npm install`이 *not a valid Win32 application*으로 실패하거나, git이 저장소를
+*dubious ownership*이라고 하면 [Windows](manual.ko.md#windows)를 보세요.
 
 ## Gitty가 하지 않는 것 <a id="what-gitty-does-not-do"></a>
 
@@ -180,13 +205,14 @@ cherry-pick, 충돌 해결, 브랜치 생성·삭제·전환은 하지 않으며
 - [텍스트 찾기](manual.ko.md#finding-text),
   [설정 표](manual.ko.md#settings),
   [키보드 단축키](manual.ko.md#keyboard-shortcuts).
-- [플랫폼 노트](manual.ko.md#platform-notes): Linux 데스크톱 통합과 macOS 앱 번들.
+- [플랫폼 노트](manual.ko.md#platform-notes): Linux 데스크톱 통합, macOS 앱 번들,
+  Windows, 그리고 창이 멈출 때 Gitty가 남기는 로그.
 
 ## 구조 <a id="architecture"></a>
 
 ```
 src/main       Electron main process — git commands, ptys, fs watchers,
-               the recent-repository store, IPC
+               the recent-repository store, the stall log, IPC
 src/preload    contextBridge API exposed to the renderer as window.gitty
 src/renderer   React UI — App.tsx manages tabs, RepoTab.tsx owns one
                repository's four panes
@@ -204,8 +230,6 @@ git은 `execFile('git', …)`로 구동되고 `--porcelain=v2 -z` / `--name-stat
 막는 규칙, 그리고 새 것을 추가하는 법 — 은
 [ref/spec/lazy-loading.md](../../ref/spec/lazy-loading.md)에 명시되어 있습니다.
 
-
 ## 라이선스 <a id="licence"></a>
 
 MIT
-

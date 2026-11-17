@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · **Русский** · [Português](README.pt.md)
 
-> **Переведено 2026-08-21.**
+> **Переведено 2026-11-18, соответствует Gitty v0.2.3.**
 > Официальной версией является [английский README](../../README.md) — единственный,
 > который поддерживается в актуальном состоянии. Этот документ — его моментальный
 > снимок; там, где они расходятся, прав английский. Этот документ охватывает только
@@ -106,18 +106,18 @@ markdown** и **копирование-вставку, которая прост
 `.deb` — самый короткий путь: ни Node, ни сборки:
 
 ```bash
-wget https://github.com/baojie/gitty/releases/download/v0.2.0/gitty-desktop_0.2.0_amd64.deb
-sudo dpkg -i gitty-desktop_0.2.0_amd64.deb
+wget https://github.com/baojie/gitty/releases/download/v0.2.3/gitty-desktop_0.2.3_amd64.deb
+sudo dpkg -i gitty-desktop_0.2.3_amd64.deb
 ```
 
 Он ставит `/usr/bin/gitty`, запись в меню приложений со значком, и работает с
 песочницей Chromium **включённой** — см.
 [Интеграция с рабочим столом Linux](manual.ru.md#linux-desktop-integration).
 
-Рядом лежат [`.deb` для arm64](https://github.com/baojie/gitty/releases/download/v0.2.0/gitty-desktop_0.2.0_arm64.deb)
+Рядом лежат [`.deb` для arm64](https://github.com/baojie/gitty/releases/download/v0.2.3/gitty-desktop_0.2.3_arm64.deb)
 и AppImage для дистрибутивов без dpkg
-([x86_64](https://github.com/baojie/gitty/releases/download/v0.2.0/Gitty-0.2.0-x86_64.AppImage),
-[arm64](https://github.com/baojie/gitty/releases/download/v0.2.0/Gitty-0.2.0-arm64.AppImage)) —
+([x86_64](https://github.com/baojie/gitty/releases/download/v0.2.3/Gitty-0.2.3-x86_64.AppImage),
+[arm64](https://github.com/baojie/gitty/releases/download/v0.2.3/Gitty-0.2.3-arm64.AppImage)) —
 это второй выбор, потому что AppImage не может установить помощник песочницы. Более
 старые версии — на [странице релизов](https://github.com/baojie/gitty/releases).
 
@@ -137,8 +137,9 @@ npm install -g gitty-desktop      # installs the gitty command globally
 ```
 
 `setup.sh` также ставит кликабельный лаунчер — запись рабочего стола в Linux,
-минимальный `Gitty.app` в macOS. Оба оборачивают один и тот же `run.sh`, и оба несут
-обходные пути, нужные непакетированному Electron; см.
+минимальный `Gitty.app` в macOS, ярлыки в меню «Пуск» и на рабочем столе в Windows. Все
+они оборачивают один и тот же `run.sh`, и все несут обходные пути, нужные
+непакетированному Electron; см.
 [Заметки о платформах](manual.ru.md#platform-notes).
 
 Затем откройте репозиторий откуда угодно:
@@ -164,6 +165,32 @@ Gitty отсоединяется от терминала и печатает с�
 Запуск Gitty из каталога вне рабочего дерева откатывается к последнему открытому
 репозиторию, вместо того чтобы просто ругаться.
 
+### В Windows <a id="on-windows"></a>
+
+Установщика для Windows нет; Gitty запускается из клона. Нужен
+[Git for Windows](https://gitforwindows.org/), чей Git Bash выполняет скрипты,
+а также Node.js и 64-битная среда выполнения Visual C++. В PowerShell:
+
+```powershell
+winget install Git.Git
+winget install OpenJS.NodeJS.LTS
+winget install Microsoft.VCRedist.2015+.x64
+```
+
+Затем — в **новом** окне Git Bash, чтобы оно увидело Node:
+
+```bash
+git clone https://github.com/baojie/gitty.git && cd gitty
+npm install
+./setup.sh
+```
+
+`setup.sh` ставит `gitty` для Git Bash и `gitty.cmd` для cmd и PowerShell в
+`%USERPROFILE%\.local\bin`, а также ярлыки. После этого `gitty` в любом
+репозитории открывает его, из какого бы shell ни был вызван. Visual Studio не
+нужна. Если `npm install` падает с *not a valid Win32 application* или git
+называет репозиторий *dubious ownership*, см.
+[Windows](manual.ru.md#windows).
 
 ## Чего Gitty не делает <a id="what-gitty-does-not-do"></a>
 
@@ -192,13 +219,14 @@ Gitty читает историю и индексирует (stage) то, что
   [таблица настроек](manual.ru.md#settings) и
   [горячие клавиши](manual.ru.md#keyboard-shortcuts).
 - [Заметки о платформах](manual.ru.md#platform-notes): интеграция с рабочим столом
-  Linux и macOS app bundle.
+  Linux, macOS app bundle, Windows и журнал, который Gitty ведёт, когда его окно
+  зависает.
 
 ## Архитектура <a id="architecture"></a>
 
 ```
 src/main       Electron main process — git commands, ptys, fs watchers,
-               the recent-repository store, IPC
+               the recent-repository store, the stall log, IPC
 src/preload    contextBridge API exposed to the renderer as window.gitty
 src/renderer   React UI — App.tsx manages tabs, RepoTab.tsx owns one
                repository's four panes
@@ -216,8 +244,6 @@ xterm, highlight.js и markdown-it. Это разбиение — четыре �
 тяжёлые библиотеки в тёплые, и как добавить новый, — описано в
 [ref/spec/lazy-loading.md](../../ref/spec/lazy-loading.md).
 
-
 ## Лицензия <a id="licence"></a>
 
 MIT
-

@@ -2,7 +2,7 @@
 
 [English](../../README.md) · [简体中文](README.zh-CN.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · **Español** · [Русский](README.ru.md) · [Português](README.pt.md)
 
-> **Traducido el 2026-08-21.**
+> **Traducido el 2026-11-18; corresponde a Gitty v0.2.3.**
 > El [README en inglés](../../README.md) es la versión oficial y la única que se
 > mantiene al día. Este documento es una instantánea de ese momento; donde
 > discrepen, manda el inglés. Este documento solo cubre este archivo: el
@@ -110,18 +110,18 @@ Dos cosas más que quería y que casi nadie ofrecía: **vista previa de Markdown
 El `.deb` es el camino más corto — sin Node, sin compilación:
 
 ```bash
-wget https://github.com/baojie/gitty/releases/download/v0.2.0/gitty-desktop_0.2.0_amd64.deb
-sudo dpkg -i gitty-desktop_0.2.0_amd64.deb
+wget https://github.com/baojie/gitty/releases/download/v0.2.3/gitty-desktop_0.2.3_amd64.deb
+sudo dpkg -i gitty-desktop_0.2.3_amd64.deb
 ```
 
 Instala `/usr/bin/gitty`, una entrada del menú de aplicaciones con su icono, y
 corre con la sandbox de Chromium **activada** — véase
 [Integración de escritorio en Linux](manual.es.md#linux-desktop-integration).
 
-A su lado hay un [`.deb` arm64](https://github.com/baojie/gitty/releases/download/v0.2.0/gitty-desktop_0.2.0_arm64.deb)
+A su lado hay un [`.deb` arm64](https://github.com/baojie/gitty/releases/download/v0.2.3/gitty-desktop_0.2.3_arm64.deb)
 y un AppImage para las distribuciones sin dpkg
-([x86_64](https://github.com/baojie/gitty/releases/download/v0.2.0/Gitty-0.2.0-x86_64.AppImage),
-[arm64](https://github.com/baojie/gitty/releases/download/v0.2.0/Gitty-0.2.0-arm64.AppImage)) —
+([x86_64](https://github.com/baojie/gitty/releases/download/v0.2.3/Gitty-0.2.3-x86_64.AppImage),
+[arm64](https://github.com/baojie/gitty/releases/download/v0.2.3/Gitty-0.2.3-arm64.AppImage)) —
 la segunda opción, porque un AppImage no puede instalar el ayudante de la sandbox.
 Las versiones anteriores están en la
 [página de versiones](https://github.com/baojie/gitty/releases).
@@ -142,8 +142,9 @@ Enlázalo a tu PATH con:
 ```
 
 `setup.sh` también instala un lanzador ejecutable — una entrada de escritorio en
-Linux, un `Gitty.app` mínimo en macOS. Ambos envuelven el mismo `run.sh`, y ambos
-llevan los apaños que un Electron sin empaquetar necesita; véase
+Linux, un `Gitty.app` mínimo en macOS, accesos directos en el menú Inicio y en el
+escritorio en Windows. Todos envuelven el mismo `run.sh`, y todos llevan los
+apaños que un Electron sin empaquetar necesita; véase
 [Notas de plataforma](manual.es.md#platform-notes).
 
 Luego abre un repositorio desde donde sea:
@@ -170,6 +171,32 @@ cambiado, así que la primera ejecución puede tardar un momento. `npm run dev`,
 Arrancar Gitty desde un directorio que no está dentro de un árbol de trabajo
 recurre al último repositorio abierto, en vez de limitarse a protestar.
 
+### En Windows <a id="on-windows"></a>
+
+No hay instalador para Windows; Gitty se ejecuta desde una copia. Necesita
+[Git for Windows](https://gitforwindows.org/), cuyo Git Bash ejecuta los scripts,
+además de Node.js y el runtime de Visual C++ de 64 bits. En PowerShell:
+
+```powershell
+winget install Git.Git
+winget install OpenJS.NodeJS.LTS
+winget install Microsoft.VCRedist.2015+.x64
+```
+
+Luego, en una ventana **nueva** de Git Bash, para que vea Node:
+
+```bash
+git clone https://github.com/baojie/gitty.git && cd gitty
+npm install
+./setup.sh
+```
+
+`setup.sh` instala `gitty` para Git Bash y `gitty.cmd` para cmd y PowerShell en
+`%USERPROFILE%\.local\bin`, además de los accesos directos. A partir de ahí,
+`gitty` en cualquier repositorio lo abre, desde la shell que sea. No hace falta
+Visual Studio. Si `npm install` falla con *not a valid Win32 application*, o git
+tacha un repositorio de *dubious ownership*, véase
+[Windows](manual.es.md#windows).
 
 ## Lo que Gitty no hace <a id="what-gitty-does-not-do"></a>
 
@@ -199,13 +226,14 @@ El resto — cada panel, cada ajuste, cada atajo — está en
   [tabla de ajustes](manual.es.md#settings) y los
   [atajos de teclado](manual.es.md#keyboard-shortcuts).
 - [Notas de plataforma](manual.es.md#platform-notes): la integración de escritorio
-  en Linux y el bundle de aplicación macOS.
+  en Linux, el bundle de aplicación macOS, Windows y el registro que Gitty guarda
+  cuando su ventana se congela.
 
 ## Arquitectura <a id="architecture"></a>
 
 ```
 src/main       Electron main process — git commands, ptys, fs watchers,
-               the recent-repository store, IPC
+               the recent-repository store, the stall log, IPC
 src/preload    contextBridge API exposed to the renderer as window.gitty
 src/renderer   React UI — App.tsx manages tabs, RepoTab.tsx owns one
                repository's four panes
@@ -224,8 +252,6 @@ pinte antes de que se analicen xterm, highlight.js y markdown-it. La división
 los fragmentos calientes y cómo añadir una nueva— está especificada en
 [ref/spec/lazy-loading.md](../../ref/spec/lazy-loading.md).
 
-
 ## Licencia <a id="licence"></a>
 
 MIT
-

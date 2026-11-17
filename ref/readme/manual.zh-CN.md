@@ -5,7 +5,7 @@
 Gitty 做的每件事，逐窗格讲清楚。[README](../../README.md) 是简短版——它是什么、为什
 么存在、怎么安装——并保持那样；细节都放在这里。
 
-> **翻译于 2026-08-22。**
+> **翻译于 2026-11-18，对应 Gitty v0.2.3。**
 > [英文手册](manual.md) 是官方版本，也是唯一持续更新的版本。本文是那一刻的快照，两
 > 者不一致时以英文版为准。界面本身全是英文，所以下文中的按钮名、菜单项一律保留原
 > 文。
@@ -25,7 +25,7 @@ Gitty 做的每件事，逐窗格讲清楚。[README](../../README.md) 是简短
   的链接。
 - **‹ › ▾** —— 你在这个仓库里去过的地方。见[后退](#going-back)。
 - **仓库路径**是一个按钮：点开[最近仓库](#recent-repositories)菜单。
-  打开另一个仓库用[标签栏](#tabs)末尾的 **+**，或 <kbd>Ctrl+O</kbd>。
+  [标签栏](#tabs)末尾的 **+** 和 <kbd>Ctrl+O</kbd> 打开的也是这个菜单。
 - **⎇ 分支**也是按钮——显示 git 当前检出的分支，并给出其余分支的菜单供你阅读。见
   [浏览另一个分支](#browsing-another-branch)。
 - **`origin/main ↑2 ↓0`** —— 当前检出分支的上游，以及领先、落后多少。分支没有跟踪
@@ -35,7 +35,8 @@ Gitty 做的每件事，逐窗格讲清楚。[README](../../README.md) 是简短
 - **Panes ▾** —— 显示或隐藏这四个窗格；见[全屏与隐藏](#full-screen-and-hiding)。
 - **Settings** —— 首选项对话框（[设置](#settings)），也可按 <kbd>Ctrl+,</kbd>。
 - **Refresh** —— 手动重新读取状态和日志（<kbd>F5</kbd> / <kbd>Ctrl+R</kbd>）。
-  Gitty 会监视仓库并自动刷新；这个按钮留给监视看不见的情况。
+  Gitty 会监视仓库并自动刷新；这个按钮留给监视看不见的情况——在 Linux 上，超过大约
+  8,000 个目录的工作区只有一部分会被监视。
 
 当你在读另一个分支时，分支按钮显示为 `⎇ main › other-branch`；上一条 git 命令的
 错误会以红字出现在计数旁边。
@@ -68,12 +69,20 @@ Gitty 做的每件事，逐窗格讲清楚。[README](../../README.md) 是简短
 是完全隐藏的，于是这个点是「那边还有活儿没干完」的唯一信号。把鼠标停在标签上，会显
 示仓库路径并用文字说明这一点。
 
-**+**（以及 <kbd>Ctrl+O</kbd>）把另一个仓库开进新标签页；标题栏永远显示当前那个。每
+**+**（以及 <kbd>Ctrl+O</kbd>）经由[最近仓库](#recent-repositories)菜单把另一个仓
+库开进新标签页；标题栏永远显示当前那个。每
 个标签页各自保有自己的窗格和终端，所以你正在读的提交、以及你留着跑的 shell，在你切
 走再切回来时还在原处。把标签拖到栏里的另一个位置就能重排这些仓库。右键一个标签会给
 出 **Rename tab…**——这个名字为那个仓库记住，显示在标签栏和标题栏上，真实路径仍留在
-悬停提示里——以及 **Close repository**。关掉最后一个标签页会留下一个空窗口和一个打开
-下一个仓库的按钮。（打开的标签页不会跨重启记住。）
+悬停提示里——**Open in File Manager**，打开仓库的根目录，以及 **Close repository**。
+关掉最后一个标签页会留下一个空窗口和一个打开下一个仓库的按钮。
+
+Gitty 退出时开着的标签页，下次启动时会重新打开——启动时指定的那个仓库仍然是当前标签
+页，而其间已被删除的仓库会被悄悄略去。设置里的 **Reopen last session** 可以关掉这一
+点。开着多个窗口时（**Instances: Multiple**），保留的是最后关闭的那个窗口的会话。
+
+开着不止一个仓库时关闭窗口或退出，会先问一句，免得一次误按 <kbd>Ctrl+Q</kbd> 把整组
+都带走。只开着一个仓库时直接关闭，不问。
 
 ### 最近仓库 <a id="recent-repositories"></a>
 
@@ -86,8 +95,23 @@ Gitty 做的每件事，逐窗格讲清楚。[README](../../README.md) 是简短
 - 条目右侧的 **×** —— 把它移出列表；右键该条目也是同一件事。菜单会留着不关，所以可
   以连着删好几条。
 
-**Open Repository…** 和 **Clear Recent** 在下方。列表存在
-`~/.config/Gitty/recent-repos.json`，保留十二条，并跳过那些已被移走或删除的。
+菜单显示最近的十二个；底部的 **More…** 列出其余的。顶部的搜索框随着输入过滤整个列
+表——每个词都得出现在仓库的名字或它所在的目录里，名字匹配的排在前面。
+<kbd>↑</kbd>/<kbd>↓</kbd> 移动，<kbd>Enter</kbd> 在新标签页打开，
+<kbd>Ctrl+Enter</kbd> 在当前标签页打开，<kbd>Esc</kbd> 关闭。
+
+列表里没有匹配时，搜索会转向磁盘：Gitty 在你记住的那些仓库所在的地方找目录名相符的
+仓库——它们各自的父目录，以及父目录的上一级（往下搜两层），所以 `~/work/<group>/<repo>` 不用配置
+就能覆盖到——还有家目录下的常见位置（`~/work`、`~/code`、`~/src`、`~/projects`……）。
+找到的会带着完整路径列在 *Is it one of these?* 下面，只有你选中时才打开；打开之后它
+就加入列表。
+
+**+** 和 <kbd>Ctrl+O</kbd> 打开的就是这个菜单，所以找仓库靠敲它的名字；再按一次
+<kbd>Ctrl+O</kbd>，或者点 **Open Repository…**，就进到文件夹对话框。
+
+**Open Repository…** 和 **Clear Recent** 在下方；Clear Recent 清空列表前会先问一句，
+因为这一步没有撤销。列表存在 `~/.config/Gitty/recent-repos.json`，保留最近的一百个
+仓库，并跳过那些已被移走或删除的。
 
 ### 全屏与隐藏 <a id="full-screen-and-hiding"></a>
 
@@ -137,11 +161,16 @@ Changes 窗格的标题菜单，各有各的含义），或者 <kbd>Ctrl+Shift+1
 得到一张朴素的纸，而不是一个猜测。
 
 显示两列状态：暂存区状态（绿色）和工作区状态（黄 / 红）；未跟踪文件是 `??`。
-行数在工作区从磁盘读取，其他情况从对应版本读取；二进制文件、已删除的文件，以及超过
-8 MB 的文件不显示行数。行数之后跟着变更量（churn）——这个改动在这个文件里增删了多少
+行数在工作区从磁盘读取，其他情况从对应版本读取；没有行数可读的地方——二进制文件，
+或超过 8 MB 的文件——这一行改为显示文件有多大，而已删除的文件什么都不显示。行数之后跟
+着变更量（churn）——这个改动在这个文件里增删了多少
 行，显示为 `+12 −3`：工作区里是与 HEAD 比较，提交或区间里是与父提交比较。快照是一
 棵树而不是一次改动，所以没有变更量；二进制文件和合并提交也没有——合并 diff 不会把
 改动归到具体文件。
+
+在变更量的位置上，一棵树——Working Tree 列表和一个提交的快照——改为写出**最后提交每
+个文件的人**：一次改动本来就属于某个人，而一棵树要问的是这是谁的文件。悬停名字可以看
+到完整的句子。git 从没见过的文件没有这一项，所以未跟踪和被忽略的文件什么都不显示。
 
 窗格的标题写着现在列的是什么，点它会打开一个菜单，里面是两个常驻视图：**Changes**，
 未提交的那些；以及 **Working Tree**，磁盘上那个目录里的每一个文件，只读。屏幕上是哪
@@ -163,11 +192,21 @@ Changes 窗格的标题菜单，各有各的含义），或者 <kbd>Ctrl+Shift+1
 - **双击** —— 把整个文件作为文档开在 diff 旁边，带行号和语法高亮（Markdown 是渲染
   后的文档，图片则是图片本身）。
 - **点击状态列** —— 暂存该文件；若已暂存则取消暂存。
-- **右键** —— View File、Open in System App、Reveal in File Manager、Copy Relative
-  Path、Copy Absolute Path、Copy File Name、Blame File、File History、Stage /
-  Unstage File、Discard Changes、Delete File。子模块那一行还会多出
+- **右键** —— View File、Open in System App、Reveal in File Manager、Open Remote
+  URL、Copy Relative Path、Copy Absolute Path、Copy File Name、Blame File、File
+  History、Stage / Unstage File、Discard Changes、Delete File。子模块那一行还会多出
   **Pull Submodule**。
+- **右键 → Open Remote URL** —— 这个文件在仓库所托管站点上的页面，在系统浏览器里打
+  开。版本是正在看的那个——一个提交、一个快照——在 Changes 和 Working Tree 视图里则是
+  当前检出的分支。地址和[提交菜单里那一条](#commits-bottom-left)一样从远端推出来，所以
+  只在推得出来时才出现；未跟踪的文件、分离的 HEAD，或者还没 push 的提交都没有这一条
+  ——站点上还没有它的页面。
 - **点击文件夹** —— 折叠或展开。
+- **右键文件夹** —— Copy Relative Path、Copy Absolute Path、Copy Folder Name，以及在
+  Gitty 之外打开它的两种方式：**Open in Browser**，即浏览器自己的目录列表，和
+  **Open in File Manager**。某个版本的快照列的是一棵不在磁盘上的树，所以只提供路径。
+- **右键行下方的空白处** —— 在仓库根目录上 **Open in File Manager**（某个版本的快照里
+  没有），有文件可粘贴时还有 **Paste**。
 
 在文件管理器里复制的文件可以**粘贴进这棵树**：在行下方的空白处右键得到 **Paste**，
 写进仓库根目录；在某个文件上右键得到 **Paste into `dir`/**，写在它旁边。焦点在这个窗
@@ -186,6 +225,18 @@ Changes 窗格的标题菜单，各有各的含义），或者 <kbd>Ctrl+Shift+1
 的表达式（`src/(`，`src/(main|renderer)` 打到一半）会被按字面匹配，而不是报成错误。
 框里有内容时不会有目录保持折叠——藏在五层之下的匹配正是你打字的目的。<kbd>Esc</kbd>
 或 **✕** 清掉它并把整棵树放回来，换到另一个提交也一样。
+
+<kbd>Ctrl+E</kbd> 回答的是另一个问题——不是「收窄这里列出的东西」，而是「把那个文件给
+我，不管它在哪」。它从任何地方都能在窗口上方打开一个框，不需要哪个窗格有焦点，列出的
+是整个工作目录而不是屏幕上的那棵树：`git` 会点名的每一个文件，`.gitignore` 覆盖的那些
+除外，所以 `node_modules` 埋不掉答案。字母**按顺序、但不必相邻**地匹配——`dfpn` 能找到
+`DiffPane.tsx`——排序偏好落在词首的字母（一个路径段的开头，或 `-`、`_`、`.` 之后，或
+小写转大写的地方）、落在文件名而不是上层目录里的字母，以及连在一起的字母；路径更短的
+在平局时胜出。<kbd>↑</kbd> <kbd>↓</kbd> 挑选，<kbd>Enter</kbd> 把文件作为文档开在
+diff 旁边，<kbd>Esc</kbd> 关闭这个框。即使屏幕上是一个提交，文件也按磁盘上的样子打
+开，因为框里列的就是工作目录。这个键在终端里也管用，shell 不会收到它——不像
+<kbd>Ctrl+D</kbd>，它仍然是输入结束，因为那是离开 shell 的方式；readline 的行尾也可以
+用 <kbd>End</kbd>。
 
 **Pull Submodule** 出现在 `.gitmodules` 点名的那条路径上，在那两个就是磁盘上目录的视
 图里——**Changes** 和 **Working Tree**。它抓取那个子模块自己的远端，并把它移到它所跟
@@ -248,8 +299,10 @@ Changes 窗格的标题菜单，各有各的含义），或者 <kbd>Ctrl+Shift+1
 
 文件会作为独立文档开在 diff *旁边*的一条标签里，而不是盖在它上面，所以读文件不必丢
 掉你正看的 diff。**Diff** 标签永远排第一，而在树里单击仍然是就地浏览 diff。每个文档
-记住自己被打开时的版本，用自己的 **×** 关闭，并在仓库变化时重新读取工作区文件。源码
-文件带行号和语法高亮；Markdown 打开时是[渲染好的](#markdown-preview)，可切回源码；
+记住自己被打开时的版本，用自己的 **×** 关闭，并在仓库变化时重新读取工作区文件。
+**右键**一个文档的标签，得到的菜单和它那一行在文件树里的一样；列表里没有的文件——比如
+Changes 视图里一个没改动的文件——得到 Working Tree 里的那份菜单，只是没有暂存、丢弃和
+删除。源码文件带行号和语法高亮；Markdown 打开时是[渲染好的](#markdown-preview)，可切回源码；
 HTML 同样[渲染出来](#html-preview)；图片则作为[图片本身](#images)打开。
 
 拿到哪个版本取决于窗格所处的位置：工作区里是磁盘上的文件，其余情况是所选提交处的那
@@ -303,12 +356,18 @@ diff。它把文件作为整体渲染：工作区里是磁盘上的版本，其�
 
 - **Wrap** —— 和 diff 那个是同一个开关，默认开。散文永远折行；在预览里，这个开关决
   定围栏代码块、宽表格和长的行内字符串是否也折行，而不是横向滚动。
+- **表格列宽** —— 表格的列按内容定宽，每条边界都能拖：抓住表头单元格的右边缘，那一
+  列就跟着指针走，其余各列保持原来的宽度。比窗格还宽的表格横向滚动。双击一条边界把
+  表格交还给浏览器，也就是回到贴合内容的宽度。列宽在文档开着期间一直保留。
 - **Outline** —— 文档旁边的标题结构，按层级缩进，跟随你滚动到的标题。点一条即可跳
   转，拖动它和文档之间的分隔条可以给任一侧更多空间。这个宽度由仓库里的每个文档共
   享——它是阅读偏好，不是单个文件的属性——和其他窗格的尺寸一样，随窗口存续。
 - **Source lines** —— 默认关闭，在[设置](#settings)里打开：每个标题、段落、列表项、表
   格、围栏代码块和图片都会在左侧行号槽里标出它在源码里起始的那一行。数字是画出来的而
   不是插入的，所以它们不会进入你复制的选区，也不会进入 <kbd>Ctrl+F</kbd> 搜索的内容。
+  当文档正是屏幕上那个 diff 所针对的文件时，diff 插入或改动过的块，其行号画成绿底绿
+  字——就是 diff 自己给 `+` 行上的颜色——这样行号槽就映照出 diff 说过的话。一个块只要
+  它跨的任何一行改过就算改动，所以改过的围栏代码块即使开头那行没动也会被标出来。
   写进句子里的图片取它所在段落的那一行，因为它自己没有行号。
 - **<kbd>Ctrl+F</kbd>** —— 在文档里查找；见[查找文本](#finding-text)。
 - **右键** —— Copy Selection、Copy Markdown Source、折行与大纲开关，以及
@@ -342,6 +401,23 @@ frame 继承应用的内容安全策略，而它两者都不允许。页面是�
 决定 frame 自己滚动，还是长到内容那么高、让页面作为整体滚动。<kbd>Ctrl+F</kbd> 和
 <kbd>Ctrl+Shift+C</kbd> 在 frame 内管用，而 frame 里的按键永远不会到达窗口其余部分。
 
+#### JSON <a id="json"></a>
+
+`.json`、`.geojson`、`.topojson` 或 `.webmanifest` 文件按它存储的样子打开，并在
+**Wrap** 旁边多一个 **Format** 按钮：按下后，文档按每层两个空格重新缩进，于是一个压
+缩成一整行、长得没有尽头的文件读起来就是一棵树。再按一次回到文件存储的样子。
+
+文档处于格式化状态时，每个有内容的对象和数组在行号旁都带一个 **▼**：点它把那个节点折
+起来，它开头的那一行留一个 **…** 表示少了东西。点它变成的 **▶** 再展开。折叠可以嵌套，
+所以一个折在另一个里面的节点，在父节点展开时仍然是折着的；<kbd>Ctrl+F</kbd> 搜的是屏
+幕上的内容——折起来的节点那些行根本没有渲染。打开另一个文档，或者仓库变化后重新读取
+工作区文件时，什么都不会保持折叠：一个折叠所指的那些行，可能已经不是那些行了。
+
+变的只有记号之间的空白。数字保留文件里写的那些位数——长得双精度装不下的值、大得过头的
+指数——键保持原来的顺序，重复的键也留着。只有文本能解析为一个完整的 JSON 文档时才会出
+现这个按钮，所以满是占位符的模板，或者下载到一半的文件，什么都不提供，而不是给一个按
+了没用的按钮。格式化是读文件的一种方式；什么都不会写回去。
+
 #### 图片 <a id="images"></a>
 
 `.png`、`.jpg`、`.gif`、`.webp`、`.bmp`、`.ico`、`.avif` 或 `.svg` 打开时是图片本
@@ -351,13 +427,30 @@ frame 继承应用的内容安全策略，而它两者都不允许。页面是�
 
 ![Image preview](../../ref/gitty-0.1.5-image.png)
 
+#### PDF <a id="pdfs"></a>
+
+`.pdf` 打开时就是文档本身，由浏览器引擎自带的查看器来读：侧边的页面列表、缩放、旋转、
+它自己的查找，以及打印或另存一份的按钮。在某个版本上也一样——提交快照里的 PDF 从 git
+里读出来，所以一篇论文的旧版本不用检出任何东西就能按当时的样子读。文件大小写在下方。
+超过 64 MB 的 PDF 不打开；查看器自己工具栏上的名字不是文件名，上方的窗格标题才是。
+
+#### 用 Git LFS 存储的文件 <a id="files-stored-with-git-lfs"></a>
+
+由 [Git LFS](https://git-lfs.com/) 跟踪的文件，在仓库里本身只是一个三行的指针，真正的
+文件放在旁边的存储里。Gitty 会顺着指针去取，所以一个 LFS 跟踪的图片或 PDF 和别的文件
+一样能预览——在某个版本上和在工作区里都行，也不管机器上装没装 `git lfs`。对象还没被抓
+取时，窗格会直说，而不是显示一张破图或查看器报错。`git lfs pull` 把它取下来，预览随
+后就能用了。树里文件旁边的大小仍然是指针的大小，因为那才是仓库实际存储的东西。
+
 #### Blame 与文件历史 <a id="blame-and-file-history"></a>
 
 在树里右键任何文件，选择 **Blame File** 或 **File History**；两者都作为 diff 旁边的
 文档打开。Blame 每行源码一行——提交、作者、日期以及行本身，像代码查看器一样高亮，尚
 未提交的行显示为 em dash——在你正在查看的版本上。File History 列出碰过这个文件的每一
-次提交，跟踪重命名，点一个提交就打开它；日期和作者之间有一列写着文件在那次提交时有
-多长，算不出来的地方留空——二进制版本，以及比它更早的一切。
+次提交，并跟踪重命名；日期和作者之间有一列写着文件在那次提交时有多长，算不出来的地方
+则写它有多大——二进制版本，以及比它更早的一切。它的行和提交日志的行一样操作：单击选
+中一个，双击打开那个提交，Shift+点击第二行则在两个版本之间 diff 这个文件——和日志里
+第二次选取打开的是同一种区间视图，并且已经选好了这个文件。
 
 右键一个 blame 行会提供 **History of These Lines**：对选区覆盖的行——没有选区时就是被
 点击的那一行——运行 `git log -L`，它会作为自己的文档打开，显示每个碰过这些行的提交，
@@ -456,7 +549,8 @@ diff 一样。
   开。地址是从远端推出来的（当前分支跟踪的那个，否则是 `origin`），而这一条只在推得
   出来时才出现：GitHub、GitLab、Bitbucket、Gitea、Forgejo、Codeberg 和 sourcehut 都
   认识，任何遵循 `/commit/<hash>` 布局的自建站点也一样。没有远端的仓库，或者放在
-  Azure DevOps 上的仓库，得不到这一条。
+  Azure DevOps 上的仓库，得不到这一条；还没 push 的提交也得不到——Ctrl+Click 也不会
+  打开它的页面。
 
   它监听 `127.0.0.1`，而仅凭这一点算不上什么：loopback 挡住的是别的机器，挡不住你
   自己浏览器里的别的页面，它们任何一个都能抓取它。所以每个 URL 都带一个启动时生成、
@@ -626,7 +720,8 @@ Semantic reading 打开后会显示它自己的三项设置。**Analyser** 是�
 | <kbd>Alt</kbd> | 显示或隐藏应用菜单栏（macOS 除外，那里它一直都在） |
 | <kbd>F1</kbd> | 快捷键一览，铺在窗口之上 |
 | <kbd>F5</kbd> / <kbd>Ctrl+R</kbd> | 刷新状态和日志 |
-| <kbd>Ctrl+O</kbd> | 在新标签页打开另一个仓库 |
+| <kbd>Ctrl+O</kbd> | 在新标签页打开另一个仓库：最近仓库菜单；再按一次进到文件夹对话框 |
+| <kbd>Ctrl+E</kbd> | 按名字打开文件，窗口里任何地方都行——终端也包括在内 |
 | <kbd>Ctrl+,</kbd> | 设置 |
 | <kbd>Ctrl+1</kbd> … <kbd>Ctrl+4</kbd> | 隐藏或显示 Files、Diff、Commits、Terminal |
 | <kbd>Ctrl+Shift+0</kbd> | 把四个窗格全部带回 |
@@ -695,3 +790,57 @@ bundle 上，而不是被一个比它活得更久的进程孤立——`--any` �
 Homebrew，而 `run.sh` 在 bundle 过期时需要 `node` 和 `npm` 来重建。`setup.sh` 在安
 装时解析它们并把路径前置——用前缀，所以从终端启动不受影响。之后切换 Node 版本会让那
 条路径过时；重新运行 `setup.sh` 来重新指向。
+
+### Windows <a id="windows"></a>
+
+Windows 从源码检出运行，用的是和其他平台相同的 `run.sh` 和 `setup.sh`，由
+[Git for Windows](https://gitforwindows.org/) 自带的 Git Bash 执行。README 列出了
+[步骤](../../README.md#on-windows)。没有任何打包：`electron-builder.yml` 只配置了
+Linux 目标。
+
+**`setup.sh` 装了什么。** 在这里符号链接没用，因为 Git Bash 的 `ln -s` 会悄悄做一份
+拷贝，而 `run.sh` 的拷贝会在自己旁边找源码目录。所以 `%USERPROFILE%\.local\bin` 得到
+的是两个小包装：`gitty`，给 Git Bash 用的 bash 脚本；以及 `gitty.cmd`，给 cmd 和
+PowerShell 用，它把参数交给 Git 的 `bash.exe -l`。`-l` 把 Git 自己的工具放进
+`PATH`；`CHERE_INVOKING=1` 让登录 profile 不把目录切到你的家目录，所以 `gitty` 仍然
+指当前目录。Git Bash 的 `PATH` 是从 Windows 的那份构造出来的，所以那个目录只要一条
+记录就能服务所有 shell；缺这条时，`setup.sh` 会打印出添加它的 PowerShell 命令。
+
+开始菜单和桌面得到一个 `Gitty.lnk`，它在一个最小化的 Git Bash 窗口里运行
+`run.sh --any`。Electron 一启动，那个窗口就关掉。它的图标是 `build/icon.png` 包成的
+`.ico`，放在 `%LOCALAPPDATA%\Gitty` 下。日志是
+`%USERPROFILE%\.local\state\gitty\gitty.log`，和其他平台路径相同。
+
+**不需要 Visual Studio。** 终端窗格用的 `node-pty` 为 Windows 带了预编译的 N-API 二
+进制，在任何 Electron 下都能加载，所以 `postinstall` 这一步跳过它在 Linux 和 macOS
+上运行的 `electron-rebuild`。那次重建需要 Visual Studio 的 C++ 工具，没有就会失败。
+
+**`npm install` 时报 _not a valid Win32 application_。** 这意味着缺 64 位 Visual C++
+运行库，而不是哪个下载坏了。没有它时，Windows 会沿着 `PATH` 找 `vcruntime140.dll`，
+而别的程序留在那里的一份 32 位拷贝（通常是 32 位的 Python）没法加载进 64 位的 Node。
+用 `winget install Microsoft.VCRedist.2015+.x64` 装上运行库，再跑一次 `npm install`。
+
+**_dubious ownership_。** 在不记录文件所有者的驱动器上，比如 FAT/exFAT 或某些网络共
+享，git 会拒绝一个它无法证明归你所有的仓库，Gitty 也就对它什么都显示不出来。在 git 自
+己的配置里信任这个仓库，或者那个驱动器上的所有仓库：
+
+```bash
+git config --global --add safe.directory D:/path/to/repo
+git config --global --add safe.directory '*'   # every repository
+```
+
+**终端**启动的是 `COMSPEC`，也就是 `cmd.exe`，除非 **Settings → Shell** 选了
+PowerShell 或别的 shell。**Login shell** 在这里不起作用。
+
+**换行符。** Git for Windows 默认以 CRLF 检出文本，而 bash 会把行尾的 CR 当成命令的
+一部分。`.gitattributes` 让 `*.sh` 在每次检出时都保持 LF。在那个文件出现之前做的检出，
+要把这两个脚本重新检出一次才会用上它：
+`rm run.sh setup.sh && git checkout -- run.sh setup.sh`。
+
+### 窗口卡住时 <a id="when-the-window-freezes"></a>
+
+Gitty 会记录自己的卡顿：每当主进程或窗口停止响应半秒或更久，就有一行 JSON 记下卡了多
+久，以及当时有哪些 git 调用正在运行。从源码检出运行时，日志在检出目录里的
+`logs/stalls/<date>.jsonl`（被 git 忽略）；打包版则在 `~/.config/Gitty/logs/stalls/`。
+报告卡死的 bug 时附上当天的文件，比任何描述都说得更多。`GITTY_STALL_MS=200` 会降低
+这个阈值。
