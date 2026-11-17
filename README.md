@@ -222,13 +222,14 @@ The rest — every pane, every setting, every shortcut — is in
   [settings table](ref/readme/manual.md#settings) and the
   [keyboard shortcuts](ref/readme/manual.md#keyboard-shortcuts).
 - [Platform notes](ref/readme/manual.md#platform-notes): Linux desktop integration,
-  the macOS app bundle and Windows.
+  the macOS app bundle, Windows, and the log Gitty keeps when its window
+  freezes.
 
 ## Architecture
 
 ```
 src/main       Electron main process — git commands, ptys, fs watchers,
-               the recent-repository store, IPC
+               the recent-repository store, the stall log, IPC
 src/preload    contextBridge API exposed to the renderer as window.gitty
 src/renderer   React UI — App.tsx manages tabs, RepoTab.tsx owns one
                repository's four panes

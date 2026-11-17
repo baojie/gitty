@@ -43,7 +43,8 @@ Left to right, it describes the active repository and then acts on it:
   also <kbd>Ctrl+,</kbd>.
 - **Refresh** — re-read status and log by hand (<kbd>F5</kbd> /
   <kbd>Ctrl+R</kbd>). Gitty watches the repository and refreshes on its own;
-  this is for the times watching cannot see a change.
+  this is for the times watching cannot see a change — on Linux, a work tree
+  of more than about 8,000 directories is watched only in part.
 
 While you are reading another branch the branch button reads `⎇ main ›
 other-branch`, and errors from the last git command appear in red beside the
@@ -124,8 +125,9 @@ first. <kbd>↑</kbd>/<kbd>↓</kbd> move, <kbd>Enter</kbd> opens in a new tab,
 
 When nothing in the list matches, the search goes to disk: Gitty looks for a
 repository whose directory name matches, in the places your remembered
-repositories live — their parent directories, and the ones above those two
-levels down, so `~/work/<group>/<repo>` is covered without being configured —
+repositories live — each one's parent directory, and the directory above that
+searched two levels deep, so `~/work/<group>/<repo>` is covered without being
+configured —
 and in the usual places under home (`~/work`, `~/code`, `~/src`,
 `~/projects`, …). What it finds is listed under *Is it one of these?* with its
 full path, and opens only when you pick it; once opened it joins the list.

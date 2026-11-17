@@ -269,7 +269,7 @@ Terminal sessions end only in `destroySession` / `destroyTerminals(root)`.
 
 | file | what it covers |
 | --- | --- |
-| `ref/spec/main-process.md` | staging and the patch surgery, search and the commit graph, git access, the local web server, gource, recent repositories, one instance or several, terminal sessions, the watcher and refresh |
+| `ref/spec/main-process.md` | staging and the patch surgery, search and the commit graph, git access, the local web server, gource, recent repositories, one instance or several, terminal sessions, the watcher and refresh, the stall log |
 | `ref/spec/renderer.md` | messages and i18n, time, settings, tabs, full screen, hiding panes, the `View` union and file icons, browsing history, browsing another branch, DiffPane, finding text |
 | `ref/spec/file-viewers.md` | CodePane, MarkdownPane, ImagePane, highlighting, the two outlines, links and images |
 | `ref/spec/plugins.md` | what a plugin is and is not, the one channel, preferences and settings rows, strings, the `marks` extension point |
