@@ -1073,3 +1073,13 @@ bash reads a trailing CR as part of the command. `.gitattributes` keeps `*.sh`
 at LF on every checkout. A checkout made before that file existed picks it up
 once the two scripts are checked out again, with
 `rm run.sh setup.sh && git checkout -- run.sh setup.sh`.
+
+### When the window freezes
+
+Gitty keeps a log of its own stalls: whenever the main process or the window
+stops responding for half a second or more, one JSON line records how long,
+and which git calls were running at the time. Run from a checkout, the log is
+`logs/stalls/<date>.jsonl` inside it (ignored by git); packaged, it is
+`~/.config/Gitty/logs/stalls/`. Attaching that day's file to a bug report
+about a freeze says more than a description of it can. `GITTY_STALL_MS=200`
+lowers the threshold.

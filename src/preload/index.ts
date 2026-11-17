@@ -30,10 +30,29 @@ import type {
   SnapshotEntry,
   SnapshotExport,
   SnapshotFileContent,
+  RendererStall,
   TerminalOptions,
   WebUrl,
   WorktreeFile
 } from '../shared/types'
+
+// Long tasks on this window's thread go to the main process's stall log. Set
+// up here rather than in the renderer: it needs no API of its own, and the
+// preload shares the page's thread, so it sees the same tasks.
+try {
+  const observer = new PerformanceObserver((list) => {
+    for (const e of list.getEntries()) {
+      if (e.duration < 200) continue // the main process applies the real threshold
+      const stall: RendererStall = { start: performance.timeOrigin + e.startTime, ms: e.duration }
+      ipcRenderer.send('stall:renderer', stall)
+    }
+  })
+  // Chromium's observer at run time; the types this file is checked against
+  // are Node's, which have no 'longtask'.
+  observer.observe({ type: 'longtask' as never, buffered: true })
+} catch {
+  /* no long-task timing here; the main process's hang events still apply */
+}
 
 const api = {
   /** Used to shorten paths for display. */

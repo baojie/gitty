@@ -78,6 +78,13 @@ A detached run writes everything to
 `${XDG_STATE_HOME:-~/.local/state}/gitty/gitty.log`; use `--fg` when you want
 the output inline.
 
+**A freeze is diagnosed from `logs/stalls/*.jsonl`, not guessed at.** Each line
+is one stall with the IPC calls in flight at the time (see "The stall log" in
+`ref/spec/main-process.md`). Read the log before touching code for a hang, and
+when fixing one, reproduce it and compare the log before and after. A fix is
+usually: one git process instead of one per file, async instead of `*Sync`,
+or a cap.
+
 `npm run dist` is the *packaged* product and differs from the scripts above on
 purpose: its own executable, so the desktop entry matches on `gitty` rather than
 the `electron` window class, and the `.deb`'s postinst sets `chrome-sandbox` up.

@@ -18,6 +18,7 @@ import { addRecent, clearRecent, guessRepos, listRecent, removeRecent } from './
 import { readPrefs, writePrefs } from './prefs'
 import { registerPlugins } from './plugins'
 import { watchRepo, type RepoWatcher } from './watcher'
+import { startStallLog, watchWindowStalls } from './stalls'
 import * as web from './web'
 import {
   copyName,
@@ -300,6 +301,7 @@ function createWindow(): void {
       plugins: true
     }
   })
+  watchWindowStalls(win)
 
   // The window is created hidden and shown at its first paint, so it never
   // appears empty. Under Wayland that frame can never come: an unmapped
@@ -899,6 +901,8 @@ app.whenReady().then(async () => {
   if (relaunchWithoutFractionalScale()) return
   // The web server must be up before the renderer can ask for URLs.
   await web.start()
+  // Before registerIpc: it wraps ipcMain.handle so every handler is timed.
+  startStallLog()
   registerIpc()
   installMenu()
   createWindow()

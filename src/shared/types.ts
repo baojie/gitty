@@ -356,3 +356,12 @@ export interface AboutInfo {
   readonly chromium: string
   readonly node: string
 }
+
+/**
+ * A long task the renderer saw on its own thread, reported to the main
+ * process for the stall log. `start` is epoch milliseconds.
+ */
+export interface RendererStall {
+  start: number
+  ms: number
+}

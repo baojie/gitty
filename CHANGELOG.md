@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **+** and Ctrl+O open that menu rather than the folder dialog, so a
   repository is found by name; Ctrl+O again or **Open Repository…** reaches
   the dialog.
+- A stall log: every freeze of half a second or more is recorded with the git
+  calls running at the time, in `logs/stalls/` (gitignored) when run from a
+  checkout, `~/.config/Gitty/logs/stalls/` when packaged.
 - `setup.sh` works on Windows from Git Bash: it installs `gitty` for Git Bash
   and `gitty.cmd` for cmd and PowerShell, plus Start Menu and desktop
   shortcuts. The README has the steps, the manual the details.

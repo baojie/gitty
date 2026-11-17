@@ -495,6 +495,8 @@ are a per-user kernel budget shared with every other program. macOS and
 Windows keep the recursive option, which their kernels implement for one
 handle.
 
+The stall log (below) is how the next such case gets found.
+
 The same lesson applies to anything that runs once per file of a commit:
 never one process each. Spawning is synchronous on the main thread, so
 `countFileLines` reads a commit's files through one `cat-file --batch-check`
@@ -563,3 +565,33 @@ then would take the terminal panes' shells with it, so nothing happens
 automatically and `GITTY_DISABLE_FRACTIONAL_SCALE=1` is the way to ask. And the
 pid `run.sh` prints is the process that stepped aside, not the one now running.
 Upstream: electron#35325, electron#46843.
+
+## The stall log
+
+`src/main/stalls.ts` records every stall of `THRESHOLD_MS` (500 ms,
+`GITTY_STALL_MS` to change) or longer as one JSON line in
+`logs/stalls/<local date>.jsonl` — inside the checkout when unpackaged, where
+`logs/*` is gitignored; under `app.getPath('logs')` when packaged. Three
+sources feed it:
+
+- **main, `event-loop`** — a 100 ms interval that arrived late by the
+  threshold. This is the stall the desktop answers with "not responding".
+- **renderer, `longtask`** — a `PerformanceObserver` in the *preload*, which
+  shares the page's thread, so the renderer itself has no code or API for it.
+  It sends anything over 200 ms on `stall:renderer`; the main process applies
+  the threshold.
+- **renderer, `unresponsive` / `recovered`** — Chromium's hang detector, for a
+  renderer too stuck to report its own long task. `unresponsive` is written as
+  it starts, so a window that is killed still leaves a line.
+
+Each record carries the IPC calls **in flight** across the stall and those
+that **finished** within three seconds before it, with arguments summarised by
+the pure `stallFormat.ts` (arrays as their length, objects as their fields,
+strings cut at 120 characters). That is the context that identified both
+causes above — a stall with `git:fileLines` over `[2000 items]` in flight
+needs no profiler. It is collected by wrapping `ipcMain.handle` once, in
+`startStallLog`, which therefore runs **before** `registerIpc`: a handler
+registered earlier is not timed.
+
+Writes are asynchronous, so recording a stall cannot extend one; a record made
+in the last moments before quitting can be lost. A day's file stops at 5 MB.
