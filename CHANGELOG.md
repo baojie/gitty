@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Working Tree (<kbd>Ctrl+B</kbd>) opens a checked-out submodule as a folder
+  of its files, nested ones included, instead of one row; **Pull Submodule**
+  moves to that folder's menu.
+
 ## [0.2.3] - 2026-11-18
 
 ### Added

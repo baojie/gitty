@@ -1351,7 +1351,8 @@ export const RepoTab = forwardRef<RepoTabHandle, RepoTabProps>(function RepoTab(
       // remote link is simply absent there rather than guessing a branch.
       branchRev: status && status.branch !== '(detached)' ? status.branch : null,
       unpushed,
-      viewFiles
+      viewFiles,
+      submodulePaths
     })
 
   /* ---------- log header overflow ---------- */

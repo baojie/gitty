@@ -101,6 +101,9 @@ export interface ContextMenuDeps {
   unpushed: Set<string>
   /** The file pane's rows, which a document tab looks its file up in. */
   viewFiles: FileEntry[]
+  /** Which work-tree paths are submodules. Browsing the work tree opens a
+   *  checked-out one as a folder, so the folder's menu offers the pull too. */
+  submodulePaths: Set<string>
 }
 
 /** The four context-menu builders, in one factory so RepoTab calls it once. */
@@ -156,7 +159,8 @@ export function createContextMenus(deps: ContextMenuDeps): {
     remoteBases,
     branchRev,
     unpushed,
-    viewFiles
+    viewFiles,
+    submodulePaths
   } = deps
 
   const diffMenu = (at: MenuState): void => {
@@ -480,6 +484,15 @@ export function createContextMenus(deps: ContextMenuDeps): {
           action: () => void window.gitty.file.open(absPath)
         }
       )
+    }
+    // A checked-out submodule is a folder in the work tree, and its folder row
+    // is where the pull the single row used to carry now lives.
+    if (submodulePaths.has(dir) && pastable) {
+      items.push({
+        label: msg.contextMenu.pullSubmodule,
+        separatorBefore: true,
+        action: () => pullSubmodule(dir)
+      })
     }
     items.push(...pasteItem(dir, can))
     setMenu({ ...at, items })

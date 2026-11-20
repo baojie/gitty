@@ -226,7 +226,10 @@ from a commit, a range or a snapshot the same menu is the way back to either.
 a folder holding nothing but ignored files is dimmed too. They open and read
 like any other file; only their line counts are left off, since counting them
 means reading every byte of a directory that is usually the largest thing on
-disk. `.git` itself is not listed.
+disk. `.git` itself is not listed. A submodule that is checked out is a folder
+like any other, its files listed beneath it — nested submodules too, and a git
+repository sitting untracked inside the tree; one that was never checked out
+stays a single row.
 
 <kbd>Ctrl+B</kbd> — b for browse — is the shortcut into it from anywhere, and it
 sets the window up for reading as well as switching the view: Commits and the
@@ -303,7 +306,8 @@ what the box listed. The key works inside a terminal too, where the shell does
 not see it — unlike <kbd>Ctrl+D</kbd>, which stays end-of-input because that is
 how a shell is left; readline's end-of-line is <kbd>End</kbd> as well.
 
-**Pull Submodule** appears on the row of a path `.gitmodules` names, in the two
+**Pull Submodule** appears on the row of a path `.gitmodules` names — its
+folder's row, in **Working Tree**, when it is checked out — in the two
 views that are the directory on disk — **Changes** and **Working Tree**. It
 fetches that submodule's own remote and moves it to the tip of the branch it
 tracks (`git submodule update --init --remote`), so a submodule that was never

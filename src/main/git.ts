@@ -1085,17 +1085,48 @@ export async function worktreeFiles(root: string): Promise<WorktreeFile[]> {
     paths.map((p) =>
       fs.promises
         .stat(path.join(root, p))
-        .then<WorktreeFile | null>((st) => ({
-          path: p,
-          ignored: ignored.has(p),
-          exec: st.isFile() && (st.mode & 0o111) !== 0
-        }))
-        .catch(() => null)
+        .then<WorktreeFile[]>(async (st) => {
+          // `ls-files` lists files, so a directory among them is a gitlink: a
+          // submodule, which is a repository of its own and lists nothing of
+          // itself here. One that is checked out is browsed into, its files
+          // under its path; one that is not stays a single row, where the
+          // menu can still offer to pull it.
+          if (st.isDirectory()) {
+            const inner = await submoduleFiles(root, p)
+            if (inner.length > 0) return inner
+          }
+          return [
+            { path: p, ignored: ignored.has(p), exec: st.isFile() && (st.mode & 0o111) !== 0 }
+          ]
+        })
+        .catch(() => [])
     )
   )
-  return existing
-    .filter((f): f is WorktreeFile => f !== null)
-    .sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))
+  return existing.flat().sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))
+}
+
+/**
+ * A checked-out submodule's files, named from the superproject's root. The
+ * `.git` check is what makes it checked out: without one, git run in the empty
+ * directory would find the superproject above it instead. Nested submodules
+ * recurse through `worktreeFiles` like any other.
+ */
+async function submoduleFiles(root: string, sub: string): Promise<WorktreeFile[]> {
+  const dir = path.join(root, sub)
+  try {
+    await fs.promises.access(path.join(dir, '.git'))
+  } catch {
+    return []
+  }
+  try {
+    const inner = await worktreeFiles(dir)
+    // An untracked repository inside the tree is listed as `name/`, slash and
+    // all; it is browsed into the same way.
+    const prefix = sub.replace(/\/$/, '')
+    return inner.map((f) => ({ ...f, path: `${prefix}/${f.path}` }))
+  } catch {
+    return []
+  }
 }
 
 /** Contents of one file at a revision; binary files report rather than dump. */
