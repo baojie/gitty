@@ -287,7 +287,20 @@ Shift+click on a second row of the commit log, and a Shift+click on a second row
 of a file's history — which selects that file as well, so the diff on screen is
 the file's own between the two revisions rather than the whole range's. The
 history keeps its two picks itself: they are about the file, not about the
-repository the log's selection names. The commit log's first row is a
+repository the log's selection names.
+
+A file inside a checked-out submodule (browsing the work tree lists them) has a
+history of the submodule's commits, which this tab's log and diff cannot show:
+the superproject holds only a gitlink. `git:ownerRepo` names the repository a
+work-tree path belongs to — the innermost `.git` above it — and when that is not
+the tab's own root, the double click and the Shift+click are handed to the
+submodule's tab as an `OpenRequest`. `App` opens that tab or switches to it and
+holds the request in `requests` until the tab, mounted by then, has shown it and
+called `onRequestDone`; a tab opened for the purpose has not mounted when the
+ask is made, so a handle call would find nobody there. Blame, file history and
+line history ask `ownerRepo` themselves in the main process.
+
+The commit log's first row is a
 pseudo-commit (`WORKTREE_ROW`) standing for the uncommitted changes, drawn as
 the **Changes** row; it joins keyboard navigation and selecting it returns to
 `worktree` mode.

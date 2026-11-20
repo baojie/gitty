@@ -600,7 +600,9 @@ commit, and how big it was where the count cannot be worked out — a binary
 revision, and anything older than one. Its rows behave like the commit log's: a click
 picks one, a double click opens that commit, and Shift+click on a second row
 diffs the file between the two revisions — the same range view the log's second
-pick opens, with the file already selected.
+pick opens, with the file already selected. For a file inside a submodule those
+commits are the submodule's, so both open in the submodule's own tab — opened
+for the purpose, or switched to if it is already open.
 
 Right-clicking a blame row offers **History of These Lines**: `git log -L` over
 the lines the selection covers — or the clicked line, with no selection — which

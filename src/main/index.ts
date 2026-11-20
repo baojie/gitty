@@ -600,6 +600,9 @@ function registerIpc(): void {
     (_e, root: string, rev: string | null, filePath: string) =>
       git.blame(root, rev, filePath)
   )
+  ipcMain.handle('git:ownerRepo', (_e, root: string, rev: string | null, filePath: string) =>
+    git.ownerRepo(root, rev, filePath)
+  )
   ipcMain.handle(
     'git:fileHistory',
     (_e, root: string, rev: string | null, filePath: string) =>

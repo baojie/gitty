@@ -10,6 +10,7 @@ import type {
   CommitDetail,
   CommitFile,
   CommitMeta,
+  OwnerRepo,
   DiffOptions,
   DiffRequest,
   DiffResult,
@@ -179,6 +180,13 @@ const api = {
     /** Which commit last touched each line. `rev` null blames the work tree. */
     blame: (root: string, rev: string | null, filePath: string): Promise<BlameLine[]> =>
       ipcRenderer.invoke('git:blame', root, rev, filePath),
+    /**
+     * Which repository a path belongs to: a file inside a checked-out
+     * submodule is the submodule's, named from its root. `rev` null is the
+     * work tree; at a revision it is always the repository itself.
+     */
+    ownerRepo: (root: string, rev: string | null, filePath: string): Promise<OwnerRepo> =>
+      ipcRenderer.invoke('git:ownerRepo', root, rev, filePath),
     /**
      * Every commit that touched this file, newest first, following renames,
      * each with the file's line count at that commit.

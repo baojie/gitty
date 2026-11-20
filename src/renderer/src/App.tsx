@@ -5,7 +5,7 @@ import { PromptDialog } from './components/PromptDialog'
 import { AboutPane } from './components/AboutPane'
 import { HelpPane } from './components/HelpPane'
 import { SettingsPane } from './components/SettingsPane'
-import type { RepoTabHandle } from './RepoTab'
+import type { OpenRequest, RepoTabHandle } from './RepoTab'
 import { moveTab, renameTab, tabBasename, tabLabel } from './tabs'
 import { usePreferences } from './prefs'
 
@@ -385,6 +385,34 @@ export default function App(): JSX.Element {
 
   const onNav = useCallback((root: string, h: NavHistory) => {
     setNavByRoot((prev) => ({ ...prev, [root]: h }))
+  }, [])
+
+  // What one tab asked another to show, held until that tab has shown it — a
+  // tab opened for the purpose has not mounted yet when the ask is made.
+  const [requests, setRequests] = useState<Record<string, OpenRequest>>({})
+
+  /** Open a repository — a submodule, from a file's history in its
+   *  superproject — in its own tab, or go to it, and show a commit there. */
+  const openInRepo = useCallback(
+    async (dir: string, request: OpenRequest) => {
+      const resolved = await window.gitty.repo.resolve(dir)
+      if (!resolved) {
+        setError(msg.app.notInWorkTree(dir))
+        return
+      }
+      setRequests((prev) => ({ ...prev, [resolved]: request }))
+      await openTab(resolved)
+    },
+    [openTab, msg]
+  )
+
+  const requestDone = useCallback((root: string) => {
+    setRequests((prev) => {
+      if (!(root in prev)) return prev
+      const next = { ...prev }
+      delete next[root]
+      return next
+    })
   }, [])
 
   const activeStatus = active ? statusByRoot[active] ?? null : null
@@ -790,6 +818,9 @@ export default function App(): JSX.Element {
                   dialogOpen={settingsOpen || aboutOpen || helpOpen}
                   onStatus={onStatus}
                   onNav={onNav}
+                  request={requests[r] ?? null}
+                  onRequestDone={requestDone}
+                  onOpenInRepo={(dir, req) => void openInRepo(dir, req)}
                 />
               </Suspense>
             </div>

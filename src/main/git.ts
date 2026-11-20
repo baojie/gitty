@@ -28,7 +28,8 @@ import type {
   SnapshotEntry,
   SnapshotExport,
   SnapshotFileContent,
-  WorktreeFile
+  WorktreeFile,
+  OwnerRepo
 } from '../shared/types'
 import { DEFAULT_DIFF_OPTIONS, MAX_SNAPSHOT_EXPORT_BYTES } from '../shared/types'
 import { isExpression, literalPattern } from '../shared/regex'
@@ -378,11 +379,11 @@ export async function log(
  * The innermost `.git` wins, which is what makes nested submodules work. A
  * revision is the superproject's own tree, which never descends into one.
  */
-async function ownerRepo(
+export async function ownerRepo(
   root: string,
   rev: string | null,
   filePath: string
-): Promise<{ cwd: string; rel: string }> {
+): Promise<OwnerRepo> {
   if (rev !== null) return { cwd: root, rel: filePath }
   const parts = filePath.split('/')
   for (let d = parts.length - 1; d > 0; d--) {

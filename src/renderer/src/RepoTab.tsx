@@ -113,6 +113,16 @@ function commitMarks(f: CommitFile): FileEntry['marks'] {
   return [{ char: f.status, cls: `st-${f.status}` }]
 }
 
+/**
+ * Something another tab asked this one to show once it is open: a commit, or
+ * one file's diff between two revisions. A file's history inside a submodule
+ * lists the submodule's commits, which the superproject's tab cannot show, so
+ * they are handed to the submodule's own tab this way.
+ */
+export type OpenRequest =
+  | { kind: 'commit'; commit: Commit }
+  | { kind: 'range'; path: string; from: string; to: string }
+
 export interface RepoTabHandle {
   refresh(): void
   /** Go to a place in this tab's browsing history, by index into `places`. */
@@ -178,6 +188,12 @@ export interface RepoTabProps {
   onStatus: (status: RepoStatus) => void
   /** Report the browsing history, which the title bar's buttons act on. */
   onNav: (root: string, history: NavHistory) => void
+  /** What another tab asked this one to show, until it has been shown. */
+  request: OpenRequest | null
+  /** The request has been acted on; App lets go of it. */
+  onRequestDone: (root: string) => void
+  /** Open another repository — a submodule — in its tab, showing this there. */
+  onOpenInRepo: (dir: string, request: OpenRequest) => void
 }
 
 /**
@@ -224,7 +240,10 @@ export const RepoTab = forwardRef<RepoTabHandle, RepoTabProps>(function RepoTab(
     browsing,
     dialogOpen,
     onStatus,
-    onNav
+    onNav,
+    request,
+    onRequestDone,
+    onOpenInRepo
   },
   ref
 ): JSX.Element {
@@ -922,6 +941,39 @@ export const RepoTab = forwardRef<RepoTabHandle, RepoTabProps>(function RepoTab(
     [setDocs, setActiveDoc]
   )
 
+  // Shown once, then handed back: App holds the request only until this tab,
+  // new or already open, has acted on it.
+  useEffect(() => {
+    if (!request) return
+    if (request.kind === 'commit') showCommit(request.commit)
+    else showFileRange(request.path, request.from, request.to)
+    onRequestDone(root)
+  }, [request, root, showCommit, showFileRange, onRequestDone])
+
+  /**
+   * A file's history names commits of the repository the file belongs to. For
+   * a file inside a checked-out submodule that is the submodule, whose commits
+   * this tab's log and diff know nothing of — so they open in its own tab.
+   */
+  const openHistoryCommit = useCallback(
+    async (path: string, rev: string | null, c: Commit) => {
+      const { cwd } = await window.gitty.git.ownerRepo(root, rev, path)
+      if (cwd === root) showCommit(c)
+      else onOpenInRepo(cwd, { kind: 'commit', commit: c })
+    },
+    [root, showCommit, onOpenInRepo]
+  )
+
+  /** The same for two revisions picked in a file's history. */
+  const openHistoryRange = useCallback(
+    async (path: string, rev: string | null, from: string, to: string) => {
+      const { cwd, rel } = await window.gitty.git.ownerRepo(root, rev, path)
+      if (cwd === root) showFileRange(path, from, to)
+      else onOpenInRepo(cwd, { kind: 'range', path: rel, from, to })
+    },
+    [root, showFileRange, onOpenInRepo]
+  )
+
   /** Browse the whole repository as it was at this commit, read-only. */
   const showSnapshot = useCallback((c: Commit) => {
     setCompareCommit(null)
@@ -1594,8 +1646,10 @@ export const RepoTab = forwardRef<RepoTabHandle, RepoTabProps>(function RepoTab(
                       onSource={setDocSource}
                       onMenu={diffMenu}
                       setMenu={setMenu}
-                      onOpenCommit={showCommit}
-                      onCompareRevs={(from, to) => showFileRange(doc.path, from, to)}
+                      onOpenCommit={(c) => void openHistoryCommit(doc.path, doc.rev, c)}
+                      onCompareRevs={(from, to) =>
+                        void openHistoryRange(doc.path, doc.rev, from, to)
+                      }
                       range={doc.range}
                       gotoLine={doc.line}
                       onOpenHit={openHit}

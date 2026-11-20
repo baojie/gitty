@@ -249,6 +249,17 @@ export interface DiffResult {
  * One entry of "browse working tree". `ignored` is what `.gitignore` says
  * about it — the file is listed either way, and the pane draws it differently.
  */
+/**
+ * The repository a work-tree path belongs to — the superproject, or the
+ * checked-out submodule it lies inside — and the path as that one names it.
+ */
+export interface OwnerRepo {
+  /** The repository's root on disk. */
+  cwd: string
+  /** The path relative to that root. */
+  rel: string
+}
+
 export interface WorktreeFile {
   path: string
   ignored: boolean
