@@ -132,6 +132,8 @@ export const zh: RendererMessages = {
     keyBrowse: ' 浏览工作树；提交与终端面板让位',
     keyChanges: ' 回到变更，并恢复四个面板',
     ignoredFile: '被 .gitignore 忽略',
+    submoduleDir: '子模块——独立的仓库',
+    submoduleNotCheckedOut: '子模块，尚未检出',
     emptyChanges: '没有变更。',
     emptyWorktree: '工作树干净。',
     emptySnapshot: '此快照中没有文件。',

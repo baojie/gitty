@@ -22,6 +22,11 @@ export interface FileEntry {
   exec?: boolean
   /** On disk only: this path is a submodule, so it can be pulled on its own. */
   submodule?: boolean
+  /** Working Tree only: the innermost checked-out submodule the file is in.
+   *  The tree draws that folder as a submodule rather than a plain directory. */
+  inSubmodule?: string
+  /** Working Tree only: a submodule that is not checked out, listed as a row. */
+  gitlink?: boolean
   /** Present for renames: the previous path. */
   origPath?: string
   /** Number of lines, when counted. */
@@ -44,6 +49,8 @@ interface TreeRow {
   entry?: FileEntry
   /** Directories: everything under it is ignored, so the folder reads as dim too. */
   ignored?: boolean
+  /** Directories: a checked-out submodule, a repository of its own. */
+  submodule?: boolean
 }
 
 /**
@@ -68,6 +75,8 @@ function ignoredDirs(entries: FileEntry[]): Set<string> {
 function buildRows(entries: FileEntry[], collapsed: (key: string) => boolean): TreeRow[] {
   const rows: TreeRow[] = []
   const dim = ignoredDirs(entries)
+  const subs = new Set<string>()
+  for (const entry of entries) if (entry.inSubmodule) subs.add(entry.inSubmodule)
   let prevParts: string[] = []
 
   for (const entry of entries) {
@@ -86,7 +95,8 @@ function buildRows(entries: FileEntry[], collapsed: (key: string) => boolean): T
         key,
         name: dirs[d],
         depth: d,
-        ignored: dim.has(key)
+        ignored: dim.has(key),
+        submodule: subs.has(key)
       })
     }
     prevParts = dirs
@@ -246,11 +256,15 @@ export function FilesPane({
               e.stopPropagation()
               onDirMenu(row.key, { x: e.clientX, y: e.clientY, items: [] })
             }}
-            title={row.key}
+            title={row.submodule ? `${row.key}\n${msg.files.submoduleDir}` : row.key}
           >
             <span className="tree-indent" style={{ width: row.depth * 12 }} />
             <span className="twisty">{collapsed(row.key) ? '▶' : '▼'}</span>
-            <span className={`dir-name${row.ignored ? ' ignored' : ''}`}>{row.name}/</span>
+            <span
+              className={`dir-name${row.ignored ? ' ignored' : ''}${row.submodule ? ' submodule' : ''}`}
+            >
+              {row.name}/
+            </span>
           </div>
         ) : (
           <div
@@ -295,8 +309,16 @@ export function FilesPane({
             <span
               className={`file-name${row.entry!.deleted ? ' deleted' : ''}${
                 row.entry!.staged ? ' staged' : ''
-              }${row.entry!.ignored ? ' ignored' : ''}`}
-              title={row.entry!.ignored ? msg.files.ignoredFile : undefined}
+              }${row.entry!.ignored ? ' ignored' : ''}${
+                row.entry!.gitlink ? ' submodule' : ''
+              }`}
+              title={
+                row.entry!.ignored
+                  ? msg.files.ignoredFile
+                  : row.entry!.gitlink
+                    ? msg.files.submoduleNotCheckedOut
+                    : undefined
+              }
             >
               {row.name}
             </span>

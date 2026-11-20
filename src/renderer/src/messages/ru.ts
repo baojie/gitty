@@ -150,6 +150,8 @@ export const ru: RendererMessages = {
     keyBrowse: ' просмотр рабочего дерева; коммиты и терминал уходят',
     keyChanges: ' назад к изменениям, со всеми четырьмя панелями',
     ignoredFile: 'Игнорируется через .gitignore',
+    submoduleDir: 'Подмодуль — отдельный репозиторий',
+    submoduleNotCheckedOut: 'Подмодуль, не извлечён',
     emptyChanges: 'Изменений нет.',
     emptyWorktree: 'Рабочее дерево чистое.',
     emptySnapshot: 'В этом снимке нет файлов.',

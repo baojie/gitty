@@ -135,6 +135,8 @@ export const en: RendererMessages = {
     keyBrowse: ' browses the working tree; Commits and Terminal step aside',
     keyChanges: ' back to the changes, with all four panes',
     ignoredFile: 'Ignored by .gitignore',
+    submoduleDir: 'Submodule — a repository of its own',
+    submoduleNotCheckedOut: 'Submodule, not checked out',
     emptyChanges: 'No changes.',
     emptyWorktree: 'Working tree clean.',
     emptySnapshot: 'No files in this snapshot.',

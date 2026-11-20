@@ -371,6 +371,33 @@ export async function log(
 }
 
 /**
+ * The repository a work-tree path belongs to, and the path as that repository
+ * names it. Browsing the work tree lists a checked-out submodule's files under
+ * the submodule's path, but the superproject has no history for them — only a
+ * gitlink — so a question about one of them is asked inside the submodule.
+ * The innermost `.git` wins, which is what makes nested submodules work. A
+ * revision is the superproject's own tree, which never descends into one.
+ */
+async function ownerRepo(
+  root: string,
+  rev: string | null,
+  filePath: string
+): Promise<{ cwd: string; rel: string }> {
+  if (rev !== null) return { cwd: root, rel: filePath }
+  const parts = filePath.split('/')
+  for (let d = parts.length - 1; d > 0; d--) {
+    const dir = parts.slice(0, d).join('/')
+    try {
+      await fs.promises.access(path.join(root, dir, '.git'))
+      return { cwd: path.join(root, dir), rel: parts.slice(d).join('/') }
+    } catch {
+      // Not a repository of its own; keep climbing.
+    }
+  }
+  return { cwd: root, rel: filePath }
+}
+
+/**
  * Which commit last touched each line of a file. A null `rev` blames the work
  * tree — lines not committed yet come back with an all-zero sha.
  */
@@ -379,12 +406,13 @@ export async function blame(
   rev: string | null,
   filePath: string
 ): Promise<BlameLine[]> {
+  const { cwd, rel } = await ownerRepo(root, rev, filePath)
   const args = ['blame', '--line-porcelain']
   // The `--` keeps the path from being read as a revision when it is empty
   // or shadows a ref name.
   if (rev) args.push(rev)
-  args.push('--', filePath)
-  const raw = await git(root, args)
+  args.push('--', rel)
+  const raw = await git(cwd, args)
   return parseBlame(raw)
 }
 
@@ -397,15 +425,16 @@ export async function fileHistory(
   rev: string | null,
   filePath: string
 ): Promise<FileHistoryEntry[]> {
+  const { cwd, rel } = await ownerRepo(root, rev, filePath)
   const fmt = ['%H', '%h', '%an', '%ae', '%aI', '%s', '%D', '%P'].join(US) + RS
   // Ordered by the date the rows show, as the log pane is. The churn pass below
   // needs no such thing: it is read into a map from hash to numbers.
   const args = ['log', '--follow', '--author-date-order', `--pretty=format:${fmt}`]
   if (rev) args.push(rev)
-  args.push('--', filePath)
+  args.push('--', rel)
   const [raw, churnRaw] = await Promise.all([
-    git(root, args),
-    git(root, [
+    git(cwd, args),
+    git(cwd, [
       'log',
       '--follow',
       '--format=%H',
@@ -413,10 +442,10 @@ export async function fileHistory(
       '-z',
       ...(rev ? [rev] : []),
       '--',
-      filePath
+      rel
     ])
   ])
-  return withLineCounts(root, filePath, parseLog(raw), parseCommitNumstat(churnRaw))
+  return withLineCounts(cwd, rel, parseLog(raw), parseCommitNumstat(churnRaw))
 }
 
 /**
@@ -610,10 +639,11 @@ export async function lineHistory(
 ): Promise<string> {
   const a = Math.max(1, Math.floor(start))
   const b = Math.max(a, Math.floor(end))
-  const args = ['log', '--no-color', `-L${a},${b}:${filePath}`]
+  const { cwd, rel } = await ownerRepo(root, rev, filePath)
+  const args = ['log', '--no-color', `-L${a},${b}:${rel}`]
   if (rev) args.push(rev)
   try {
-    return await git(root, args)
+    return await git(cwd, args)
   } catch (e) {
     const err = e as { stderr?: string; message?: string }
     return err.stderr || err.message || ''
@@ -1091,13 +1121,29 @@ export async function worktreeFiles(root: string): Promise<WorktreeFile[]> {
           // itself here. One that is checked out is browsed into, its files
           // under its path; one that is not stays a single row, where the
           // menu can still offer to pull it.
+          // An untracked repository inside the tree comes as `name/`, slash
+          // and all; only a tracked gitlink is a submodule.
+          const gitlink = st.isDirectory() && !p.endsWith('/')
           if (st.isDirectory()) {
             const inner = await submoduleFiles(root, p)
-            if (inner.length > 0) return inner
+            if (inner.length > 0) {
+              const prefix = p.replace(/\/$/, '')
+              return inner.map((f) => ({
+                ...f,
+                path: `${prefix}/${f.path}`,
+                // The innermost one wins: a file of a nested submodule names
+                // that one, the rest of the outer one name the outer.
+                submodule: f.submodule ? `${prefix}/${f.submodule}` : gitlink ? prefix : undefined
+              }))
+            }
           }
-          return [
-            { path: p, ignored: ignored.has(p), exec: st.isFile() && (st.mode & 0o111) !== 0 }
-          ]
+          const file: WorktreeFile = {
+            path: p,
+            ignored: ignored.has(p),
+            exec: st.isFile() && (st.mode & 0o111) !== 0
+          }
+          if (gitlink) file.gitlink = true
+          return [file]
         })
         .catch(() => [])
     )
@@ -1106,10 +1152,10 @@ export async function worktreeFiles(root: string): Promise<WorktreeFile[]> {
 }
 
 /**
- * A checked-out submodule's files, named from the superproject's root. The
- * `.git` check is what makes it checked out: without one, git run in the empty
- * directory would find the superproject above it instead. Nested submodules
- * recurse through `worktreeFiles` like any other.
+ * A checked-out submodule's files, named from the submodule's own root — the
+ * caller prefixes them. The `.git` check is what makes it checked out: without
+ * one, git run in the empty directory would find the superproject above it
+ * instead. Nested submodules recurse through `worktreeFiles` like any other.
  */
 async function submoduleFiles(root: string, sub: string): Promise<WorktreeFile[]> {
   const dir = path.join(root, sub)
@@ -1119,11 +1165,7 @@ async function submoduleFiles(root: string, sub: string): Promise<WorktreeFile[]
     return []
   }
   try {
-    const inner = await worktreeFiles(dir)
-    // An untracked repository inside the tree is listed as `name/`, slash and
-    // all; it is browsed into the same way.
-    const prefix = sub.replace(/\/$/, '')
-    return inner.map((f) => ({ ...f, path: `${prefix}/${f.path}` }))
+    return await worktreeFiles(dir)
   } catch {
     return []
   }

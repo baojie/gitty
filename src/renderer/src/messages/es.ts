@@ -134,6 +134,8 @@ export const es: RendererMessages = {
     keyBrowse: ' explora el árbol de trabajo; Commits y Terminal se apartan',
     keyChanges: ' vuelve a los cambios, con los cuatro paneles',
     ignoredFile: 'Ignorado por .gitignore',
+    submoduleDir: 'Submódulo — un repositorio propio',
+    submoduleNotCheckedOut: 'Submódulo, sin extraer',
     emptyChanges: 'Sin cambios.',
     emptyWorktree: 'El árbol de trabajo está limpio.',
     emptySnapshot: 'No hay archivos en esta instantánea.',

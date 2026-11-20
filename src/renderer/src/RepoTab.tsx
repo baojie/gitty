@@ -562,7 +562,9 @@ export const RepoTab = forwardRef<RepoTabHandle, RepoTabProps>(function RepoTab(
             deleted: false,
             ignored: f.ignored,
             exec: f.exec,
-            submodule: submodulePaths.has(f.path)
+            submodule: submodulePaths.has(f.path),
+            inSubmodule: f.submodule,
+            gitlink: f.gitlink
           }))
         } else {
           // Snapshot mode: the whole tree at that commit, read-only.

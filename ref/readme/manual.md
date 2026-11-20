@@ -229,7 +229,9 @@ means reading every byte of a directory that is usually the largest thing on
 disk. `.git` itself is not listed. A submodule that is checked out is a folder
 like any other, its files listed beneath it — nested submodules too, and a git
 repository sitting untracked inside the tree; one that was never checked out
-stays a single row.
+stays a single row. Either way a submodule is drawn in its own colour, and its
+tooltip says it is one. Blame, File History and Line History on a file inside one
+are asked of that repository, since the superproject has no history for it.
 
 <kbd>Ctrl+B</kbd> — b for browse — is the shortcut into it from anywhere, and it
 sets the window up for reading as well as switching the view: Commits and the

@@ -254,6 +254,12 @@ export interface WorktreeFile {
   ignored: boolean
   /** The executable bit is set on disk, so the file tree can offer to run it. */
   exec: boolean
+  /** The innermost checked-out submodule this file lives in, as a path from
+   *  the root; absent for the superproject's own files. */
+  submodule?: string
+  /** This row is a submodule that is not checked out: a gitlink with nothing
+   *  on disk to list beneath it. */
+  gitlink?: boolean
 }
 
 /**

@@ -133,6 +133,8 @@ export const ko: RendererMessages = {
     keyBrowse: ' 작업 트리 보기 (커밋과 터미널은 숨김)',
     keyChanges: ' 변경 사항으로 돌아가고 네 패널을 모두 표시',
     ignoredFile: '.gitignore에 의해 무시됨',
+    submoduleDir: '서브모듈 — 별도의 저장소',
+    submoduleNotCheckedOut: '서브모듈, 체크아웃되지 않음',
     emptyChanges: '변경 사항이 없습니다.',
     emptyWorktree: '작업 트리가 깨끗합니다.',
     emptySnapshot: '이 스냅숏에 파일이 없습니다.',

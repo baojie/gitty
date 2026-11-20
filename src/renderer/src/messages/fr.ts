@@ -135,6 +135,8 @@ export const fr: RendererMessages = {
     keyBrowse: " parcourt la copie de travail ; Commits et Terminal s'effacent",
     keyChanges: ' retour aux modifications, avec les quatre panneaux',
     ignoredFile: 'Ignoré par .gitignore',
+    submoduleDir: 'Sous-module — un dépôt à part entière',
+    submoduleNotCheckedOut: 'Sous-module, non extrait',
     emptyChanges: 'Aucune modification.',
     emptyWorktree: 'Copie de travail propre.',
     emptySnapshot: 'Aucun fichier dans cet instantané.',

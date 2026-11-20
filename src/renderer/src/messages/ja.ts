@@ -134,6 +134,8 @@ export const ja: RendererMessages = {
     keyBrowse: ' ワークツリーを閲覧（コミットとターミナルは退避）',
     keyChanges: ' 変更に戻り、4 つのペインをすべて表示',
     ignoredFile: '.gitignore により無視されています',
+    submoduleDir: 'サブモジュール — 独立したリポジトリ',
+    submoduleNotCheckedOut: 'サブモジュール（未チェックアウト）',
     emptyChanges: '変更はありません。',
     emptyWorktree: 'ワークツリーはクリーンです。',
     emptySnapshot: 'このスナップショットにファイルはありません。',

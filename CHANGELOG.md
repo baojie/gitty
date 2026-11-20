@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Working Tree (<kbd>Ctrl+B</kbd>) opens a checked-out submodule as a folder
   of its files, nested ones included, instead of one row; **Pull Submodule**
-  moves to that folder's menu.
+  moves to that folder's menu. Submodules are drawn in their own colour,
+  with a tooltip saying so. Blame, File History and Line History on a file
+  inside one run in the submodule.
 
 ## [0.2.3] - 2026-11-18
 

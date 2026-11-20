@@ -135,6 +135,8 @@ export const de: RendererMessages = {
     keyBrowse: ' durchsucht das Arbeitsverzeichnis; Commits und Terminal treten zurück',
     keyChanges: ' zurück zu den Änderungen, mit allen vier Bereichen',
     ignoredFile: 'Von .gitignore ignoriert',
+    submoduleDir: 'Submodul — ein eigenes Repository',
+    submoduleNotCheckedOut: 'Submodul, nicht ausgecheckt',
     emptyChanges: 'Keine Änderungen.',
     emptyWorktree: 'Arbeitsverzeichnis ist sauber.',
     emptySnapshot: 'Keine Dateien in diesem Snapshot.',

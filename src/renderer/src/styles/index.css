@@ -736,6 +736,13 @@ button:disabled:hover {
   color: var(--green);
 }
 
+/* A submodule is a repository of its own inside this one: its history, blame
+   and pulls are its own, so the row says so before the tooltip does. */
+.dir-name.submodule,
+.file-name.submodule {
+  color: var(--magenta);
+}
+
 /* Ignored by .gitignore — in the Working Tree listing these are there but not
    part of the project, so they are drawn back rather than left out. Last of
    the file-name rules: nothing else applies to them, and this is the fact the

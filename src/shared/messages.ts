@@ -294,6 +294,10 @@ export interface RendererMessages {
     readonly keyBrowse: string
     readonly keyChanges: string
     readonly ignoredFile: string
+    /** Tooltip of a submodule's row in the file tree. */
+    readonly submoduleDir: string
+    /** Tooltip of a submodule that is not checked out, so has no files. */
+    readonly submoduleNotCheckedOut: string
     /** The empty text of the `worktree` view — "No changes." */
     readonly emptyChanges: string
     /** The empty text while browsing the whole working directory. */
