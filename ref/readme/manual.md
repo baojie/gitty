@@ -123,6 +123,8 @@ to appear in the repository's name or its directory, and name matches come
 first. <kbd>↑</kbd>/<kbd>↓</kbd> move, <kbd>Enter</kbd> opens in a new tab,
 <kbd>Ctrl+Enter</kbd> in the current one, <kbd>Esc</kbd> closes.
 
+![The recent-repository menu, with its search box and More…](../../ref/gitty-0.2.2-recent.png)
+
 When nothing in the list matches, the search goes to disk: Gitty looks for a
 repository whose directory name matches, in the places your remembered
 repositories live — each one's parent directory, and the directory above that
@@ -131,6 +133,8 @@ configured —
 and in the usual places under home (`~/work`, `~/code`, `~/src`,
 `~/projects`, …). What it finds is listed under *Is it one of these?* with its
 full path, and opens only when you pick it; once opened it joins the list.
+
+![A search with no remembered match, answered from the disk](../../ref/gitty-0.2.3-find-repo.png)
 
 **+** and <kbd>Ctrl+O</kbd> open this same menu, so a repository is found by
 typing its name; <kbd>Ctrl+O</kbd> a second time, or **Open Repository…**, goes
@@ -307,6 +311,8 @@ it is on disk even while a commit is on screen, since the working directory is
 what the box listed. The key works inside a terminal too, where the shell does
 not see it — unlike <kbd>Ctrl+D</kbd>, which stays end-of-input because that is
 how a shell is left; readline's end-of-line is <kbd>End</kbd> as well.
+
+![Ctrl+E: the letters in order, not adjacent](../../ref/gitty-0.2.1-quick-open.png)
 
 **Pull Submodule** appears on the row of a path `.gitmodules` names — its
 folder's row, in **Working Tree**, when it is checked out — in the two
@@ -494,6 +500,8 @@ glance.
 - **Right-click** — Copy Selection, Copy Markdown Source, the wrap and outline
   toggles, and Show Diff Instead.
 
+![Source lines, with the blocks this commit changed in green](../../ref/gitty-0.2.1-markdown.png)
+
 Raw HTML inside the markdown is not rendered, and a link to the web opens in
 the system browser rather than inside the app. A link to another file in the
 repository — `ref/readme/manual.md`, `../README.md`, `/CHANGELOG.md` — is followed
@@ -548,6 +556,8 @@ screen — a folded node's lines are not rendered at all. Nothing stays folded
 when another document is opened, or when a work-tree file is re-read after the
 repository changes: the lines a fold named may not be those lines any more.
 
+![A formatted JSON file with three nodes folded](../../ref/gitty-0.2.2-json.png)
+
 Only the whitespace between tokens changes. Numbers keep the digits the file
 spells — a value too long for a double, an exponent too large — keys keep the
 order they are in, and a duplicate key stays. The button appears only where the
@@ -575,6 +585,8 @@ snapshot is read from git, so an old edition of a paper reads as it was then
 without checking anything out. The file's size sits underneath. PDFs above
 64 MB are not opened, and the name in the viewer's own toolbar is not the
 file's; the pane header above it is.
+
+![A PDF beside the Working Tree, which names who last committed each file](../../ref/gitty-0.2.1-pdf.png)
 
 #### Files stored with Git LFS
 

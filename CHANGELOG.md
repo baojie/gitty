@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Screenshots in the manual of what 0.2.1–0.2.3 added: the PDF viewer, Ctrl+E,
+  changed blocks in a markdown preview, the recent-repository menu, JSON
+  folding, and the disk search for a repository.
+
 ### Changed
 
 - Working Tree (<kbd>Ctrl+B</kbd>) opens a checked-out submodule as a folder
