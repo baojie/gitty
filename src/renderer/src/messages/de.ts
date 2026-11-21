@@ -15,6 +15,12 @@ export const de: RendererMessages = {
       shortcuts: 'Tastaturkürzel',
       close: 'Schließen'
     },
+    crash: {
+      title: 'Gitty ist auf einen Fehler gestoßen und zeichnet dieses Fenster nicht mehr.',
+      staleBuild:
+        'Wurde Gitty während der Ausführung neu gebaut, fehlt ein Teil des alten Builds – beenden und neu starten; das Fenster neu zu laden reicht nicht.',
+      reload: 'Fenster neu laden'
+    },
     help: {
       title: 'Tastaturkürzel',
       close: 'Schließen',

@@ -33,6 +33,22 @@ rebuilds the application menu so its labels change with the rest. That is also
 what makes `msg` a value that changes over a component's life rather than a
 module constant.
 
+## When rendering throws
+
+`CrashBoundary` wraps `App` in `main.tsx`. Without it any error thrown while
+rendering makes React unmount the whole tree: the window is an empty dark
+rectangle and nothing reaches a log, since the processes are all healthy.
+
+The case that motivated it is a failed lazy import. Chunk names carry a
+content hash and `npm run build` empties `out/`, so rebuilding while Gitty runs
+leaves the window asking for `RepoTab-…`, `FileDoc-…` or `TerminalsPane-…`
+files that no longer exist — the first file opened or tab added afterwards goes
+blank. A reload does not cure that, because the main process is the old build
+too and the new renderer would call IPC it lacks; the stand-in therefore says
+to restart when it sees `vite:preloadError` or a dynamic-import message, and
+offers a reload only for other errors. It sits above the locale provider and
+reads the stored locale itself.
+
 ## Time
 
 `src/renderer/src/time.ts` is the one place a date becomes text. It holds the

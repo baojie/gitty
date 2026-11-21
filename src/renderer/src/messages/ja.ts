@@ -15,6 +15,12 @@ export const ja: RendererMessages = {
       shortcuts: 'キーボードショートカット',
       close: '閉じる'
     },
+    crash: {
+      title: 'Gitty でエラーが発生し、このウィンドウの描画が止まりました。',
+      staleBuild:
+        '実行中に Gitty が再ビルドされた場合、古いビルドの一部が失われています。終了して起動し直してください。ウィンドウの再読み込みだけでは足りません。',
+      reload: 'ウィンドウを再読み込み'
+    },
     help: {
       title: 'キーボードショートカット',
       close: '閉じる',

@@ -22,6 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   inside one run in the submodule, and a double click or Shift+click in that
   history opens the submodule's commits in the submodule's own tab.
 
+### Fixed
+
+- An error while drawing the window shows the error and a reload button
+  instead of a blank window. When the cause is Gitty having been rebuilt while
+  running, it says to restart.
+
 ## [0.2.3] - 2026-11-18
 
 ### Added

@@ -156,6 +156,16 @@ export interface RendererMessages {
       readonly shortcuts: string
       readonly close: string
     }
+    /** What replaces the whole window when rendering throws — chiefly a lazy
+     *  chunk that no longer exists because `out/` was rebuilt under a running
+     *  Gitty. Without it React unmounts everything and the window goes blank. */
+    readonly crash: {
+      readonly title: string
+      /** Says a rebuild is the likely cause, and that a restart, not a
+       *  reload, is the cure: the main process is still the old build. */
+      readonly staleBuild: string
+      readonly reload: string
+    }
     /** The keyboard shortcut sheet, opened with F1 or from the Help menu.
      *  The key names themselves are not translated — they are what is printed
      *  on the keyboard — so only the section headings and the actions are. */

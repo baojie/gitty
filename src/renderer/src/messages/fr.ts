@@ -15,6 +15,12 @@ export const fr: RendererMessages = {
       shortcuts: 'Raccourcis clavier',
       close: 'Fermer'
     },
+    crash: {
+      title: 'Gitty a rencontré une erreur et a cessé d’afficher cette fenêtre.',
+      staleBuild:
+        'Si Gitty a été recompilé pendant qu’il tournait, une partie de l’ancienne version a disparu — quittez-le et relancez-le ; recharger la fenêtre ne suffit pas.',
+      reload: 'Recharger la fenêtre'
+    },
     help: {
       title: 'Raccourcis clavier',
       close: 'Fermer',

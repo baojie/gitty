@@ -444,6 +444,39 @@ button:disabled:hover {
   color: var(--fg-faint);
 }
 
+/* CrashBoundary's stand-in for the whole window. */
+.crash {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+  color: var(--fg);
+}
+
+.crash h1 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--fg-strong);
+}
+
+.crash p {
+  margin: 0;
+  color: var(--fg-dim);
+}
+
+.crash pre {
+  margin: 0;
+  max-width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--red);
+}
+
 /* The commit filter is fixed above the log while the list itself scrolls. */
 .log-filter {
   flex: none;

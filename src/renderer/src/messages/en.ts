@@ -15,6 +15,12 @@ export const en: RendererMessages = {
       shortcuts: 'Keyboard Shortcuts',
       close: 'Close'
     },
+    crash: {
+      title: 'Gitty hit an error and stopped drawing this window.',
+      staleBuild:
+        'If Gitty was rebuilt while it was running, part of the old build is gone — quit and start it again; reloading the window is not enough.',
+      reload: 'Reload window'
+    },
     help: {
       title: 'Keyboard Shortcuts',
       close: 'Close',

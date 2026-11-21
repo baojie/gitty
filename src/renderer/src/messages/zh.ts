@@ -15,6 +15,12 @@ export const zh: RendererMessages = {
       shortcuts: '键盘快捷键',
       close: '关闭'
     },
+    crash: {
+      title: 'Gitty 出错，已停止绘制此窗口。',
+      staleBuild:
+        '如果 Gitty 在运行时被重新构建，旧构建的一部分已经不在了——请退出并重新启动；只重新加载窗口不够。',
+      reload: '重新加载窗口'
+    },
     help: {
       title: '键盘快捷键',
       close: '关闭',

@@ -15,6 +15,12 @@ export const es: RendererMessages = {
       shortcuts: 'Atajos de teclado',
       close: 'Cerrar'
     },
+    crash: {
+      title: 'Gitty encontró un error y dejó de dibujar esta ventana.',
+      staleBuild:
+        'Si Gitty se recompiló mientras se ejecutaba, parte de la compilación anterior ya no existe: ciérralo y vuelve a abrirlo; recargar la ventana no basta.',
+      reload: 'Recargar ventana'
+    },
     help: {
       title: 'Atajos de teclado',
       close: 'Cerrar',

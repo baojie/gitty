@@ -15,6 +15,12 @@ export const ko: RendererMessages = {
       shortcuts: '키보드 단축키',
       close: '닫기'
     },
+    crash: {
+      title: 'Gitty에 오류가 발생해 이 창을 더 이상 그리지 못합니다.',
+      staleBuild:
+        '실행 중에 Gitty가 다시 빌드되었다면 이전 빌드의 일부가 사라졌습니다. 종료한 뒤 다시 시작하세요. 창을 다시 불러오는 것만으로는 부족합니다.',
+      reload: '창 다시 불러오기'
+    },
     help: {
       title: '키보드 단축키',
       close: '닫기',
