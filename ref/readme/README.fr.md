@@ -81,7 +81,7 @@ Ce que les autres navigateurs git ne font pour la plupart pas :
   journal, blame, historique de fichier, la frontière entre « aujourd'hui » et
   une date — suit.
 
-![Gitty 0.2.0](../../ref/gitty-0.2.0.png)
+![Gitty 0.2.0](../../ref/2026-08-21-gitty-0.2.0.png)
 
 ## Pourquoi un de plus ? <a id="why-another-one"></a>
 

@@ -472,7 +472,7 @@ Markdown 中の生 HTML は描画されず、ウェブへのリンクはアプ�
 一切取得しません。他人の README を読むのに、その相手のホストへ挨拶しに行く必要はありま
 せん。
 
-![Markdown プレビュー](../../ref/gitty-0.1.5-markdown.png)
+![Markdown プレビュー](../../ref/2026-08-12-gitty-0.1.5-markdown.png)
 
 #### HTML プレビュー <a id="html-preview"></a>
 
@@ -521,7 +521,7 @@ Markdown 中の生 HTML は描画されず、ウェブへのリンクはアプ�
 ます。ピクセル寸法とディスク上のサイズが下に出ます。12 MB を超える画像はインライン展
 開されません。
 
-![画像プレビュー](../../ref/gitty-0.1.5-image.png)
+![画像プレビュー](../../ref/2026-08-12-gitty-0.1.5-image.png)
 
 #### PDF <a id="pdfs"></a>
 
@@ -684,7 +684,7 @@ Changes ペインのヘッダーにある **Search** が、ファイルリスト
 - 左上のペインでファイルを選ぶと差分がそのファイルに絞られ、**Show Whole Diff** でま
   た広がります。
 
-![任意の 2 コミットの差分](../../ref/gitty-0.1.5-range.png)
+![任意の 2 コミットの差分](../../ref/2026-08-12-gitty-0.1.5-range.png)
 
 #### Gource <a id="gource"></a>
 

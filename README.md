@@ -71,7 +71,7 @@ Things the other git browsers mostly do not do:
   you make it, and the whole UI — log, blame, file history, the boundary between
   "today" and a date — follows.
 
-![Gitty 0.2.0](ref/gitty-0.2.0.png)
+![Gitty 0.2.0](ref/2026-08-21-gitty-0.2.0.png)
 
 ## Why another one?
 

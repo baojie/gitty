@@ -482,7 +482,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- A new README screenshot (`ref/gitty-0.1.7.png`), showing the window as it is
+- A new README screenshot (`ref/2026-08-15-gitty-0.1.7.png`), showing the window as it is
   now: **Send to agent** in the work-tree header, documents open beside the
   diff, the lane graph. The 0.1.6 image stays where it is — the translated
   READMEs are dated snapshots and still point at it.
@@ -751,7 +751,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   markdown-it) load as their own chunks only when they first appear.
 - Hovering any of the four pane titles now shows **Double-click the title
   toggles full screen** alongside its shortcut.
-- README screenshot updated for this release (`ref/gitty-0.1.4.png`).
+- README screenshot updated for this release (`ref/2026-08-08-gitty-0.1.4.png`).
 
 ### Fixed
 
@@ -819,7 +819,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- README screenshot updated for this release (`ref/gitty-0.1.3.png`).
+- README screenshot updated for this release (`ref/2026-08-07-gitty-0.1.3.png`).
 
 ## [0.1.2] - 2026-08-06
 
@@ -898,7 +898,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Show Whole Diff** stays in the diff header for the work tree, a commit and
   a range alike, lit while the whole diff is on screen, and also appears while
   viewing a file.
-- README screenshot updated for this release (`ref/gitty-0.1.2.png`).
+- README screenshot updated for this release (`ref/2026-08-06-gitty-0.1.2.png`).
 
 ### Fixed
 
@@ -970,7 +970,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Double-clicking a file views it in the pane beside the tree instead of handing
   it to the system application, which moved to the context menu as **Open in
   System App**.
-- README screenshot updated for this release (`ref/gitty-0.1.1.png`).
+- README screenshot updated for this release (`ref/2026-08-05-gitty-0.1.1.png`).
 
 ### Fixed
 
@@ -1016,7 +1016,7 @@ Initial release.
   `/usr/local/bin` with `--system`).
 - Linux runs with the SUID sandbox disabled (`ELECTRON_DISABLE_SANDBOX=1`);
   `chrome-sandbox` cannot keep its root-owned setuid bit inside `node_modules`.
-- README shows a screenshot of the interface (`ref/gitty-0.1.0.png`).
+- README shows a screenshot of the interface (`ref/2026-08-05-gitty-0.1.0.png`).
 
 [Unreleased]: https://github.com/baojie/gitty/compare/v0.2.3...HEAD
 [0.2.3]: https://github.com/baojie/gitty/compare/v0.2.2...v0.2.3

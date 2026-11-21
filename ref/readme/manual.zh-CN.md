@@ -388,7 +388,7 @@ Markdown 里的原始 HTML 不会被渲染，指向网络的链接在系统浏�
 的截图。仓库在那个版本没有的图片，留下一个带 alt 文本的虚线占位框。网络上的图片根本不
 会去取：读别人的 README 不该向对方的主机报到。
 
-![Markdown preview](../../ref/gitty-0.1.5-markdown.png)
+![Markdown preview](../../ref/2026-08-12-gitty-0.1.5-markdown.png)
 
 #### HTML 预览 <a id="html-preview"></a>
 
@@ -425,7 +425,7 @@ frame 继承应用的内容安全策略，而它两者都不允许。页面是�
 窗格大小，衬在棋盘格上，所以透明就看得出是透明；**点击**它切到原始尺寸并可滚动查
 看，再点一次回到适配。像素尺寸和磁盘占用写在下方。超过 12 MB 的图片不内联。
 
-![Image preview](../../ref/gitty-0.1.5-image.png)
+![Image preview](../../ref/2026-08-12-gitty-0.1.5-image.png)
 
 #### PDF <a id="pdfs"></a>
 
@@ -562,7 +562,7 @@ diff 一样。
 - 在左上窗格选中一个文件会把 diff 收窄到那个文件；**Show Whole Diff** 再把它放回
   去。
 
-![Diff against any two commits](../../ref/gitty-0.1.5-range.png)
+![Diff against any two commits](../../ref/2026-08-12-gitty-0.1.5-range.png)
 
 #### Gource <a id="gource"></a>
 

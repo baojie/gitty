@@ -77,7 +77,7 @@ Coisas que os outros navegadores de git em geral não fazem:
   escolha de fuso; aqui você a faz, e toda a UI — log, blame, histórico de
   arquivo, a fronteira entre "hoje" e uma data — a acompanha.
 
-![Gitty 0.2.0](../../ref/gitty-0.2.0.png)
+![Gitty 0.2.0](../../ref/2026-08-21-gitty-0.2.0.png)
 
 ## Por que mais um? <a id="why-another-one"></a>
 

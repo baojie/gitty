@@ -536,7 +536,7 @@ seu texto alternativo. Imagens da web não são buscadas de forma alguma: ler o
 README de um estranho não deveria anunciar você para qualquer host que ele
 aponte.
 
-![Markdown preview](../../ref/gitty-0.1.5-markdown.png)
+![Markdown preview](../../ref/2026-08-12-gitty-0.1.5-markdown.png)
 
 #### Pré-visualização de HTML <a id="html-preview"></a>
 
@@ -588,7 +588,7 @@ transparência se lê como transparência; **clique** nele para o tamanho real e
 ao redor, clique de novo para ajustar. Suas dimensões em pixels e o tamanho no
 disco ficam embaixo. Imagens acima de 12 MB não são embutidas.
 
-![Image preview](../../ref/gitty-0.1.5-image.png)
+![Image preview](../../ref/2026-08-12-gitty-0.1.5-image.png)
 
 #### PDFs <a id="pdfs"></a>
 
@@ -766,7 +766,7 @@ chega ao git como um único argumento.
 - Selecionar um arquivo no painel superior esquerdo estreita o diff para aquele
   arquivo; **Show Whole Diff** o alarga de volta.
 
-![Diff against any two commits](../../ref/gitty-0.1.5-range.png)
+![Diff against any two commits](../../ref/2026-08-12-gitty-0.1.5-range.png)
 
 #### Gource <a id="gource"></a>
 

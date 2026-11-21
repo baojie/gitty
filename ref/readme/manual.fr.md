@@ -558,7 +558,7 @@ pointillé portant son texte alternatif. Les images du web ne sont pas récupér
 du tout : lire le README d'un inconnu ne devrait pas vous annoncer à l'hôte vers
 lequel il pointe.
 
-![Markdown preview](../../ref/gitty-0.1.5-markdown.png)
+![Markdown preview](../../ref/2026-08-12-gitty-0.1.5-markdown.png)
 
 #### Aperçu HTML <a id="html-preview"></a>
 
@@ -614,7 +614,7 @@ volet sur un damier, pour que la transparence se lise comme de la transparence ;
 l'ajuster. Ses dimensions en pixels et sa taille sur le disque sont en dessous.
 Les images de plus de 12 Mo ne sont pas intégrées.
 
-![Image preview](../../ref/gitty-0.1.5-image.png)
+![Image preview](../../ref/2026-08-12-gitty-0.1.5-image.png)
 
 #### PDF <a id="pdfs"></a>
 
@@ -802,7 +802,7 @@ de commande, donc une expression régulière atteint git en un seul argument.
 - Sélectionner un fichier dans le volet en haut à gauche restreint le diff à ce
   fichier ; **Show Whole Diff** le rélargit.
 
-![Diff against any two commits](../../ref/gitty-0.1.5-range.png)
+![Diff against any two commits](../../ref/2026-08-12-gitty-0.1.5-range.png)
 
 #### Gource <a id="gource"></a>
 

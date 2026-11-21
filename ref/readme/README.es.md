@@ -75,7 +75,7 @@ Cosas que los demás navegadores de git, en su mayoría, no hacen:
   elección de zona; aquí la eliges tú, y toda la interfaz — log, blame, historial
   de archivo, la frontera entre «hoy» y una fecha — la sigue.
 
-![Gitty 0.2.0](../../ref/gitty-0.2.0.png)
+![Gitty 0.2.0](../../ref/2026-08-21-gitty-0.2.0.png)
 
 ## ¿Por qué otro más? <a id="why-another-one"></a>
 

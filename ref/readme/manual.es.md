@@ -544,7 +544,7 @@ posición punteado con su texto alternativo. Las imágenes de la web no se desca
 en absoluto: leer el README de un desconocido no debería anunciarte al servidor al
 que apunte.
 
-![Markdown preview](../../ref/gitty-0.1.5-markdown.png)
+![Markdown preview](../../ref/2026-08-12-gitty-0.1.5-markdown.png)
 
 #### Vista previa de HTML <a id="html-preview"></a>
 
@@ -598,7 +598,7 @@ verla a tamaño real y desplazarte, y otra vez para ajustarla. Sus dimensiones e
 píxeles y su tamaño en disco van debajo. Las imágenes de más de 12 MB no se
 insertan.
 
-![Image preview](../../ref/gitty-0.1.5-image.png)
+![Image preview](../../ref/2026-08-12-gitty-0.1.5-image.png)
 
 #### PDF <a id="pdfs"></a>
 
@@ -779,7 +779,7 @@ expresión regular llega a git como un solo argumento.
 - Seleccionar un archivo en el panel superior izquierdo estrecha el diff a ese
   archivo; **Show Whole Diff** lo vuelve a ensanchar.
 
-![Diff against any two commits](../../ref/gitty-0.1.5-range.png)
+![Diff against any two commits](../../ref/2026-08-12-gitty-0.1.5-range.png)
 
 #### Gource <a id="gource"></a>
 

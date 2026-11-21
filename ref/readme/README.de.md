@@ -80,7 +80,7 @@ Dinge, die die anderen Git-Browser meist nicht tun:
   der Zone; hier trifft man sie, und die ganze Oberfläche — Log, Blame,
   Datei-Historie, die Grenze zwischen „heute" und einem Datum — folgt.
 
-![Gitty 0.2.0](../../ref/gitty-0.2.0.png)
+![Gitty 0.2.0](../../ref/2026-08-21-gitty-0.2.0.png)
 
 ## Warum noch einer? <a id="why-another-one"></a>
 

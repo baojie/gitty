@@ -123,7 +123,7 @@ to appear in the repository's name or its directory, and name matches come
 first. <kbd>↑</kbd>/<kbd>↓</kbd> move, <kbd>Enter</kbd> opens in a new tab,
 <kbd>Ctrl+Enter</kbd> in the current one, <kbd>Esc</kbd> closes.
 
-![The recent-repository menu, with its search box and More…](../../ref/gitty-0.2.2-recent.png)
+![The recent-repository menu, with its search box and More…](../../ref/2026-11-16-gitty-0.2.2-recent.png)
 
 When nothing in the list matches, the search goes to disk: Gitty looks for a
 repository whose directory name matches, in the places your remembered
@@ -134,7 +134,7 @@ and in the usual places under home (`~/work`, `~/code`, `~/src`,
 `~/projects`, …). What it finds is listed under *Is it one of these?* with its
 full path, and opens only when you pick it; once opened it joins the list.
 
-![A search with no remembered match, answered from the disk](../../ref/gitty-0.2.3-find-repo.png)
+![A search with no remembered match, answered from the disk](../../ref/2026-11-18-gitty-0.2.3-find-repo.png)
 
 **+** and <kbd>Ctrl+O</kbd> open this same menu, so a repository is found by
 typing its name; <kbd>Ctrl+O</kbd> a second time, or **Open Repository…**, goes
@@ -312,7 +312,7 @@ what the box listed. The key works inside a terminal too, where the shell does
 not see it — unlike <kbd>Ctrl+D</kbd>, which stays end-of-input because that is
 how a shell is left; readline's end-of-line is <kbd>End</kbd> as well.
 
-![Ctrl+E: the letters in order, not adjacent](../../ref/gitty-0.2.1-quick-open.png)
+![Ctrl+E: the letters in order, not adjacent](../../ref/2026-09-14-gitty-0.2.1-quick-open.png)
 
 **Pull Submodule** appears on the row of a path `.gitmodules` names — its
 folder's row, in **Working Tree**, when it is checked out — in the two
@@ -500,7 +500,7 @@ glance.
 - **Right-click** — Copy Selection, Copy Markdown Source, the wrap and outline
   toggles, and Show Diff Instead.
 
-![Source lines, with the blocks this commit changed in green](../../ref/gitty-0.2.1-markdown.png)
+![Source lines, with the blocks this commit changed in green](../../ref/2026-09-14-gitty-0.2.1-markdown.png)
 
 Raw HTML inside the markdown is not rendered, and a link to the web opens in
 the system browser rather than inside the app. A link to another file in the
@@ -523,7 +523,7 @@ there leaves a dashed placeholder with its alt text. Images from the web are not
 fetched at all: reading a stranger's README should not announce you to whatever
 host it points at.
 
-![Markdown preview](../../ref/gitty-0.1.5-markdown.png)
+![Markdown preview](../../ref/2026-08-12-gitty-0.1.5-markdown.png)
 
 #### HTML preview
 
@@ -556,7 +556,7 @@ screen — a folded node's lines are not rendered at all. Nothing stays folded
 when another document is opened, or when a work-tree file is re-read after the
 repository changes: the lines a fold named may not be those lines any more.
 
-![A formatted JSON file with three nodes folded](../../ref/gitty-0.2.2-json.png)
+![A formatted JSON file with three nodes folded](../../ref/2026-11-16-gitty-0.2.2-json.png)
 
 Only the whitespace between tokens changes. Numbers keep the digits the file
 spells — a value too long for a double, an exponent too large — keys keep the
@@ -574,7 +574,7 @@ checkerboard, so transparency reads as transparency; **click** it for actual
 size and scroll around, click again to fit. Its pixel dimensions and size on
 disk sit underneath. Images above 12 MB are not inlined.
 
-![Image preview](../../ref/gitty-0.1.5-image.png)
+![Image preview](../../ref/2026-08-12-gitty-0.1.5-image.png)
 
 #### PDFs
 
@@ -586,7 +586,7 @@ without checking anything out. The file's size sits underneath. PDFs above
 64 MB are not opened, and the name in the viewer's own toolbar is not the
 file's; the pane header above it is.
 
-![A PDF beside the Working Tree, which names who last committed each file](../../ref/gitty-0.2.1-pdf.png)
+![A PDF beside the Working Tree, which names who last committed each file](../../ref/2026-09-14-gitty-0.2.1-pdf.png)
 
 #### Files stored with Git LFS
 
@@ -753,7 +753,7 @@ regular expression reaches git as one argument.
 - Selecting a file in the top-left pane narrows the diff to that file;
   **Show Whole Diff** widens it back out.
 
-![Diff against any two commits](../../ref/gitty-0.1.5-range.png)
+![Diff against any two commits](../../ref/2026-08-12-gitty-0.1.5-range.png)
 
 #### Gource
 

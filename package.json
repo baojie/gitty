@@ -12,7 +12,7 @@
     "build",
     "cli.js",
     "scripts/postinstall.js",
-    "ref/gitty-0.1.6.png"
+    "ref/2026-08-21-gitty-0.2.0.png"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"

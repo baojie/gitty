@@ -566,7 +566,7 @@ nicht hat, hinterlässt einen gestrichelten Platzhalter mit seinem Alt-Text. Bil
 aus dem Netz werden überhaupt nicht geholt: das README eines Fremden zu lesen
 sollte einen nicht bei dessen Host anmelden.
 
-![Markdown preview](../../ref/gitty-0.1.5-markdown.png)
+![Markdown preview](../../ref/2026-08-12-gitty-0.1.5-markdown.png)
 
 #### HTML-Vorschau <a id="html-preview"></a>
 
@@ -624,7 +624,7 @@ in den Bereich eingepasst, sodass Transparenz als Transparenz lesbar ist; ein
 ein. Pixelmaße und Größe auf der Platte stehen darunter. Bilder über 12 MB werden
 nicht eingebettet.
 
-![Image preview](../../ref/gitty-0.1.5-image.png)
+![Image preview](../../ref/2026-08-12-gitty-0.1.5-image.png)
 
 #### PDFs <a id="pdfs"></a>
 
@@ -811,7 +811,7 @@ ein regulärer Ausdruck erreicht git also als ein Argument.
 - Eine Datei im Bereich oben links auszuwählen verengt das Diff auf diese Datei;
   **Show Whole Diff** weitet es wieder.
 
-![Diff against any two commits](../../ref/gitty-0.1.5-range.png)
+![Diff against any two commits](../../ref/2026-08-12-gitty-0.1.5-range.png)
 
 #### Gource <a id="gource"></a>
 

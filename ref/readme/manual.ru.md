@@ -483,7 +483,7 @@ alt-текстом. Изображения из сети не загружают
 выдавать вас тому хосту, на который оно ссылается.
 ссылается.
 
-![Markdown preview](../../ref/gitty-0.1.5-markdown.png)
+![Markdown preview](../../ref/2026-08-12-gitty-0.1.5-markdown.png)
 
 #### Предпросмотр HTML <a id="html-preview"></a>
 
@@ -533,7 +533,7 @@ alt-текстом. Изображения из сети не загружают
 прокрутку, ещё щелчок — снова вписать. Под ней — её размеры в пикселях и размер на диске.
 Изображения больше 12 МБ не встраиваются.
 
-![Image preview](../../ref/gitty-0.1.5-image.png)
+![Image preview](../../ref/2026-08-12-gitty-0.1.5-image.png)
 
 #### PDF <a id="pdfs"></a>
 
@@ -695,7 +695,7 @@ merge, какой линии принадлежит коммит. Он вычи�
 - Выбор файла в верхней левой панели сужает diff до этого файла; **Show Whole Diff**
   расширяет его обратно.
 
-![Diff against any two commits](../../ref/gitty-0.1.5-range.png)
+![Diff against any two commits](../../ref/2026-08-12-gitty-0.1.5-range.png)
 
 #### Gource <a id="gource"></a>
 
